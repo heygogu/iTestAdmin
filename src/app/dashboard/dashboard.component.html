@@ -1,46 +1,34 @@
-<div class="button-group">
-  <button mat-flat-button color="primary" routerLink="/create-quiz">
-    <mat-icon>add</mat-icon> Create Quiz
-  </button>
-  <button mat-flat-button color="accent" routerLink="/schedule-quiz">
-    <mat-icon>schedule</mat-icon> Schedule Quiz
-  </button>
-  </div>
-
-<!-- Recent Users Table -->
-  <div class="main-content">
-    <span class="header-title">Recent Users</span> 
-    <table mat-table [dataSource]="recentResults" class="mat-elevation-z8" style="width: 100%; margin-top: 16px;">
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let row"> {{row.name}} </td>
-    </ng-container>
-
-    <!-- Quiz Column -->
-    <ng-container matColumnDef="quiz">
-      <th mat-header-cell *matHeaderCellDef> Quiz Title </th>
-      <td mat-cell *matCellDef="let row"> {{row.quiz}} </td>
-    </ng-container>
-
-    <!-- Score Column -->
-    <ng-container matColumnDef="score">
-      <th mat-header-cell *matHeaderCellDef> Score </th>
-      <td mat-cell *matCellDef="let row"> {{row.score}} </td>
-    </ng-container>
-
-    <!-- Action Column -->
-    <ng-container matColumnDef="action">
-      <th mat-header-cell *matHeaderCellDef> Action </th>
-      <td mat-cell *matCellDef="let row">
-        <button mat-button color="primary" (click)="goToUserDetails(row.id)">View</button>
-      </td>
-    </ng-container>
-
-    <!-- Render Rows -->
-    <tr mat-header-row *matHeaderRowDef="['name', 'quiz', 'score', 'action']"></tr>
-    <tr mat-row *matRowDef="let row; columns: ['name', 'quiz', 'score', 'action'];"></tr>
-    </table>
+<div class="mb-4 d-flex gap-2">
+  <a class="btn btn-primary" routerLink="/create-quiz">
+    <i class="bi bi-plus"></i> Create Quiz
+  </a>
+  <a class="btn btn-info text-white" routerLink="/schedule-quiz">
+    <i class="bi bi-clock"></i> Schedule Quiz
+  </a>
 </div>
 
+<div class="main-content">
+  <span class="h5 d-block mb-3">Recent Users</span>
+  <table class="table table-striped table-hover">
+    <thead class="table-light">
+      <tr>
+        <th>Name</th>
+        <th>Quiz Title</th>
+        <th>Score</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of recentResults; let i = index" [ngClass]="{'bg-light': i % 2 === 0}">
+        <td>{{ row.name }}</td>
+        <td>{{ row.quiz }}</td>
+        <td>{{ row.score }}</td>
+        <td>
+          <button class="btn btn-sm btn-outline-secondary" (click)="goToUserDetails(row.id)" title="View Details">
+            <i class="bi bi-eye-fill"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

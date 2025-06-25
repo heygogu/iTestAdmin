@@ -28,44 +28,35 @@
             </div>
 
             <!-- Test History Table -->
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-gradient-primary text-white d-flex align-items-center">
-                    <i class="bi bi-clock-history me-2"></i>
-                    <h3 class="mb-0 fs-5">Test History</h3>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="table-primary">
-                                <tr>
-                                    <th scope="col"><i class="bi bi-file-earmark-text me-1"></i>Test</th>
-                                    <th scope="col"><i class="bi bi-calendar-event me-1"></i>Taken At</th>
-                                    <th scope="col"><i class="bi bi-bar-chart me-1"></i>Score</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let test of testHistory">
-                                    <td>
-                                        <span class="fw-semibold">{{ test.testName }}</span>
-                                    </td>
-                                    <td>
-                                        <span class="text-muted">{{ test.takenAt | date:'medium' }}</span>
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-success fs-6">{{ test.score }}</span>
-                                    </td>
-                                </tr>
-                                <tr *ngIf="!testHistory || testHistory.length === 0">
-                                    <td colspan="3" class="text-center text-muted py-4">
-                                        <i class="bi bi-info-circle me-2"></i>No test history available.
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+            <!-- Test History Table (Simplified like Create Quiz table) -->
+            <div class="card border-0 shadow-sm">
+            <div class="card-body px-0 py-0">
+                <span class="h5 d-block mb-3"><i class="bi bi-clock-history me-2"></i>Test History</span>
+                <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-light">
+                    <tr>
+                        <th>Test</th>   
+                        <th>Taken At</th>
+                        <th>Score</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let test of testHistory; let i = index" [ngClass]="{ 'bg-light': i % 2 === 0 }">
+                        <td>{{ test.testName }}</td>
+                        <td>{{ test.takenAt | date:'medium' }}</td>
+                        <td>{{ test.score }}</td>
+                    </tr>
+                    <tr *ngIf="!testHistory || testHistory.length === 0">
+                        <td colspan="3" class="text-center text-muted py-4">
+                        <i class="bi bi-info-circle me-2"></i>No test history available.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
                 </div>
             </div>
-
+            </div>
         </div>
     </div>
 </div>
