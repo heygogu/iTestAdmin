@@ -1,45 +1,29 @@
-.content-wrapper {
-  padding: 30px 40px;
-}
-.sidenav-container {
-  height: 100vh;
+mat-card {
+  border-radius: 12px;
+  padding: 10px;
 }
 
-.sidenav {
-  width: 220px;
-}
-.header-title {
-  font-size: 20px;
+mat-card-title {
+  font-size: 1.3rem;
   font-weight: 600;
 }
-.quiz-card {
-  margin-bottom: 20px;
-  padding: 20px;
+
+mat-card-subtitle {
+  font-size: 1rem;
+  color: #555;
 }
 
-.schedule-section {
+.mat-card-actions {
   display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-top: 15px;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
-.profile-btn {
-  background: transparent;
-  border: none;
-  color: white;
-  font-weight: 500;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.pagination {
+  margin-top: 20px;
+  font-size: 1.1rem;
 }
 
-.spacer {
-  flex: 1 1 auto;
-}
-.active {
-  background-color: rgba(103, 58, 183, 0.1); 
-  font-weight: bold;
-  color: #673AB7;
+mat-form-field {
+  min-width: 180px;
 }

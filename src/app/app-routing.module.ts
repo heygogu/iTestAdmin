@@ -19,6 +19,7 @@ import { AddQuestionComponent } from './add-question/add-question.component';
 import { ViewQuestionsComponent } from './view-questions/view-questions.component';
 import { EditQuestionComponent } from './edit-question/edit-question.component';
 import { AuthGuard } from './guards/auth.guard';
+import { EditQuizComponent } from './edit-quiz/edit-quiz.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'admin-login', pathMatch: 'full' },
@@ -44,7 +45,9 @@ const routes: Routes = [
       { path: 'schedule-quiz', component: ScheduleQuizComponent },
       { path: 'questionbank/add/:category', component: AddQuestionComponent },
       { path: 'questionbank/view/:category', component: ViewQuestionsComponent }, 
-      { path: 'questionbank/view/:category/edit-question/:id', component: EditQuestionComponent}
+      { path: 'questionbank/view/:category/edit-question/:id', component: EditQuestionComponent},
+      { path: 'edit-quiz/:id', component: EditQuizComponent },
+
     ]
   },
 

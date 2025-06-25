@@ -1,0 +1,113 @@
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex align-items-center" style="min-height: 70px;">
+            <i class="bi bi-pencil-square me-2 fs-3"></i>
+            <h2 class="mb-0 ms-2" style="font-size: 2rem;">Edit Quiz</h2>
+        </div>
+        <div class="card-body bg-white">
+            <form #quizForm="ngForm" (ngSubmit)="updateQuiz()">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold" style="font-size: 1.2rem;">Quiz Title</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="title"
+                        [(ngModel)]="quiz.title"
+                        required
+                        style="font-size: 1.2rem; height: 2.5rem;"
+                    />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold" style="font-size: 1.2rem;">Description</label>
+                    <textarea
+                        class="form-control"
+                        rows="3"
+                        name="description"
+                        [(ngModel)]="quiz.description"
+                        required
+                        style="font-size: 1.2rem;"
+                    ></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold" style="font-size: 1.2rem;">Score To Pass</label>
+                    <input
+                        type="number"
+                        class="form-control"
+                        name="scoreToPass"
+                        [(ngModel)]="quiz.scoreToPass"
+                        required
+                        style="font-size: 1.2rem; height: 2.5rem;"
+                    />
+                </div>
+
+                <h5 class="mt-4 text-primary">Questions</h5>
+                <div
+                    *ngFor="let q of quiz.questions; let i = index"
+                    class="border rounded p-3 mb-3 bg-light"
+                >
+                    <div class="mb-2 d-flex align-items-center">
+                        <span class="badge bg-primary me-2">Q{{ i + 1 }}</span>
+                        <input
+                            type="text"
+                            class="form-control"
+                            [(ngModel)]="q.text"
+                            name="text{{ i }}"
+                            required
+                            style="flex: 1"
+                        />
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-md-3" *ngFor="let opt of ['A', 'B', 'C', 'D']">
+                            <label class="form-label small">Option {{ opt }}</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                [(ngModel)]="q['option' + opt]"
+                                name="option{{ opt }}_{{ i }}"
+                                required
+                            />
+                        </div>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label small">Correct Option</label>
+                        <select
+                            class="form-select"
+                            [(ngModel)]="q.correctOption"
+                            name="correctOption{{ i }}"
+                            required
+                        >
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                        </select>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="btn btn-outline-danger btn-sm mt-2"
+                        (click)="deleteQuestion(q.id)"
+                    >
+                        <i class="bi bi-trash"></i> Remove
+                    </button>
+                </div>
+
+                <div class="d-flex gap-2 mt-4">
+                    <button
+                        type="submit"
+                        class="btn btn-primary px-4"
+                        [disabled]="loading || !quizForm.valid"
+                    >
+                        {{ loading ? 'Updating...' : 'Update Quiz' }}
+                    </button>
+                    <a class="btn btn-outline-secondary px-4" routerLink="/quizzes">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+                

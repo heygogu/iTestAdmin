@@ -1,0 +1,34 @@
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.question-block {
+  padding: 12px 0;
+}
+
+.option-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.option-input {
+  flex: 1;
+}
+
+.correct-option {
+  width: 200px;
+  margin-top: 8px;
+}
+
+.actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 16px;
+}
+
+.question-header {
+  margin-bottom: 8px;
+  font-weight: 500;
+}
