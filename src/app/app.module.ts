@@ -47,6 +47,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AddQuestionComponent } from './add-question/add-question.component';
 import { ViewQuestionsComponent } from './view-questions/view-questions.component';
+import { EditQuizComponent } from './edit-quiz/edit-quiz.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +73,8 @@ import { ViewQuestionsComponent } from './view-questions/view-questions.componen
     SharedLayoutComponent,
     ScheduleQuizComponent,
     EditQuestionComponent,
-    EditQuestionComponent
+    EditQuestionComponent,
+    EditQuizComponent
   ],
   imports: [
     BrowserModule,

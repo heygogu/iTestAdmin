@@ -1,18 +1,122 @@
-<div class="content-wrapper">
-  <h2>Created Quizzes</h2>
-    <mat-card *ngFor="let quiz of createdQuizzes" class="quiz-card">
-    <mat-card-title>{{ quiz.name }}</mat-card-title>
-    <mat-card-subtitle>ID: {{ quiz.testId }}</mat-card-subtitle>
-    <p><strong>Description:</strong> {{ quiz.description }}</p>
-    <p><strong>Category:</strong> {{ quiz.category || 'Custom' }}</p>
-
-    <div class="schedule-section">
-      <mat-form-field appearance="outline">
-        <mat-label>Due Date</mat-label>
-          <input matInput type="date" [(ngModel)]="quiz.dueDate">
-      </mat-form-field>
-      <button mat-flat-button color="primary" (click)="scheduleQuiz(quiz)">Publish</button>
-      <button mat-flat-button color="accent" (click)="deleteQuiz(quiz)">Delete</button>
+<div class="container py-4"></div>
+  <!-- Filters -->
+  <div class="row mb-4 align-items-end">
+    <div class="col-md-4 mb-2">
+      <label for="categorySelect" class="form-label fw-semibold text-primary">
+        <i class="bi bi-layers"></i> Category
+      </label>
+      <select
+        class="form-select shadow-sm"
+        id="categorySelect"
+        [(ngModel)]="selectedCategory"
+        (change)="loadQuizzes()"
+      >
+        <option [ngValue]="null">All Categories</option>
+        <option *ngFor="let c of categories" [ngValue]="c.index">
+          {{ c.name }} ({{ c.totalUnscheduledQuizzes }} quizzes)
+        </option>
+      </select>
     </div>
-    </mat-card>
-</div>
+    <div class="col-md-8 mb-2">
+      <label for="searchInput" class="form-label fw-semibold text-primary">
+        <i class="bi bi-search"></i> Search
+      </label>
+      <input
+        id="searchInput"
+        type="text"
+        class="form-control shadow-sm"
+        placeholder="Search by Title..."
+        [(ngModel)]="searchText"
+        (ngModelChange)="loadQuizzes()"
+      />
+    </div>
+  </div>
+
+  <!-- Quiz Cards -->
+  <div *ngFor="let quiz of quizzes" class="mb-4">
+    <div class="card border-0 shadow-sm rounded-4 px-3 py-3">
+      <div class="row align-items-center">
+        <!-- Icon & Title -->
+        <div class="col-md-8 d-flex align-items-start">
+          <div class="me-3 d-flex align-items-center justify-content-center bg-primary bg-opacity-10 rounded-circle" style="width:56px; height:56px;">
+            <i class="bi bi-clipboard2-check text-primary" style="font-size:2rem;"></i>
+          </div>
+          <div>
+            <h4 class="card-title fw-bold mb-1 text-primary" style="font-size: 1.5rem;">
+              {{ quiz.title }}
+            </h4>
+            <p class="card-text text-muted mb-1">{{ quiz.description }}</p>
+            <div class="small text-secondary mt-1">
+              {{ quiz.totalMarks || 0 }} Questions
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions & Schedule -->
+        <div class="col-md-4 d-flex flex-column align-items-end gap-2 mt-3 mt-md-0">
+          <div class="d-flex align-items-center gap-2 mb-2 w-100 justify-content-end">
+            <label class="form-label mb-0 me-2 fw-semibold text-secondary" style="font-size:0.95rem;">
+              <i class="bi bi-clock-history text-primary"></i> Schedule
+            </label>
+            <input
+              type="datetime-local"
+              class="form-control border-primary"
+              [(ngModel)]="quiz.scheduledAt"
+              [name]="'scheduledAt-' + quiz.id"
+              style="max-width: 180px;"
+            />
+            <button
+              type="button"
+              class="btn btn-success btn-sm ms-2"
+              (click)="scheduleQuiz(quiz.id, quiz.scheduledAt)"
+              ngbTooltip="Schedule Quiz"
+              aria-label="Schedule Quiz"
+            >
+              <i class="bi bi-calendar-plus"></i>
+              <span class="visually-hidden">Schedule Quiz</span>
+            </button>
+          </div>
+          <div class="d-flex gap-2">
+            <a
+              class="btn btn-outline-secondary btn-sm"
+              [routerLink]="['/edit-quiz', quiz.id]"
+              aria-label="Edit Quiz"
+            >
+              <i class="bi bi-pencil"></i>
+              <span class="ms-2">Edit Quiz</span>
+            </a>
+            <button
+              type="button"
+              class="btn btn-outline-danger btn-sm"
+              (click)="deleteQuiz(quiz.id)"
+              aria-label="Delete Quiz"
+            >
+              <i class="bi bi-trash"></i>
+              <span class="ms-2">Delete Quiz</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div class="d-flex justify-content-center align-items-center mt-4 gap-3">
+    <button
+      class="btn btn-outline-primary"
+      (click)="prevPage()"
+      [disabled]="currentPage === 1"
+      aria-label="Previous Page"
+    >
+      <i class="bi bi-chevron-left"></i> Prev
+    </button>
+    <span class="fw-semibold">Page {{ currentPage }} of {{ totalPages }}</span>
+    <button
+      class="btn btn-outline-primary"
+      (click)="nextPage()"
+      [disabled]="currentPage === totalPages"
+      aria-label="Next Page"
+    >
+      Next <i class="bi bi-chevron-right"></i>
+    </button>
+  </div>

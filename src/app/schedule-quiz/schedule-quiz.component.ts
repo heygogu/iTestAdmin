@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ApiService } from 'src/app/api.service';
+import { ToastServiceService } from 'src/app/toast-service.service';
+import { of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-schedule-quiz',
@@ -7,47 +10,94 @@ import { Router } from '@angular/router';
   styleUrls: ['./schedule-quiz.component.css']
 })
 export class ScheduleQuizComponent implements OnInit {
-createdQuizzes: any[] = [];
+  quizzes: any[] = [];
+  categories: any[] = [];
+  currentPage = 1;
+  totalPages = 1;
+  pageSize = 6;
+  selectedCategory: number | null = null;
+  searchText = '';
 
-  constructor(private router: Router) {}
+  constructor(
+    private api: ApiService,
+    private toast: ToastServiceService
+  ) {}
 
   ngOnInit(): void {
-    const stored = localStorage.getItem('createdQuizzes');
-    this.createdQuizzes = stored ? JSON.parse(stored) : [];
+    this.loadCategories();
+    this.loadQuizzes();
   }
 
-  scheduleQuiz(quiz: any) {
-    if (!quiz.dueDate) {
-      alert('Please select a due date before publishing.');
+  loadCategories(): void {
+    this.api.admin.getCategoryStats().pipe(
+      tap(res => {
+        if (res.success) this.categories = res.data;
+      }),
+      catchError(() => of(null))
+    ).subscribe();
+  }
+
+  loadQuizzes(): void {
+    this.api.admin.getUnscheduledQuizzes(this.currentPage, this.pageSize, this.selectedCategory, this.searchText).pipe(
+      tap(res => {
+        if (res?.success && res.data?.quizzes) {
+          this.quizzes = res.data.quizzes;
+          const total = res.data.totalCount || 0;
+          this.totalPages = total > 0 ? Math.ceil(total / (res.data.limit || this.pageSize)) : 1;
+        } else {
+          this.quizzes = [];
+        }
+      }),
+      catchError(() => {
+        this.toast.show('Failed to load quizzes.');
+        return of(null);
+      })
+    ).subscribe();
+  }
+
+
+  scheduleQuiz(quizId: number, date: string): void {
+    if (!date) {
+      this.toast.show('Please select a date.');
       return;
     }
 
-    const stored = localStorage.getItem('availableQuizzes');
-    const availableQuizzes = stored ? JSON.parse(stored) : [];
-
-    // Add due date and mark as scheduled
-    const quizToPublish = { ...quiz, scheduled: true };
-
-    availableQuizzes.push(quizToPublish);
-    localStorage.setItem('availableQuizzes', JSON.stringify(availableQuizzes));
-
-    alert('Quiz scheduled and published!');
+    this.api.admin.scheduleQuizById(quizId, new Date(date).toISOString()).pipe(
+      tap(() => {
+        this.toast.show('Quiz scheduled!');
+        this.loadQuizzes();
+      }),
+      catchError(() => {
+        this.toast.show('Failed to schedule quiz.');
+        return of(null);
+      })
+    ).subscribe();
   }
 
-   deleteQuiz(quiz: any) {
-    const confirmDelete = confirm(`Are you sure you want to delete the quiz "${quiz.name}"?`);
-    if (!confirmDelete) return;
+  deleteQuiz(quizId: number): void {
+    this.api.admin.deleteQuizById(quizId).pipe(
+      tap(() => {
+        this.toast.show('Quiz deleted!');
+        this.loadQuizzes();
+      }),
+      catchError(() => {
+        this.toast.show('Failed to delete quiz.');
+        return of(null);
+      })
+    ).subscribe();
+  }
 
-    const stored = localStorage.getItem('createdQuizzes');
-    let createdQuizzes = stored ? JSON.parse(stored) : [];
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.loadQuizzes();
+    }
+  }
 
-    // Remove quiz by testId
-    createdQuizzes = createdQuizzes.filter((q: { testId: any; }) => q.testId !== quiz.testId);
-    localStorage.setItem('createdQuizzes', JSON.stringify(createdQuizzes));
-
-    // Update the local array used for rendering
-    this.createdQuizzes = createdQuizzes;
-
-    alert('Quiz deleted successfully!');
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.loadQuizzes();
+    }
   }
 }

@@ -1,85 +1,76 @@
 <mat-sidenav-container class="sidenav-container bg-light" style="min-height: 100vh;">
   <!-- Sidebar -->
-  <mat-sidenav #sidenav [mode]="isScreenSmall ? 'over' : 'side'" [opened]="!isScreenSmall" class="sidenav shadow-sm p-0" fixedInViewport>
+  <mat-sidenav
+    #sidenav
+    [mode]="isScreenSmall ? 'over' : 'side'"
+    [opened]="!isScreenSmall"
+    class="sidenav shadow-sm p-0"
+    fixedInViewport>
     <div class="d-flex flex-column h-100">
       <mat-toolbar color="primary" class="justify-content-center py-3" style="font-size: 1.3rem; letter-spacing: 1px;">
         <mat-icon class="me-2">dashboard</mat-icon> iTest
       </mat-toolbar>
       <nav class="flex-grow-1 overflow-hidden">
         <mat-nav-list>
-          <a mat-list-item
-             routerLink="/dashboard"
-             routerLinkActive="active-link"
-             [routerLinkActiveOptions]="{ exact: true }"
-             class="sidebar-link"
-             (click)="isScreenSmall && sidenav.close()">
+          <a mat-list-item routerLink="/dashboard" routerLinkActive="active-link" class="sidebar-link"
+             [routerLinkActiveOptions]="{ exact: true }" (click)="isScreenSmall && sidenav.close()">
             <mat-icon class="me-3">space_dashboard</mat-icon>
-            <span class="">Dashboard</span>
+            <span>Dashboard</span>
           </a>
-          <a mat-list-item
-             routerLink="/users"
-             routerLinkActive="active-link"
-             class="sidebar-link"
+          <a mat-list-item routerLink="/users" routerLinkActive="active-link" class="sidebar-link"
              (click)="isScreenSmall && sidenav.close()">
             <mat-icon class="me-3">people</mat-icon>
             <span>Users</span>
           </a>
-          <a mat-list-item
-             routerLink="/quizzes"
-             routerLinkActive="active-link"
-             class="sidebar-link"
+          <a mat-list-item routerLink="/quizzes" routerLinkActive="active-link" class="sidebar-link"
              (click)="isScreenSmall && sidenav.close()">
             <mat-icon class="me-3">assignment</mat-icon>
             <span>Quizzes</span>
           </a>
-          <a mat-list-item
-             routerLink="/question-bank"
-             routerLinkActive="active-link"
-             class="sidebar-link"
+          <a mat-list-item routerLink="/question-bank" routerLinkActive="active-link" class="sidebar-link"
              (click)="isScreenSmall && sidenav.close()">
             <mat-icon class="me-3">help_center</mat-icon>
             <span>Question Bank</span>
           </a>
         </mat-nav-list>
       </nav>
-      <div class="mt-auto p-3 border-top">
-        <button mat-stroked-button color="primary" class="w-100" routerLink="/edit-profile">
-          <mat-icon class="me-2">edit</mat-icon> Edit Profile
-        </button>
-      </div>
     </div>
   </mat-sidenav>
 
   <!-- Main Content Area -->
-  <mat-sidenav-content>
-    <mat-toolbar color="primary" class="top-toolbar px-3 d-flex align-items-center justify-content-between" style="font-size: 1.1rem; min-height: 64px;">
+  <mat-sidenav-content class="bg-light" style="height: 100vh; overflow-y: auto;">
+    <!-- Sticky Header -->
+    <mat-toolbar
+      color="primary"
+      class="top-toolbar sticky-top px-3 d-flex align-items-center justify-content-between"
+      style="font-size: 1.1rem; min-height: 64px; z-index: 1000;">
       <div class="d-flex align-items-center">
-      <button *ngIf="isScreenSmall" mat-icon-button (click)="sidenav.toggle()" class="me-2">
-        <mat-icon>menu</mat-icon>
-      </button>
-      <span class="header-title fw-semibold" style="font-size: 1.2rem;">{{ pageTitle }}</span>
+        <button *ngIf="isScreenSmall" mat-icon-button (click)="sidenav.toggle()" class="me-2">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <span class="header-title fw-semibold" style="font-size: 1.2rem;">{{ pageTitle }}</span>
       </div>
       <div class="d-flex align-items-center">
-      <button mat-button [matMenuTriggerFor]="profileMenu" class="d-flex shadow-sm border align-items-center px-3 py-2">
-        <mat-icon class="me-2 " style="font-size: 1.2rem;" >account_circle</mat-icon>
-        <span class="d-none d-md-inline">Admin</span>
-      </button>
-      <mat-menu #profileMenu="matMenu">
-        <button mat-menu-item routerLink="/edit-profile">
-        <mat-icon color="primary">edit</mat-icon>
-        <span>Edit Profile</span>
+        <button mat-button [matMenuTriggerFor]="profileMenu" class="d-flex shadow-sm border align-items-center px-3 py-2">
+          <mat-icon class="me-2" style="font-size: 1.2rem;">account_circle</mat-icon>
+          <span class="d-none d-md-inline">Admin</span>
         </button>
-        <button mat-menu-item (click)="logOut()">
-        <mat-icon color="warn">logout</mat-icon>
-        <span>Logout</span>
-        </button>
-      </mat-menu>
+        <mat-menu #profileMenu="matMenu">
+          <button mat-menu-item routerLink="/edit-profile">
+            <mat-icon color="primary">edit</mat-icon>
+            <span>Edit Profile</span>
+          </button>
+          <button mat-menu-item (click)="logOut()">
+            <mat-icon color="warn">logout</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
       </div>
     </mat-toolbar>
-    <div class="main-content p-4 bg-light" style="min-height: calc(100vh - 64px);">
+
+    <!-- Main Scrollable Content -->
+    <div class="main-content p-4">
       <router-outlet></router-outlet>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
-
-

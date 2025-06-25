@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -199,6 +200,104 @@ export class ApiService {
     }): Observable<any> => {
       return this.post('AdminQuiz/custom', quizData);
     },
+
+    //For edit quiz
+    getQuizById: (quizId: number) => {
+        return this.get<{ success: boolean; data: any }>(`AdminQuiz/${quizId}/details`);
+    },
+
+    updateQuizById: (
+        quizId: number,
+        questions: {
+          id: number;
+          text: string;
+          optionA: string;
+          optionB: string;
+          optionC: string;
+          optionD: string;
+          correctOption: 'A' | 'B' | 'C' | 'D';
+        }[]
+      ): Observable<any> => {
+        return this.patch(`AdminQuiz/${quizId}/edit-questions`, questions);
+    },
+    deleteQuestionFromQuiz: (quizId: number, questionId: number): Observable<any> => {
+      return this.delete(`AdminQuiz/${quizId}/remove-question/${questionId}`);
+    },
+
+    getUnscheduledQuizzes: (
+      page: number,
+      limit: number = 10,
+      category: number | null = null,
+      search: string = ''
+    ): Observable<{
+        success: boolean;
+        data: {
+          page: number;
+          limit: number;
+          totalCount: number;
+          quizzes: any[];
+        };
+    }> => {
+      let params = new HttpParams().set('limit', limit.toString());
+
+      if (category !== null && category !== undefined) {
+        params = params.set('category', category.toString());
+      }
+
+      if (search) {
+        params = params.set('search', search);
+      }
+
+      return this.get(`AdminQuiz/admin/unscheduled-quizzes/${page}`, params);
+    },
+
+    getScheduledQuizzes: (
+      page: number,
+      limit: number = 10,
+      category: number | null = null,
+      search: string = ''
+    ): Observable<{
+        success: boolean;
+        data: {
+          page: number;
+          limit: number;
+          totalCount: number;
+          quizzes: any[];
+        };
+    }> => {
+      let params = new HttpParams().set('limit', limit.toString());
+
+      if (category !== null && category !== undefined) {
+        params = params.set('category', category.toString());
+      }
+
+      if (search) {
+        params = params.set('search', search);
+      }
+
+      return this.get(`AdminQuiz/admin/scheduled-quizzes/${page}`, params);
+    },
+
+    scheduleQuizById: (
+      quizId: number,
+      newTime: string
+    ): Observable<any> => {
+      return this.put(`AdminQuiz/${quizId}/schedule`, { newTime });
+    },
+    rescheduleQuizById: (
+      quizId: number,
+      newTime: string
+    ): Observable<any> => {
+      return this.put(`AdminQuiz/${quizId}/reschedule`, { newTime });
+    },
+
+
+    deleteQuizById: (quizId: number): Observable<any> => {
+      return this.delete(`AdminQuiz/${quizId}`);
+    },
+
+      
+
   };
 
 }
