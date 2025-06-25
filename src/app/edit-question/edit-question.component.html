@@ -1,0 +1,89 @@
+<mat-card class="edit-question-wrapper">
+  <mat-card-title>Edit Question</mat-card-title>
+
+  <form #editForm="ngForm" (ngSubmit)="onSubmit(editForm)">
+    <!-- Question Text -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Question</mat-label>
+      <textarea
+        matInput
+        rows="3"
+        name="text"
+        [(ngModel)]="question.text"
+        required>
+      </textarea>
+    </mat-form-field>
+
+    <!-- Option A -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Option A</mat-label>
+      <input
+        matInput
+        type="text"
+        name="optionA"
+        [(ngModel)]="question.optionA"
+        required />
+    </mat-form-field>
+
+    <!-- Option B -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Option B</mat-label>
+      <input
+        matInput
+        type="text"
+        name="optionB"
+        [(ngModel)]="question.optionB"
+        required />
+    </mat-form-field>
+
+    <!-- Option C -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Option C</mat-label>
+      <input
+        matInput
+        type="text"
+        name="optionC"
+        [(ngModel)]="question.optionC"
+        required />
+    </mat-form-field>
+
+    <!-- Option D -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Option D</mat-label>
+      <input
+        matInput
+        type="text"
+        name="optionD"
+        [(ngModel)]="question.optionD"
+        required />
+    </mat-form-field>
+
+    <!-- Correct Option Selector -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Correct Option</mat-label>
+      <mat-select
+        name="correctOption"
+        [(ngModel)]="question.correctOption"
+        required>
+        <mat-option value="A">A</mat-option>
+        <mat-option value="B">B</mat-option>
+        <mat-option value="C">C</mat-option>
+        <mat-option value="D">D</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button mat-stroked-button color="warn" type="button" (click)="onCancel()">
+        Cancel
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="loading || !editForm.valid">
+        {{ loading ? 'Updating...' : 'Update Question' }}
+      </button>
+    </div>
+  </form>
+</mat-card>

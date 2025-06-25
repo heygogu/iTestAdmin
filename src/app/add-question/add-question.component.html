@@ -1,0 +1,61 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card p-4 shadow border-0">
+        <div class="card-body p-4">
+          <h3 class="text-center text-primary mb-4 fw-bold">
+            <i class="bi bi-journal-plus me-2 fs-5 "></i><span class="fs-5">Add New Question</span> 
+          </h3>
+
+          <form #questionForm="ngForm" (ngSubmit)="onSubmit(questionForm)">
+            <!-- Question -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Question</label>
+              <textarea class="form-control fs-6" rows="3" name="text" [(ngModel)]="newQuestion.text" required></textarea>
+            </div>
+
+            <!-- Options -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Option A</label>
+                <input type="text" class="form-control fs-6" name="optionA" [(ngModel)]="newQuestion.optionA" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Option B</label>
+                <input type="text" class="form-control fs-6" name="optionB" [(ngModel)]="newQuestion.optionB" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Option C</label>
+                <input type="text" class="form-control fs-6" name="optionC" [(ngModel)]="newQuestion.optionC" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Option D</label>
+                <input type="text" class="form-control fs-6" name="optionD" [(ngModel)]="newQuestion.optionD" required>
+              </div>
+            </div>
+
+            <!-- Correct Option -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Correct Option</label>
+              <select class="form-select fs-6" name="correctOption" [(ngModel)]="newQuestion.correctOption" required>
+                <option value="" disabled selected>Select correct option</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+              </select>
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-flex justify-content-between align-items-center mt-4">
+              <button type="button" class="btn btn-outline-secondary" (click)="goBack()">
+                <i class="bi bi-arrow-left"></i> Back to Categories
+              </button>
+              <button type="submit" class="btn btn-primary px-4" [disabled]="loading">
+                <i class="bi bi-save me-1"></i>
+                {{ loading ? 'Saving...' : 'Save Question' }}
+              </button>
+            </div>
+
+          </form>
+        </div>

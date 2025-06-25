@@ -1,0 +1,120 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <!-- Quiz Details Card -->
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+          <h4 class="text-primary mb-4 fw-bold">
+            <i class="bi bi-ui-checks-grid me-2"></i> Quiz Details
+          </h4>
+
+          <form #quizForm="ngForm">
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Test Name</label>
+              <input type="text" class="form-control" [(ngModel)]="quiz.title" name="title" required #title="ngModel">
+              <div class="text-danger small" *ngIf="title.invalid && title.touched">Test Name is required</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Test Description</label>
+              <textarea rows="3" class="form-control" [(ngModel)]="quiz.description" name="description" required #description="ngModel"></textarea>
+              <div class="text-danger small" *ngIf="description.invalid && description.touched">Description is required</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Select Category</label>
+              <select class="form-select" [(ngModel)]="quiz.category" name="category" required #category="ngModel">
+                <option *ngFor="let cat of categories" [value]="cat.index">
+                  {{ cat.name }} ({{ cat.totalQuestions }} questions)
+                </option>
+              </select>
+              <div class="text-danger small" *ngIf="category.invalid && category.touched">Category is required</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Score to Pass</label>
+              <input type="number" class="form-control" [(ngModel)]="quiz.passScore" name="passScore" required #passScore="ngModel">
+              <div class="text-danger small" *ngIf="passScore.invalid && passScore.touched">Score to pass is required</div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Add Question Card -->
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+          <h4 class="text-success mb-4 fw-bold"><i class="bi bi-plus-circle me-2"></i> Add Question</h4>
+
+          <form #qForm="ngForm">
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Question</label>
+              <textarea class="form-control" rows="3" [(ngModel)]="newQuestion.text" name="questionText" required #questionText="ngModel"></textarea>
+              <div class="text-danger small" *ngIf="questionText.invalid && questionText.touched">Question is required</div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3" *ngFor="let opt of ['A', 'B', 'C', 'D']; let i = index">
+                <label class="form-label fw-semibold">Option {{ opt }}</label>
+                <input type="text" class="form-control" [(ngModel)]="newQuestion.options[i]" name="option{{ i }}" required>
+                <div class="text-danger small" *ngIf="!newQuestion.options[i] && qForm.submitted">Option {{ opt }} is required</div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Correct Answer</label>
+              <select class="form-select" [(ngModel)]="newQuestion.correctAnswer" name="correctAnswer" required #correctAnswer="ngModel">
+                <option value="" disabled selected>Select correct option</option>
+                <option *ngFor="let opt of ['A', 'B', 'C', 'D']" [value]="opt">{{ opt }}</option>
+              </select>
+              <div class="text-danger small" *ngIf="correctAnswer.invalid && correctAnswer.touched">Correct answer is required</div>
+            </div>
+
+            <div class="text-end">
+              <button class="btn btn-primary" type="button" (click)="addQuestion(qForm)" 
+                [disabled]="!qForm.form.valid || hasInvalidOptions()">
+                <i class="bi bi-plus-circle me-1"></i> Add Question
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Preview Section -->
+      <div *ngIf="quiz.questions.length > 0" class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+          <h4 class="card-title text-dark mb-4"><i class="bi bi-eye me-2"></i> Preview Questions</h4>
+          <div *ngFor="let q of quiz.questions; let i = index" class="mb-4">
+            <p class="fw-semibold">Q{{ i + 1 }}: {{ q.text }}</p>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">A. {{ q.optionA }}</li>
+              <li class="list-group-item">B. {{ q.optionB }}</li>
+              <li class="list-group-item">C. {{ q.optionC }}</li>
+              <li class="list-group-item">D. {{ q.optionD }}</li>
+            </ul>
+            <p class="mt-2 text-success"><strong>Correct Answer:</strong> {{ q.correctOption }}</p>
+            <div class="text-end">
+              <button class="btn btn-sm btn-danger" (click)="deleteQuestion(i)">
+                <i class="bi bi-trash"></i> Delete
+              </button>
+            </div>
+            <hr />
+          </div>
+        </div>
+      </div>
+
+      <!-- Save Buttons -->
+      <div class="text-end mt-3">
+        <button class="btn btn-outline-secondary me-2" 
+          [disabled]="!quizForm.form.valid || quiz.questions.length === 0"
+          (click)="scheduleNow()">
+          <i class="bi bi-calendar-check me-1"></i> Schedule Now
+        </button>
+        <button class="btn btn-success"
+          [disabled]="!quizForm.form.valid || quiz.questions.length === 0"
+          (click)="saveQuiz()">
+          <i class="bi bi-save me-1"></i> Save Quiz
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

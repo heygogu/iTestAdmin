@@ -1,0 +1,7 @@
+.card {
+  border-radius: 12px;
+}
+
+textarea.form-control {
+  resize: vertical;
+}

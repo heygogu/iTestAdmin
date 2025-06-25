@@ -1,0 +1,65 @@
+.sidenav-container {
+  height: 100vh;
+}
+
+.main-content {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 24px;
+}
+
+.profile-card {
+  width: 100%;
+  max-width: 500px;
+  padding: 45px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  background: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-image-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.profile-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+}
+
+.profile-form {
+  width: 100%;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .profile-card {
+    padding: 16px;
+  }
+
+  .profile-image {
+    width: 100px;
+    height: 100px;
+  }
+}

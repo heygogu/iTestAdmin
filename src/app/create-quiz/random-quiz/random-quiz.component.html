@@ -1,0 +1,121 @@
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-body">
+    <h4 class="card-title text-primary mb-4"><i class="bi bi-shuffle me-2"></i> Generate Random Quiz</h4>
+
+    <form #quizForm="ngForm">
+      <!-- Test Name -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Test Name</label>
+        <input type="text" class="form-control" [(ngModel)]="quiz.name" name="name" required #name="ngModel">
+        <div class="text-danger small" *ngIf="name.invalid && name.touched">Test Name is required</div>
+      </div>
+
+      <!-- Description -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Description</label>
+        <textarea class="form-control" rows="2" [(ngModel)]="quiz.description" name="description" required #description="ngModel"></textarea>
+        <div class="text-danger small" *ngIf="description.invalid && description.touched">Description is required</div>
+      </div>
+
+      <!-- Category -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Select Category</label>
+        <select class="form-select" [(ngModel)]="quiz.category" name="category" required #category="ngModel">
+          <option *ngFor="let category of categories" [value]="category.index">
+            {{ category.name }} ({{ category.totalQuestions }} questions)
+          </option>
+        </select>
+        <div class="text-danger small" *ngIf="category.invalid && category.touched">Category is required</div>
+      </div>
+
+      <!-- Number of Questions and Score -->
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Number of Questions</label>
+          <input type="number" class="form-control" [(ngModel)]="quiz.questionCount" name="questionCount" required min="1" #questionCount="ngModel">
+          <div class="text-danger small" *ngIf="questionCount.invalid && questionCount.touched">
+            Please enter a valid number greater than 0.
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Score to Pass</label>
+          <input type="number" class="form-control" [(ngModel)]="quiz.passScore" name="passScore" required #passScore="ngModel">
+          <div class="text-danger small" *ngIf="passScore.invalid && passScore.touched">Score is required</div>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="mt-4 d-flex justify-content-end gap-3">
+        <button class="btn btn-outline-primary btn-lg" type="button" (click)="generateRandomQuiz()">
+          <i class="bi bi-shuffle me-1"></i> Generate Quiz
+        </button>
+        <button class="btn btn-outline-secondary btn-lg" type="button" (click)="scheduleNow()">
+          <i class="bi bi-calendar-check me-1"></i> Schedule Now
+        </button>
+        <button class="btn btn-success btn-lg" type="button" (click)="saveQuiz()">
+          <i class="bi bi-save me-1"></i> Save Quiz
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Preview Questions -->
+<div *ngIf="quiz.questions.length" class="card mt-5 border-0 shadow-sm bg-white rounded-4 overflow-hidden">
+  <div class="bg-primary bg-gradient text-white py-4 px-4 d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <i class="bi bi-eye-fill me-3 fs-2"></i>
+      <h4 class="mb-0 fw-bold">Preview Questions</h4>
+    </div>
+    <span class="badge bg-light text-primary fs-6 px-4 py-2 shadow-sm rounded-pill">
+      {{ quiz.questions.length }} Questions
+    </span>
+  </div>
+  <div class="card-body p-0">
+    <ul class="list-group list-group-flush">
+      <li *ngFor="let q of quiz.questions; let i = index" class="list-group-item px-4 py-4 border-0 border-bottom bg-transparent">
+        <div class="d-flex align-items-start mb-3">
+          <span class="badge bg-gradient bg-info text-white fs-5 me-3 shadow"
+                style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+            Q{{ i + 1 }}
+          </span>
+          <span class="fs-5 fw-semibold text-dark flex-grow-1">{{ q.text }}</span>
+        </div>
+        <div class="row g-3">
+          <div class="col-12 col-md-6 col-lg-3" *ngIf="q.optionA">
+            <div class="option-card border-0 rounded-3 p-3 h-100 bg-light d-flex align-items-center shadow-sm">
+              <span class="badge bg-secondary bg-gradient me-2 fs-6">A</span>
+              <span class="fs-6">{{ q.optionA }}</span>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-3" *ngIf="q.optionB">
+            <div class="option-card border-0 rounded-3 p-3 h-100 bg-light d-flex align-items-center shadow-sm">
+              <span class="badge bg-secondary bg-gradient me-2 fs-6">B</span>
+              <span class="fs-6">{{ q.optionB }}</span>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-3" *ngIf="q.optionC">
+            <div class="option-card border-0 rounded-3 p-3 h-100 bg-light d-flex align-items-center shadow-sm">
+              <span class="badge bg-secondary bg-gradient me-2 fs-6">C</span>
+              <span class="fs-6">{{ q.optionC }}</span>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-3" *ngIf="q.optionD">
+            <div class="option-card border-0 rounded-3 p-3 h-100 bg-light d-flex align-items-center shadow-sm">
+              <span class="badge bg-secondary bg-gradient me-2 fs-6">D</span>
+              <span class="fs-6">{{ q.optionD }}</span>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- No questions fallback -->
+<div *ngIf="!quiz.questions.length" class="card mt-5 border-0 bg-white rounded-4 text-center py-5">
+  <div class="d-flex flex-column align-items-center justify-content-center h-100">
+    <i class="bi bi-emoji-frown fs-1 text-primary mb-3"></i>
+    <p class="fs-5 text-muted mb-0">No questions to preview yet.</p>
+  </div>
+</div>

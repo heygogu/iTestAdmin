@@ -1,0 +1,45 @@
+<div class="container py-5 min-vh-100 bg-light">
+  <div class="text-center mb-5">
+    <h2 class="fw-bold text-primary display-5">Create a Quiz</h2>
+    <p class="text-muted fs-5">Choose a mode to begin designing your quiz</p>
+  </div>
+
+  <!-- Redesigned Pills Navigation -->
+ <ul class="nav nav-pills justify-content-center gap-3 mb-4" id="quizTabs">
+  <li class="nav-item">
+    <a
+      class="nav-link px-4 py-4 rounded-pill fw-semibold fs-5 shadow-sm"
+      [ngClass]="{
+        'bg-primary text-white shadow': quizMode === 'custom',
+        'bg-white text-dark shadow-sm': quizMode !== 'custom'
+      }"
+      href="javascript:void(0)"
+      (click)="quizMode = 'custom'">
+      <i class="bi bi-pencil-square me-2"></i> Custom Quiz
+    </a>
+  </li>
+  <li class="nav-item">
+    <a
+      class="nav-link px-4 py-4 rounded-pill fw-semibold fs-5 shadow-sm"
+      [ngClass]="{
+        'bg-primary text-white shadow': quizMode === 'random',
+        'bg-white text-dark shadow-sm': quizMode !== 'random'
+      }"
+      href="javascript:void(0)"
+      (click)="quizMode = 'random'">
+      <i class="bi bi-shuffle me-2"></i> Random Quiz
+    </a>
+  </li>
+</ul>
+
+
+  <!-- Tab Content -->
+  <div class="tab-content">
+    <div class="tab-pane fade show active" *ngIf="quizMode === 'custom'">
+      <app-custom-quiz></app-custom-quiz>
+    </div>
+    <div class="tab-pane fade show active" *ngIf="quizMode === 'random'">
+      <app-random-quiz></app-random-quiz>
+    </div>
+  </div>
+</div>

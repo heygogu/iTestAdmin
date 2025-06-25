@@ -1,0 +1,117 @@
+<div class="d-flex justify-content-center align-items-center min-vh-100 bg-gradient" style="background: linear-gradient(135deg, #e0e7ff 0%, #f8fafc 100%);">
+  <div class="card border-0 shadow-lg p-0 overflow-hidden" style="max-width: 420px; width: 100%; border-radius: 2rem;">
+    <!-- Decorative Top Section -->
+    <div class="bg-primary text-white text-center py-4" >
+      <i class="bi bi-shield-lock-fill fs-1"></i>
+      <h2 class="fw-bold mt-2 mb-0">Welcome Back, Admin</h2>
+      <p class="mb-0 small opacity-75">Sign in to continue to your dashboard</p>
+    </div>
+    <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)" autocomplete="off" novalidate class="p-4">
+      <!-- Email Field -->
+      <div class="mb-3">
+        <label for="email" class="form-label fw-semibold">
+          <i class="bi bi-envelope me-1"></i>Email
+        </label>
+        <input
+          type="email"
+          class="form-control rounded-pill px-4"
+          id="email"
+          name="no-autofill-email"
+          [(ngModel)]="loginData.email"
+          required
+          email
+          #emailRef="ngModel"
+          autocomplete="off"
+          placeholder="Enter your email"
+        />
+        <div *ngIf="emailRef.errors?.['required'] && emailRef.touched" class="invalid-feedback d-block">
+          <i class="bi bi-exclamation-circle me-1"></i>Email is required
+        </div>
+        <div *ngIf="emailRef.errors?.['email'] && emailRef.touched" class="invalid-feedback d-block">
+          <i class="bi bi-exclamation-circle me-1"></i>Enter a valid email
+        </div>
+      </div>
+
+      <!-- Password Field -->
+      <div class="mb-2">
+        <label for="password" class="form-label fw-semibold">
+          <i class="bi bi-lock me-1"></i>Password
+        </label>
+        <div class="input-group">
+          <input
+            [type]="hidePassword ? 'password' : 'text'"
+            class="form-control rounded-pill px-4"
+            id="password"
+            name="login-pass"
+            [(ngModel)]="loginData.password"
+            required
+            autocomplete="off"
+            minlength="8"
+            pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,}$"
+            #passwordRef="ngModel"
+            placeholder="Enter your password"
+          />
+          <button
+            type="button"
+            class="btn btn-outline-secondary border-0"
+            (click)="hidePassword = !hidePassword"
+            tabindex="-1"
+            [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
+            style="margin-left: -2.5rem; z-index: 2;"
+          >
+            <i class="bi" [ngClass]="hidePassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+          </button>
+        </div>
+        <div *ngIf="passwordRef.errors?.['required'] && passwordRef.touched" class="invalid-feedback d-block">
+          <i class="bi bi-exclamation-circle me-1"></i>Password is required
+        </div>
+        <div *ngIf="passwordRef.errors?.['pattern'] && passwordRef.touched" class="invalid-feedback d-block">
+          <i class="bi bi-exclamation-circle me-1"></i>
+          Password must include (8 character) uppercase, lowercase, number, and special character
+        </div>
+      </div>
+
+      <!-- Forget password-->
+      <div class="mb-3 text-end">
+        <a routerLink="/forgot-password" class="link-secondary small">
+          <i class="bi bi-question-circle me-1"></i>Forgot Password?
+        </a>
+      </div>
+
+      <!-- Recaptcha Centered -->
+      <div class="mb-4 d-flex justify-content-center">
+        <div>
+          <re-captcha
+            siteKey="6LePdGkrAAAAAF55GXnYiJpCDfQabX6aK9rMbIFB"
+            (resolved)="onCaptchaResolved($event)">
+          </re-captcha>
+          <div *ngIf="captchaError" class="invalid-feedback d-block mt-2 text-center">
+            <i class="bi bi-robot me-1"></i>Please verify that you are not a robot
+          </div>
+        </div>
+      </div>
+
+      <!-- Login Button -->
+      <div class="d-grid mb-3">
+        <button
+          type="submit"
+          class="btn btn-primary btn-lg rounded-pill shadow-sm"
+          [disabled]="!loginForm.valid"
+        >
+          <i class="bi bi-box-arrow-in-right me-2"></i>Login
+        </button>
+      </div>
+
+      <!-- Divider -->
+      <div class="text-center text-muted mb-3">
+        <span style="letter-spacing: 0.2em;">or</span>
+      </div>
+
+      <!-- Sign Up Link -->
+      <div class="text-center">
+        <span>Don't have an account?</span>
+        <a class="ms-1 link-primary fw-semibold" routerLink="/admin-register">Register</a>
+      </div>
+    </form>
+  </div>
+</div>

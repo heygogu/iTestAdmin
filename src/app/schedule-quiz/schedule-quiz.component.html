@@ -1,0 +1,18 @@
+<div class="content-wrapper">
+  <h2>Created Quizzes</h2>
+    <mat-card *ngFor="let quiz of createdQuizzes" class="quiz-card">
+    <mat-card-title>{{ quiz.name }}</mat-card-title>
+    <mat-card-subtitle>ID: {{ quiz.testId }}</mat-card-subtitle>
+    <p><strong>Description:</strong> {{ quiz.description }}</p>
+    <p><strong>Category:</strong> {{ quiz.category || 'Custom' }}</p>
+
+    <div class="schedule-section">
+      <mat-form-field appearance="outline">
+        <mat-label>Due Date</mat-label>
+          <input matInput type="date" [(ngModel)]="quiz.dueDate">
+      </mat-form-field>
+      <button mat-flat-button color="primary" (click)="scheduleQuiz(quiz)">Publish</button>
+      <button mat-flat-button color="accent" (click)="deleteQuiz(quiz)">Delete</button>
+    </div>
+    </mat-card>
+</div>

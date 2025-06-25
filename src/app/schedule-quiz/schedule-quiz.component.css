@@ -1,0 +1,45 @@
+.content-wrapper {
+  padding: 30px 40px;
+}
+.sidenav-container {
+  height: 100vh;
+}
+
+.sidenav {
+  width: 220px;
+}
+.header-title {
+  font-size: 20px;
+  font-weight: 600;
+}
+.quiz-card {
+  margin-bottom: 20px;
+  padding: 20px;
+}
+
+.schedule-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 15px;
+}
+
+.profile-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+.active {
+  background-color: rgba(103, 58, 183, 0.1); 
+  font-weight: bold;
+  color: #673AB7;
+}

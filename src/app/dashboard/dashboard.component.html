@@ -1,0 +1,46 @@
+<div class="button-group">
+  <button mat-flat-button color="primary" routerLink="/create-quiz">
+    <mat-icon>add</mat-icon> Create Quiz
+  </button>
+  <button mat-flat-button color="accent" routerLink="/schedule-quiz">
+    <mat-icon>schedule</mat-icon> Schedule Quiz
+  </button>
+  </div>
+
+<!-- Recent Users Table -->
+  <div class="main-content">
+    <span class="header-title">Recent Users</span> 
+    <table mat-table [dataSource]="recentResults" class="mat-elevation-z8" style="width: 100%; margin-top: 16px;">
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+    </ng-container>
+
+    <!-- Quiz Column -->
+    <ng-container matColumnDef="quiz">
+      <th mat-header-cell *matHeaderCellDef> Quiz Title </th>
+      <td mat-cell *matCellDef="let row"> {{row.quiz}} </td>
+    </ng-container>
+
+    <!-- Score Column -->
+    <ng-container matColumnDef="score">
+      <th mat-header-cell *matHeaderCellDef> Score </th>
+      <td mat-cell *matCellDef="let row"> {{row.score}} </td>
+    </ng-container>
+
+    <!-- Action Column -->
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef> Action </th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-button color="primary" (click)="goToUserDetails(row.id)">View</button>
+      </td>
+    </ng-container>
+
+    <!-- Render Rows -->
+    <tr mat-header-row *matHeaderRowDef="['name', 'quiz', 'score', 'action']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['name', 'quiz', 'score', 'action'];"></tr>
+    </table>
+</div>
+

@@ -1,0 +1,33 @@
+.quiz-card {
+  margin-bottom: 30px;
+  padding: 20px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.button-group {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.random-quiz-form {
+  margin-top: 20px;
+}
+
+
+.question-preview {
+  margin-bottom: 20px;
+}
+
+.question-preview ul {
+  padding-left: 20px;
+  margin: 4px 0 8px;
+}
+
+mat-divider {
+  margin: 12px 0;
+}

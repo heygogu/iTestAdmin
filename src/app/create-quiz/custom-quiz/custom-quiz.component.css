@@ -1,0 +1,58 @@
+.full-width {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+mat-form-field {
+  font-size: 14px;
+}
+
+mat-form-field .mat-form-field-wrapper {
+  padding-bottom: 6px; /* reduces space below input */
+}
+
+mat-form-field .mat-form-field-infix {
+  padding: 6px 10px; /* reduces input height */
+}
+
+mat-card {
+  margin-bottom: 20px;
+  padding: 16px;
+}
+
+mat-card-title {
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.button-group,
+.save-btn-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+button[mat-flat-button] {
+  font-size: 14px;
+  padding: 6px 16px;
+  min-height: 36px;
+}
+
+mat-list-item {
+  margin-bottom: 10px;
+}
+.question-preview {
+  margin-bottom: 16px;
+}
+
+.question-preview ul {
+  margin: 0;
+  padding-left: 20px;
+}
+.answer-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+

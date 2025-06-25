@@ -1,0 +1,101 @@
+<div class="container py-5 min-vh-100 bg-light fs-5">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-5">
+    <h2 class="fw-bold display-5 text-primary">
+      <i class="bi bi-journal-text me-2"></i> Questions in {{ categoryParam }}
+    </h2>
+    <a routerLink="/question-bank" class="btn btn-outline-dark btn-lg">
+      <i class="bi bi-arrow-left-circle me-1"></i> Back
+    </a>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="mb-5">
+    <div class="input-group shadow">
+      <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+      <input
+        type="text"
+        class="form-control form-control-lg"
+        placeholder="Search Questions..."
+        [(ngModel)]="searchText"
+        (ngModelChange)="search()"
+      />
+    </div>
+  </div>
+
+  <!-- Questions List -->
+  <div *ngIf="questions.length > 0; else noData">
+    <div *ngFor="let q of questions" class="card mb-4 border-0 shadow rounded-4">
+      <div class="card-body px-4 py-4">
+        <!-- Question Header -->
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <h4 class="fw-semibold text-dark">
+            <i class="bi bi-question-circle-fill text-primary me-2"></i> {{ q.text }}
+          </h4>
+          <div class="btn-group">
+            <a [routerLink]="['/questionbank/view', categoryParam, 'edit-question', q.id]" class="btn btn-sm btn-outline-primary" title="Edit Question">
+              <i class="bi bi-pencil-square"></i>
+            </a>
+            <button class="btn btn-sm btn-outline-danger" (click)="deleteQuestion(q.id)" title="Delete Question">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Options Grid -->
+        <div class="row g-3">
+          <div class="col-12 col-sm-6" *ngFor="let key of ['A', 'B']">
+            <div class="border rounded-3 px-3 py-2 d-flex align-items-center"
+                 [ngClass]="{ 'bg-success bg-opacity-10': q.correctOption === key }">
+              <i *ngIf="q.correctOption === key" class="bi bi-check-circle-fill text-success me-2"></i>
+              <strong class="me-2">{{ key }}:</strong>
+              <span>{{ q['option' + key] }}</span>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6" *ngFor="let key of ['C', 'D']">
+            <div class="border rounded-3 px-3 py-2 d-flex align-items-center"
+                 [ngClass]="{ 'bg-success bg-opacity-10': q.correctOption === key }">
+              <i *ngIf="q.correctOption === key" class="bi bi-check-circle-fill text-success me-2"></i>
+              <strong class="me-2">{{ key }}:</strong>
+              <span>{{ q['option' + key] }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <nav class="d-flex justify-content-center mt-4">
+      <ul class="pagination pagination-lg">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <a class="page-link" href="javascript:void(0)" (click)="prevPage()">
+            <i class="bi bi-chevron-left"></i>
+          </a>
+        </li>
+        <li class="page-item disabled">
+          <span class="page-link bg-white text-dark">Page {{ currentPage }} of {{ totalPages }}</span>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <a class="page-link" href="javascript:void(0)" (click)="nextPage()">
+            <i class="bi bi-chevron-right"></i>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Back to Categories -->
+    <div class="d-flex justify-content-center mt-4">
+      <a routerLink="/question-bank" class="btn btn-outline-primary btn-lg">
+        <i class="bi bi-arrow-left-circle me-2"></i> Back to Categories
+      </a>
+    </div>
+  </div>
+
+  <!-- No Data Template -->
+  <ng-template #noData>
+    <div class="alert alert-warning text-center p-4">
+      <i class="bi bi-exclamation-triangle fs-4"></i>
+      <p class="mt-2 mb-0">No questions found in this category.</p>
+    </div>
+  </ng-template>
+</div>

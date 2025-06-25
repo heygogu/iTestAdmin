@@ -1,0 +1,157 @@
+<div class="d-flex justify-content-center align-items-center min-vh-100 bg-gradient" style="background: linear-gradient(135deg, #e0e7ff 0%, #f8fafc 100%);">
+  <div class="card border-0 shadow-lg p-0 overflow-hidden" style="max-width: 420px; width: 100%; border-radius: 2rem;">
+    <!-- Decorative Top Section -->
+    <div class="bg-primary text-white text-center py-4">
+      <i class="bi bi-person-plus-fill fs-1"></i>
+      <h2 class="fw-bold mt-2 mb-0">Admin Registration</h2>
+      <p class="mb-0 small opacity-75">Create your admin account</p>
+    </div>
+
+    <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)" autocomplete="off" novalidate class="p-4">
+      <!-- Name Field -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold">
+          <i class="bi bi-person-circle me-1"></i>Name
+        </label>
+        <input
+          type="text"
+          class="form-control rounded-pill px-4"
+          name="register-fullname"
+          [(ngModel)]="registerData.fullName"
+          required
+          minlength="3"
+          #fullName="ngModel"
+          autocomplete="off"
+          placeholder="Enter your full name"
+        />
+        <div *ngIf="fullName.invalid && fullName.touched" class="invalid-feedback d-block">
+          <i class="bi bi-exclamation-circle me-1"></i>
+          <span *ngIf="fullName.errors?.['required']">Name is required</span>
+          <span *ngIf="fullName.errors?.['minlength']">Minimum 3 characters</span>
+        </div>
+      </div>
+
+      <!-- Email Field -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold">
+          <i class="bi bi-envelope-at-fill me-1"></i>Email
+        </label>
+        <input
+          type="email"
+          class="form-control rounded-pill px-4"
+          name="register-email"
+          [(ngModel)]="registerData.email"
+          required
+          email
+          #email="ngModel"
+          autocomplete="off"
+          placeholder="Enter your email"
+        />
+        <div *ngIf="email.invalid && email.touched" class="invalid-feedback d-block">
+          <i class="bi bi-exclamation-circle me-1"></i>
+          <span *ngIf="email.errors?.['required']">Email is required</span>
+          <span *ngIf="email.errors?.['email']">Enter a valid email</span>
+        </div>
+      </div>
+
+      <!-- Password Field -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold">
+          <i class="bi bi-lock-fill me-1"></i>Password
+        </label>
+        <div class="input-group">
+          <input
+            [type]="hidePassword ? 'password' : 'text'"
+            class="form-control rounded-pill px-4"
+            name="register-password"
+            [(ngModel)]="registerData.password"
+            required
+            autocomplete="new-password"
+            minlength="8"
+            pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,}$"
+            #passwordRef="ngModel"
+            (ngModelChange)="checkPasswordsMatch()"
+            placeholder="Create a password"
+          />
+          <button
+            type="button"
+            class="btn btn-outline-secondary border-0"
+            (click)="hidePassword = !hidePassword"
+            tabindex="-1"
+            [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
+            style="margin-left: -2.5rem; z-index: 2;"
+          >
+            <i class="bi" [ngClass]="hidePassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+          </button>
+        </div>
+        <div *ngIf="passwordRef.errors?.['required'] && passwordRef.touched" class="invalid-feedback d-block">
+          <i class="bi bi-exclamation-circle me-1"></i>Password is required
+        </div>
+        <div *ngIf="passwordRef.errors?.['pattern'] && passwordRef.touched" class="invalid-feedback d-block">
+          <i class="bi bi-exclamation-circle me-1"></i>
+          Password must include (8 character) uppercase, lowercase, number, and special character
+        </div>
+      </div>
+
+      <!-- Confirm Password Field -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold">
+          <i class="bi bi-shield-lock-fill me-1"></i>Confirm Password
+        </label>
+        <div class="input-group">
+          <input
+            type="password"
+            class="form-control rounded-pill px-4"
+            name="register-confirm-password"
+            [(ngModel)]="registerData.confirmPassword"
+            required
+            #confirmPasswordRef="ngModel"
+            (ngModelChange)="checkPasswordsMatch()"
+            placeholder="Re-enter your password"
+          />
+        </div>
+        <div *ngIf="confirmPasswordRef.errors?.['required'] && confirmPasswordRef.touched" class="invalid-feedback d-block">
+          <i class="bi bi-exclamation-circle me-1"></i>Confirm password is required
+        </div>
+        <div *ngIf="!passwordsMatch && confirmPasswordRef.touched" class="invalid-feedback d-block">
+          <i class="bi bi-exclamation-circle me-1"></i>Passwords do not match
+        </div>
+      </div>
+
+      <!-- Recaptcha Centered -->
+      <div class="mb-4 d-flex justify-content-center">
+        <div>
+          <re-captcha
+            siteKey="6LePdGkrAAAAAF55GXnYiJpCDfQabX6aK9rMbIFB"
+            (resolved)="onCaptchaResolved($event)">
+          </re-captcha>
+          <div *ngIf="captchaError" class="invalid-feedback d-block mt-2 text-center">
+            <i class="bi bi-robot me-1"></i>Please verify that you are not a robot
+          </div>
+        </div>
+      </div>
+
+      <!-- Register Button -->
+      <div class="d-grid mb-3">
+        <button
+          type="submit"
+          class="btn btn-primary btn-lg rounded-pill shadow-sm"
+          [disabled]="!registerForm.valid"
+        >
+          <i class="bi bi-person-check-fill me-2"></i>Register
+        </button>
+      </div>
+
+      <!-- Divider -->
+      <div class="text-center text-muted mb-3">
+        <span style="letter-spacing: 0.2em;">or</span>
+      </div>
+
+      <!-- Sign In Link -->
+      <div class="text-center">
+        <span>Already have an account?</span>
+        <a class="ms-1 link-primary fw-semibold" routerLink="/admin-login">Login</a>
+      </div>
+    </form>
+  </div>
+</div>

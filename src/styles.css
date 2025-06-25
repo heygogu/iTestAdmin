@@ -1,0 +1,41 @@
+/* You can add global styles to this file, and also import other style files */
+:root {
+  --background-color: #f8f9fa;
+  --card-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  --primary-color: #0d6efd;
+  --secondary-color: #6c757d;
+  --bg-light: #f8f9fa;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.1rem;
+  --bs-body-bg: #f8f9fa;
+  --bs-body-color: #212529;
+}
+
+.dark-theme {
+  --bs-body-bg: #121212;
+  --bs-body-color: #ffffff;
+  --bs-card-bg: #1e1e1e;
+  --bs-primary: #0d6efd;
+  --bs-table-bg: #2c2c2c;
+  --bs-table-striped-bg: #343a40;
+  --bs-border-color: #444;
+}
+
+/* body {
+  background-color: var(--background-color);
+  font-family: "Segoe UI", sans-serif;
+} */
+
+.mat-toolbar {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

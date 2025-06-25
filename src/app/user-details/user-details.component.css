@@ -1,0 +1,41 @@
+.sidenav-container {
+  height: 100vh;
+}
+
+.sidenav {
+  width: 220px;
+}
+
+.top-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.header-title {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.main-content {
+  padding: 24px;
+}
+.user-details-container {
+  padding: 24px;
+}
+
+.info-box {
+  margin-bottom: 24px;
+  background-color: #f5f5f5;
+  padding: 16px;
+  border-radius: 6px;
+}
+.active {
+  background-color: rgba(103, 58, 183, 0.1); 
+  font-weight: bold;
+  color: #673AB7;
+}
