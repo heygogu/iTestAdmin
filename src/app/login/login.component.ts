@@ -4,6 +4,7 @@ import { ApiService } from '../api.service';
 import { of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { ToastServiceService } from '../toast-service.service';
+import { UserService } from '../services/user-service.service';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +21,7 @@ export class LoginComponent {
   captchaError: boolean = false;
   hidePassword=true;
 
-  constructor(private apiService: ApiService,private router: Router,private toast: ToastServiceService) {}
+  constructor(private apiService: ApiService,private router: Router,private toast: ToastServiceService,private userService:UserService) {}
 
   // Captures the CAPTCHA token
   onCaptchaResolved(token: string) {
@@ -42,6 +43,7 @@ export class LoginComponent {
           console.log('Login API Response:', response);
   
           if (response.success) {
+            this.userService.saveUser(response.data)
             console.log('Login successful:', response);
             this.router.navigate(['/dashboard']);
           } else {

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { UserService } from '../services/user-service.service';
 
 @Component({
   selector: 'app-shared-layout',
@@ -12,7 +13,7 @@ export class SharedLayoutComponent {
   pageTitle: string = '';
   isScreenSmall: boolean = false;
 
-  constructor(private router: Router, private breakpointObserver: BreakpointObserver) {
+  constructor(private router: Router, private breakpointObserver: BreakpointObserver,private userService:UserService) {
     // Watch for screen size
     this.breakpointObserver.observe([Breakpoints.Handset])
       .subscribe(result => {
@@ -29,6 +30,10 @@ export class SharedLayoutComponent {
       });
   }
 
+  logOut(){
+      this.userService.removeUser();
+      this.router.navigate(["/admin-login"])
+  }
 
 
   setPageTitle(url: string) {

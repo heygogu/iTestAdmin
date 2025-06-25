@@ -18,6 +18,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { AddQuestionComponent } from './add-question/add-question.component';
 import { ViewQuestionsComponent } from './view-questions/view-questions.component';
 import { EditQuestionComponent } from './edit-question/edit-question.component';
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'admin-login', pathMatch: 'full' },
@@ -30,6 +31,7 @@ const routes: Routes = [
   {
     path: '',
     component: SharedLayoutComponent,
+    canActivate:[AuthGuard],
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'users', component: UsersComponent },
