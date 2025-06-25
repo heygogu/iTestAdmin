@@ -48,6 +48,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { AddQuestionComponent } from './add-question/add-question.component';
 import { ViewQuestionsComponent } from './view-questions/view-questions.component';
 import { EditQuizComponent } from './edit-quiz/edit-quiz.component';
+import {ToastrModule} from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -79,6 +80,12 @@ import { EditQuizComponent } from './edit-quiz/edit-quiz.component';
   imports: [
     BrowserModule,
     NgbModule,
+    ToastrModule.forRoot({
+      timeOut:3000,
+      enableHtml:true,
+      positionClass:'toast-top-right',
+      preventDuplicates:true,
+    }),
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,

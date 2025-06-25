@@ -2,7 +2,7 @@
   background: #f8f9fa;
 }
 .sidenav {
-  width: 240px;
+  width: 260px;
   background: #fff;
   border-right: 1px solid #e0e0e0;
 }
@@ -40,7 +40,12 @@
   background-color: var(--bs-primary);
   color: white;
 }
-
+.mat-mdc-list-item,
+.mat-mdc-list-option {
+  width: 93% !important;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
 .top-toolbar {
   position: sticky;
   top: 0;
@@ -49,6 +54,11 @@
 
 .spacer {
   flex: 1 1 auto;
+}
+
+.label {
+  position: relative !important;
+  bottom: 4.5px !important;
 }
 
 .header-title {

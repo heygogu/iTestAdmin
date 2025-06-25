@@ -5,6 +5,7 @@ import { of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { ToastServiceService } from '../toast-service.service';
 import { UserService } from '../services/user-service.service';
+import { AppToasterService } from '../services/toaster.service';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,7 @@ export class LoginComponent {
   captchaError: boolean = false;
   hidePassword=true;
 
-  constructor(private apiService: ApiService,private router: Router,private toast: ToastServiceService,private userService:UserService) {}
+  constructor(private apiService: ApiService,private router: Router,private toast: AppToasterService,private userService:UserService) {}
 
   // Captures the CAPTCHA token
   onCaptchaResolved(token: string) {
@@ -47,23 +48,23 @@ export class LoginComponent {
             console.log('Login successful:', response);
             this.router.navigate(['/dashboard']);
           } else {
-            this.toast.show('Login failed. Please check your credentials.');
+            this.toast.error(response.message)
           }
   
-          // Clear form and captcha regardless of success/failure
+       
           this.loginData = { email: '', password: '' };
           this.captchaToken = null;
           form.resetForm();
         }),
         catchError((err) => {
-          console.error('Login error:', err);
-          this.toast.show('Login failed. Please try again.');
+          console.log('Login error:', err.error.message);
+          this.toast.error(err.error.message);
   
           this.loginData = { email: '', password: '' };
           this.captchaToken = null;
           form.resetForm();
   
-          return of(null); // ensure observable doesn't break
+          return of(null); 
         })
       ).subscribe();
     } else {

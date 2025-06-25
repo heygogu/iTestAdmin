@@ -15,22 +15,22 @@
           <a mat-list-item routerLink="/dashboard" routerLinkActive="active-link" class="sidebar-link"
              [routerLinkActiveOptions]="{ exact: true }" (click)="isScreenSmall && sidenav.close()">
             <mat-icon class="me-3">space_dashboard</mat-icon>
-            <span>Dashboard</span>
+            <span class="label">Dashboard</span>
           </a>
           <a mat-list-item routerLink="/users" routerLinkActive="active-link" class="sidebar-link"
              (click)="isScreenSmall && sidenav.close()">
             <mat-icon class="me-3">people</mat-icon>
-            <span>Users</span>
+            <span class="label">Users</span>
           </a>
           <a mat-list-item routerLink="/quizzes" routerLinkActive="active-link" class="sidebar-link"
              (click)="isScreenSmall && sidenav.close()">
             <mat-icon class="me-3">assignment</mat-icon>
-            <span>Quizzes</span>
+            <span class="label">Quizzes</span>
           </a>
           <a mat-list-item routerLink="/question-bank" routerLinkActive="active-link" class="sidebar-link"
              (click)="isScreenSmall && sidenav.close()">
             <mat-icon class="me-3">help_center</mat-icon>
-            <span>Question Bank</span>
+            <span class="label">Question Bank</span>
           </a>
         </mat-nav-list>
       </nav>
