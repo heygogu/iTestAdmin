@@ -42,7 +42,6 @@ const routes: Routes = [
       { path: 'question-bank', component: QuestionBankComponent },
       { path: 'schedule-quiz', component: ScheduleQuizComponent },
       { path: 'edit-profile', component: EditProfileComponent },
-      { path: 'schedule-quiz', component: ScheduleQuizComponent },
       { path: 'questionbank/add/:category', component: AddQuestionComponent },
       { path: 'questionbank/view/:category', component: ViewQuestionsComponent }, 
       { path: 'questionbank/view/:category/edit-question/:id', component: EditQuestionComponent},
