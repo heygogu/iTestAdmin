@@ -300,4 +300,13 @@ export class ApiService {
 
   };
 
+  user = {
+    getProfile: (id: number) => {
+      return this.get<{ success: boolean, data: any }>(`User/${id}/profile`);
+    },
+    updateProfile: (id: number, body: any) => {
+      return this.patch<{ success: boolean }>(`User/${id}/profile`, body);
+    }
+  };
+
 }
