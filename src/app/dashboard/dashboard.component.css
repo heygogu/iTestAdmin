@@ -20,9 +20,6 @@
   flex: 1 1 auto;
 }
 
-.main-content {
-  padding: 24px;
-}
 
 .button-group {
   display: flex;
@@ -50,15 +47,6 @@
   margin: auto;
 }
 
-@media (max-width: 600px) {
-  .mat-card {
-    padding: 16px;
-  }
-
-  .header-title {
-    font-size: 18px;
-  }
-}
 
 
 

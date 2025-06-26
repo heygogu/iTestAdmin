@@ -306,7 +306,14 @@ export class ApiService {
     },
     updateProfile: (id: number, body: any) => {
       return this.patch<{ success: boolean }>(`User/${id}/profile`, body);
-    }
+    },
+    getRecentUsers:(page: number, limit: number)=>{
+      return this.get<{ success: boolean, data: any[], total: number, page: number, limit: number }>(`AdminQuiz/dashboard-recent/page/${page}?limit=${limit}`);
+    },
+    getAllUsers: (page: number, limit: number, search: string = '') => {
+      return this.get<{ success: boolean; page: number; pageSize: number; total: number; data: any[] }>(`AdminQuiz/users/all/${page}?limit=${limit}&search=${search}`);
+    },
+
   };
 
 }

@@ -28,22 +28,25 @@ const routes: Routes = [
   { path: 'forgot-password', component: ForgetPasswordComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
 
-  // 🔄 Routes using shared layout
+  // Routes using shared layout
   {
     path: '',
     component: SharedLayoutComponent,
     canActivate:[AuthGuard],
     children: [
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'users', component: UsersComponent },
+      { path: 'users/page/:page', component: UsersComponent },
+      { path: 'users', redirectTo: 'users/page/1', pathMatch: 'full' },
       { path: 'user-details/:id', component: UserDetailsComponent },
-      { path: 'quizzes', component: ListQuizComponent },
+      { path: 'quizzes/page/:page', component: ListQuizComponent },
+      { path: 'quizzes', redirectTo: 'quizzes/page/1', pathMatch: 'full' },
       { path: 'create-quiz', component: CreateQuizComponent },
       { path: 'question-bank', component: QuestionBankComponent },
-      { path: 'schedule-quiz', component: ScheduleQuizComponent },
+      { path: 'schedule-quiz/page/:page', component: ScheduleQuizComponent },
+      { path: 'schedule-quiz', redirectTo: 'schedule-quiz/page/1', pathMatch: 'full' },
       { path: 'edit-profile', component: EditProfileComponent },
       { path: 'questionbank/add/:category', component: AddQuestionComponent },
-      { path: 'questionbank/view/:category', component: ViewQuestionsComponent }, 
+      { path: 'questionbank/view/:category/page/:page', component: ViewQuestionsComponent }, 
       { path: 'questionbank/view/:category/edit-question/:id', component: EditQuestionComponent},
       { path: 'edit-quiz/:id', component: EditQuizComponent },
 

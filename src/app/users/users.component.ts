@@ -1,57 +1,81 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ApiService } from '../api.service';
+import { AppToasterService } from '../services/toaster.service';
+import { of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css']
 })
-export class UsersComponent {
-  constructor(private router: Router) {}
+export class UsersComponent implements OnInit {
 
-  searchQuery = '';
+   users: any[] = [];
+  currentPage = 1;
+  totalPages = 1;
+  pageSize = 10;
+  searchText = '';
 
-  users = [
-    {
-      id: 1,
-      name: 'John Doe',
-      email: 'john@example.com',
-      quizName: 'General Knowledge',
-      attemptDate: '2025-06-22',
-      totalScore: 100,
-      scoreObtained: 85,
-      status: 'Pass'
-    },
-    {
-      id: 2,
-      name: 'Priya Singh',
-      email: 'priya@example.com',
-      quizName: 'Science & Tech',
-      attemptDate: '2025-06-20',
-      totalScore: 100,
-      scoreObtained: 65,
-      status: 'Pass'
-    },
-    {
-      id: 3,
-      name: 'Ravi Kumar',
-      email: 'ravi@example.com',
-      quizName: 'Mathematics',
-      attemptDate: '2025-06-19',
-      totalScore: 100,
-      scoreObtained: 40,
-      status: 'Fail'
-    }
-  ];
+  constructor(
+    private api: ApiService,
+    private toast: AppToasterService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
-  get filteredUsers() {
-    return this.users.filter(user =>
-      user.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-      user.email.toLowerCase().includes(this.searchQuery.toLowerCase())
-    );
+  ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      this.currentPage = parseInt(params.get('page') || '1', 10);
+      this.loadUsers(); 
+    });
   }
 
-  viewDetails(id: number) {
+
+  loadUsers(): void {
+    this.route.queryParamMap.subscribe(queryParams => {
+      const searchParam = queryParams.get('search') || '';
+      this.searchText = searchParam;
+
+      this.api.user.getAllUsers(this.currentPage, this.pageSize, this.searchText).pipe(
+        tap(res => {
+          if (res.success) {
+            this.users = res.data;
+            this.totalPages = Math.ceil(res.total / res.pageSize);
+          }
+        }),
+        catchError(err => {
+          this.toast.error('Failed to load users');
+          return of(null);
+        })
+      ).subscribe();
+    });
+  }
+
+
+  search(): void {
+    this.router.navigate(['/users/page', 1], {
+      queryParams: { search: this.searchText }
+    });
+  }
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.router.navigate(['/users/page', this.currentPage + 1], {
+        queryParams: { search: this.searchText }
+      });
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.router.navigate(['/users/page', this.currentPage - 1], {
+        queryParams: { search: this.searchText }
+      });
+    }
+  }
+
+  goToUserDetails(id: number): void {
     this.router.navigate(['/user-details', id]);
   }
 }

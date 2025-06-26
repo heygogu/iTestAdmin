@@ -1,34 +1,62 @@
-<div class="mb-4 d-flex gap-2">
-  <a class="btn btn-primary" routerLink="/create-quiz">
-    <i class="bi bi-plus"></i> Create Quiz
-  </a>
-  <a class="btn btn-info text-white" routerLink="/schedule-quiz">
-    <i class="bi bi-clock"></i> Schedule Quiz
-  </a>
-</div>
+<div class="container">
+  <!-- Header buttons -->
+  <div class="mb-4 d-flex gap-2">
+    <a class="btn btn-primary" routerLink="/create-quiz">
+      <i class="bi bi-plus"></i> Create Quiz
+    </a>
+    <a class="btn btn-info text-white" routerLink="/schedule-quiz">
+      <i class="bi bi-clock"></i> Schedule Quiz
+    </a>
+  </div>
 
-<div class="main-content">
-  <span class="h5 d-block mb-3">Recent Users</span>
-  <table class="table table-striped table-hover">
-    <thead class="table-light">
-      <tr>
-        <th>Name</th>
-        <th>Quiz Title</th>
-        <th>Score</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let row of recentResults; let i = index" [ngClass]="{'bg-light': i % 2 === 0}">
-        <td>{{ row.name }}</td>
-        <td>{{ row.quiz }}</td>
-        <td>{{ row.score }}</td>
-        <td>
-          <button class="btn btn-sm btn-outline-secondary" (click)="goToUserDetails(row.id)" title="View Details">
-            <i class="bi bi-eye-fill"></i>
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <!-- Recent Users Table -->
+  <div class="main-content">
+    <span class="h5 d-block mb-3">Recent Users</span>
+
+    <table class="table table-striped table-hover" *ngIf="recentResults.length > 0; else noData">
+      <thead class="table-light">
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Quiz Title</th>
+          <th>Score</th>
+          <th>Status</th> 
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of recentResults; let i = index">
+          <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td class="text-capitalize">{{ row.name }}</td>
+          <td>{{ row.quiz }}</td>
+          <td>{{ row.score }}</td>
+          <td>
+            <span
+              class="badge rounded-pill px-3 py-2"
+              [ngClass]="{
+                'bg-success bg-opacity-75': row.passed,
+                'bg-danger bg-opacity-75': !row.passed}">
+              {{ row.passed ? 'Passed' : 'Failed&nbsp;' }}
+            </span>
+          </td>
+          <td>
+            <button
+              class="btn btn-sm btn-outline-secondary"
+              (click)="goToUserDetails(row.id)"
+              title="View Details">
+              <i class="bi bi-eye-fill"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- No Data Fallback -->
+    <ng-template #noData>
+      <div class="alert alert-warning text-center p-4">
+        <i class="bi bi-exclamation-triangle fs-4"></i>
+        <p class="mt-2 mb-0">No recent user activity found.</p>
+      </div>
+    </ng-template>
+  </div>
 </div>

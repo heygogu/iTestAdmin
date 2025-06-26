@@ -3,6 +3,7 @@ import { ApiService } from 'src/app/api.service';
 import { of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { AppToasterService } from '../services/toaster.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-schedule-quiz',
@@ -20,13 +21,19 @@ export class ScheduleQuizComponent implements OnInit {
 
   constructor(
     private api: ApiService,
-    private toast: AppToasterService
+    private toast: AppToasterService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.loadCategories();
-    this.loadQuizzes();
+    this.route.paramMap.subscribe(params => {
+      this.currentPage = parseInt(params.get('page') || '1', 10);
+      this.loadCategories();
+      this.loadQuizzes();
+    });
   }
+
 
   loadCategories(): void {
     this.api.admin.getCategoryStats().pipe(
@@ -87,17 +94,16 @@ export class ScheduleQuizComponent implements OnInit {
     ).subscribe();
   }
 
-  prevPage(): void {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-      this.loadQuizzes();
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.router.navigate(['/schedule-quiz/page', this.currentPage + 1]);
     }
   }
 
-  nextPage(): void {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-      this.loadQuizzes();
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.router.navigate(['/schedule-quiz/page', this.currentPage - 1]);
     }
   }
+
 }

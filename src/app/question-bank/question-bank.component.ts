@@ -34,6 +34,6 @@ export class QuestionBankComponent implements OnInit {
   }
 
   showQuestionList(category: string) {
-    this.router.navigate(['/questionbank/view', category]);
+   this.router.navigate(['/questionbank/view', category, 'page', 1]);
   }
 }

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router} from '@angular/router';
 import { ApiService } from '../api.service';
-import { ToastServiceService } from '../toast-service.service';
 import { of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { AppToasterService } from '../services/toaster.service';
@@ -28,13 +27,17 @@ export class ViewQuestionsComponent implements OnInit {
     SpaceAndAstronomy: 18, EnvironmentalStudies: 19
   };
 
-  constructor(private route: ActivatedRoute, private api: ApiService, private toast: AppToasterService) {}
+  constructor(private route: ActivatedRoute,private router: Router, private api: ApiService, private toast: AppToasterService) {}
 
   ngOnInit(): void {
-    this.categoryParam = this.route.snapshot.paramMap.get('category') || '';
-    this.categoryIndex = this.categoryMap[this.categoryParam];
-    this.loadQuestions();
+    this.route.paramMap.subscribe(params => {
+      this.categoryParam = params.get('category') || '';
+      this.currentPage = parseInt(params.get('page') || '1', 10);
+      this.categoryIndex = this.categoryMap[this.categoryParam];
+      this.loadQuestions();
+    });
   }
+
 
   loadQuestions(): void {
     this.api.admin.getQuestionsByCategory(this.categoryIndex, this.currentPage, this.pageSize, this.searchText)
@@ -62,18 +65,18 @@ export class ViewQuestionsComponent implements OnInit {
   }
 
   nextPage(): void {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-      this.loadQuestions();
+      if (this.currentPage < this.totalPages) {
+        const next = this.currentPage + 1;
+        this.router.navigate(['/questionbank/view', this.categoryParam, 'page', next]);
+      }
     }
-  }
 
-  prevPage(): void {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-      this.loadQuestions();
+    prevPage(): void {
+      if (this.currentPage > 1) {
+        const prev = this.currentPage - 1;
+        this.router.navigate(['/questionbank/view', this.categoryParam, 'page', prev]);
+      }
     }
-  }
 
   deleteQuestion(id: number): void {
     this.api.admin.deleteQuestionFromBank(id).pipe(

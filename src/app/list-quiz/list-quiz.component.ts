@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/api.service';
 import { ToastServiceService } from 'src/app/toast-service.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
@@ -24,13 +24,17 @@ export class ListQuizComponent implements OnInit {
 
   constructor(
     public router: Router,
+    private route: ActivatedRoute,
     private api: ApiService,
     private toast: ToastServiceService
   ) {}
 
   ngOnInit(): void {
-    this.loadCategories();
-    this.loadQuizzes();
+    this.route.paramMap.subscribe(params => {
+      this.currentPage = parseInt(params.get('page') || '1', 10);
+      this.loadCategories();
+      this.loadQuizzes();
+    });
   }
 
   getCategoryName(index: number): string {
@@ -64,8 +68,6 @@ export class ListQuizComponent implements OnInit {
           this.scheduledQuizzes = res.data.quizzes;
           const total = res.data.totalCount || 0;
           this.totalPages = total > 0 ? Math.ceil(total / res.data.limit) : 1;
-
-          // ✅ Initialize datetime picker models from rescheduledAt or scheduledAt
           this.datePickerModels = {};
           for (const quiz of this.scheduledQuizzes) {
             this.datePickerModels[quiz.id] =
@@ -118,17 +120,15 @@ export class ListQuizComponent implements OnInit {
     ).subscribe();
   }
 
-  prevPage(): void {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-      this.loadQuizzes();
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.router.navigate(['/quizzes/page', this.currentPage + 1]);
     }
   }
 
-  nextPage(): void {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-      this.loadQuizzes();
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.router.navigate(['/quizzes/page', this.currentPage - 1]);
     }
   }
 }
