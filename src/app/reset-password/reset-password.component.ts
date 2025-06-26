@@ -4,6 +4,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { ApiService } from '../api.service';
 import { ToastServiceService } from '../toast-service.service';
+import { AppToasterService } from '../services/toaster.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -11,7 +12,7 @@ import { ToastServiceService } from '../toast-service.service';
   styleUrls: ['./reset-password.component.css']
 })
 export class ResetPasswordComponent {
-  constructor(private apiService: ApiService, private router: Router,private toast: ToastServiceService){}
+  constructor(private apiService: ApiService, private router: Router,private toast: AppToasterService){}
 
   resetData = {
     token: '',
@@ -21,6 +22,8 @@ export class ResetPasswordComponent {
   
   passwordsMatch: boolean = true;
   loading: boolean = false;
+  showNewPassword=false;
+  showConfirmPassword=false;
   
   checkPasswordsMatch() {
     this.passwordsMatch =
@@ -41,12 +44,12 @@ export class ResetPasswordComponent {
       this.apiService.auth.resetPassword(payload).pipe(
         tap(response => {
           console.log('Reset Password Response:', response);
-          this.toast.show(response.message);
+          this.toast.success(response.message);
           this.router.navigate(['/admin-login']);
         }),
         catchError(error => {
           console.error('Reset Password Error:', error);
-          this.toast.show(error?.error?.message);
+          this.toast.error(error?.error?.message);
           return of(null);
         })
       ).subscribe(() => {
@@ -55,7 +58,7 @@ export class ResetPasswordComponent {
 
     } else {
       if (!this.passwordsMatch) {
-        this.toast.show('Passwords do not match!');
+        this.toast.info('Passwords do not match!');
       } else {
         console.warn('Form is invalid');
       }

@@ -13,7 +13,8 @@ import { AppToasterService } from '../services/toaster.service';
 export class RegisterComponent {
   constructor(private apiService: ApiService, private router: Router, private toast: AppToasterService) {}
 
-  hidePassword=false;
+  hidePassword=true;
+  confirmHidePassword=true;
   registerData = {
     fullName: '',
     email: '',

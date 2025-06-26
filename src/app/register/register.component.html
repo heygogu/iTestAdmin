@@ -11,11 +11,11 @@
       <!-- Name Field -->
       <div class="mb-3">
         <label class="form-label fw-semibold">
-          <i class="bi bi-person-circle me-1"></i>Name
+          Name
         </label>
         <input
           type="text"
-          class="form-control rounded-pill px-4"
+          class="form-control"
           name="register-fullname"
           [(ngModel)]="registerData.fullName"
           required
@@ -25,7 +25,7 @@
           placeholder="Enter your full name"
         />
         <div *ngIf="fullName.invalid && fullName.touched" class="invalid-feedback d-block">
-          <i class="bi bi-exclamation-circle me-1"></i>
+          
           <span *ngIf="fullName.errors?.['required']">Name is required</span>
           <span *ngIf="fullName.errors?.['minlength']">Minimum 3 characters</span>
         </div>
@@ -34,11 +34,11 @@
       <!-- Email Field -->
       <div class="mb-3">
         <label class="form-label fw-semibold">
-          <i class="bi bi-envelope-at-fill me-1"></i>Email
+         Email
         </label>
         <input
           type="email"
-          class="form-control rounded-pill px-4"
+          class="form-control "
           name="register-email"
           [(ngModel)]="registerData.email"
           required
@@ -48,7 +48,7 @@
           placeholder="Enter your email"
         />
         <div *ngIf="email.invalid && email.touched" class="invalid-feedback d-block">
-          <i class="bi bi-exclamation-circle me-1"></i>
+          
           <span *ngIf="email.errors?.['required']">Email is required</span>
           <span *ngIf="email.errors?.['email']">Enter a valid email</span>
         </div>
@@ -57,12 +57,12 @@
       <!-- Password Field -->
       <div class="mb-3">
         <label class="form-label fw-semibold">
-          <i class="bi bi-lock-fill me-1"></i>Password
+          Password
         </label>
         <div class="input-group">
           <input
             [type]="hidePassword ? 'password' : 'text'"
-            class="form-control rounded-pill px-4"
+            class="form-control"
             name="register-password"
             [(ngModel)]="registerData.password"
             required
@@ -73,22 +73,15 @@
             (ngModelChange)="checkPasswordsMatch()"
             placeholder="Create a password"
           />
-          <button
-            type="button"
-            class="btn btn-outline-secondary border-0"
-            (click)="hidePassword = !hidePassword"
-            tabindex="-1"
-            [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
-            style="margin-left: -2.5rem; z-index: 2;"
-          >
+         <button type="button" class="btn btn-outline-secondary" (click)="hidePassword = !hidePassword" tabindex="-1">
             <i class="bi" [ngClass]="hidePassword ? 'bi-eye-slash' : 'bi-eye'"></i>
           </button>
         </div>
         <div *ngIf="passwordRef.errors?.['required'] && passwordRef.touched" class="invalid-feedback d-block">
-          <i class="bi bi-exclamation-circle me-1"></i>Password is required
+         Password is required
         </div>
         <div *ngIf="passwordRef.errors?.['pattern'] && passwordRef.touched" class="invalid-feedback d-block">
-          <i class="bi bi-exclamation-circle me-1"></i>
+          
           Password must include (8 character) uppercase, lowercase, number, and special character
         </div>
       </div>
@@ -96,12 +89,12 @@
       <!-- Confirm Password Field -->
       <div class="mb-3">
         <label class="form-label fw-semibold">
-          <i class="bi bi-shield-lock-fill me-1"></i>Confirm Password
+          Confirm Password
         </label>
         <div class="input-group">
           <input
             type="password"
-            class="form-control rounded-pill px-4"
+            class="form-control"
             name="register-confirm-password"
             [(ngModel)]="registerData.confirmPassword"
             required
@@ -109,12 +102,15 @@
             (ngModelChange)="checkPasswordsMatch()"
             placeholder="Re-enter your password"
           />
+          <button type="button" class="btn btn-outline-secondary" (click)="confirmHidePassword = !confirmHidePassword" tabindex="-1">
+            <i class="bi" [ngClass]="confirmHidePassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+          </button>
         </div>
         <div *ngIf="confirmPasswordRef.errors?.['required'] && confirmPasswordRef.touched" class="invalid-feedback d-block">
-          <i class="bi bi-exclamation-circle me-1"></i>Confirm password is required
+          Confirm password is required
         </div>
         <div *ngIf="!passwordsMatch && confirmPasswordRef.touched" class="invalid-feedback d-block">
-          <i class="bi bi-exclamation-circle me-1"></i>Passwords do not match
+         Passwords do not match
         </div>
       </div>
 
@@ -126,7 +122,7 @@
             (resolved)="onCaptchaResolved($event)">
           </re-captcha>
           <div *ngIf="captchaError" class="invalid-feedback d-block mt-2 text-center">
-            <i class="bi bi-robot me-1"></i>Please verify that you are not a robot
+            Please verify that you are not a robot
           </div>
         </div>
       </div>
@@ -144,7 +140,7 @@
 
       <!-- Divider -->
       <div class="text-center text-muted mb-3">
-        <span style="letter-spacing: 0.2em;">or</span>
+        <span style="letter-spacing: 0.1em;">or</span>
       </div>
 
       <!-- Sign In Link -->

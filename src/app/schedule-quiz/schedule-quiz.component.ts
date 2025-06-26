@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/api.service';
-import { ToastServiceService } from 'src/app/toast-service.service';
 import { of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { AppToasterService } from '../services/toaster.service';
 
 @Component({
   selector: 'app-schedule-quiz',
@@ -20,7 +20,7 @@ export class ScheduleQuizComponent implements OnInit {
 
   constructor(
     private api: ApiService,
-    private toast: ToastServiceService
+    private toast: AppToasterService
   ) {}
 
   ngOnInit(): void {
@@ -48,8 +48,8 @@ export class ScheduleQuizComponent implements OnInit {
           this.quizzes = [];
         }
       }),
-      catchError(() => {
-        this.toast.show('Failed to load quizzes.');
+      catchError((err) => {
+        this.toast.error(err.error.message);
         return of(null);
       })
     ).subscribe();
@@ -58,17 +58,17 @@ export class ScheduleQuizComponent implements OnInit {
 
   scheduleQuiz(quizId: number, date: string): void {
     if (!date) {
-      this.toast.show('Please select a date.');
+      this.toast.warning('Please select a date.');
       return;
     }
 
     this.api.admin.scheduleQuizById(quizId, new Date(date).toISOString()).pipe(
       tap(() => {
-        this.toast.show('Quiz scheduled!');
+        this.toast.success('Quiz scheduled!');
         this.loadQuizzes();
       }),
-      catchError(() => {
-        this.toast.show('Failed to schedule quiz.');
+      catchError((err) => {
+        this.toast.error(err.error.message);
         return of(null);
       })
     ).subscribe();
@@ -77,11 +77,11 @@ export class ScheduleQuizComponent implements OnInit {
   deleteQuiz(quizId: number): void {
     this.api.admin.deleteQuizById(quizId).pipe(
       tap(() => {
-        this.toast.show('Quiz deleted!');
+        this.toast.success('Quiz deleted!');
         this.loadQuizzes();
       }),
-      catchError(() => {
-        this.toast.show('Failed to delete quiz.');
+      catchError((err) => {
+        this.toast.error(err?.error?.message);
         return of(null);
       })
     ).subscribe();

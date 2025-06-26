@@ -10,11 +10,11 @@
       <!-- Email Field -->
       <div class="mb-3">
         <label for="email" class="form-label fw-semibold">
-          <i class="bi bi-envelope me-1"></i>Email
+         Email
         </label>
         <input
           type="email"
-          class="form-control rounded-pill px-4"
+          class="form-control "
           id="email"
           name="no-autofill-email"
           [(ngModel)]="loginData.email"
@@ -25,22 +25,22 @@
           placeholder="Enter your email"
         />
         <div *ngIf="emailRef.errors?.['required'] && emailRef.touched" class="invalid-feedback d-block">
-          <i class="bi bi-exclamation-circle me-1"></i>Email is required
+         Email is required
         </div>
         <div *ngIf="emailRef.errors?.['email'] && emailRef.touched" class="invalid-feedback d-block">
-          <i class="bi bi-exclamation-circle me-1"></i>Enter a valid email
+          Enter a valid email
         </div>
       </div>
 
       <!-- Password Field -->
       <div class="mb-2">
         <label for="password" class="form-label fw-semibold">
-          <i class="bi bi-lock me-1"></i>Password
+          Password
         </label>
         <div class="input-group">
           <input
             [type]="hidePassword ? 'password' : 'text'"
-            class="form-control rounded-pill px-4"
+            class="form-control "
             id="password"
             name="login-pass"
             [(ngModel)]="loginData.password"
@@ -51,22 +51,16 @@
             #passwordRef="ngModel"
             placeholder="Enter your password"
           />
-          <button
-            type="button"
-            class="btn btn-outline-secondary border-0"
-            (click)="hidePassword = !hidePassword"
-            tabindex="-1"
-            [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
-            style="margin-left: -2.5rem; z-index: 2;"
-          >
+          
+           <button type="button" class="btn btn-outline-secondary" (click)="hidePassword = !hidePassword" tabindex="-1">
             <i class="bi" [ngClass]="hidePassword ? 'bi-eye-slash' : 'bi-eye'"></i>
           </button>
         </div>
         <div *ngIf="passwordRef.errors?.['required'] && passwordRef.touched" class="invalid-feedback d-block">
-          <i class="bi bi-exclamation-circle me-1"></i>Password is required
+         Password is required
         </div>
         <div *ngIf="passwordRef.errors?.['pattern'] && passwordRef.touched" class="invalid-feedback d-block">
-          <i class="bi bi-exclamation-circle me-1"></i>
+     
           Password must include (8 character) uppercase, lowercase, number, and special character
         </div>
       </div>
@@ -74,7 +68,7 @@
       <!-- Forget password-->
       <div class="mb-3 text-end">
         <a routerLink="/forgot-password" class="link-secondary small">
-          <i class="bi bi-question-circle me-1"></i>Forgot Password?
+          Forgot Password?
         </a>
       </div>
 
@@ -104,7 +98,7 @@
 
       <!-- Divider -->
       <div class="text-center text-muted mb-3">
-        <span style="letter-spacing: 0.2em;">or</span>
+        <span style="letter-spacing: 0.1em;">or</span>
       </div>
 
       <!-- Sign Up Link -->

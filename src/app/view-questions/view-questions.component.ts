@@ -4,6 +4,7 @@ import { ApiService } from '../api.service';
 import { ToastServiceService } from '../toast-service.service';
 import { of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
+import { AppToasterService } from '../services/toaster.service';
 
 @Component({
   selector: 'app-view-questions',
@@ -27,7 +28,7 @@ export class ViewQuestionsComponent implements OnInit {
     SpaceAndAstronomy: 18, EnvironmentalStudies: 19
   };
 
-  constructor(private route: ActivatedRoute, private api: ApiService, private toast: ToastServiceService) {}
+  constructor(private route: ActivatedRoute, private api: ApiService, private toast: AppToasterService) {}
 
   ngOnInit(): void {
     this.categoryParam = this.route.snapshot.paramMap.get('category') || '';
@@ -39,13 +40,15 @@ export class ViewQuestionsComponent implements OnInit {
     this.api.admin.getQuestionsByCategory(this.categoryIndex, this.currentPage, this.pageSize, this.searchText)
       .pipe(
         tap(res => {
-          this.questions = res.data || [];
-          const total = res.total ?? 0;
-          const limit = res.limit ?? this.pageSize;
-          this.totalPages = total > 0 ? Math.ceil(total / limit) : 1;
+          if(res.success){
+            this.questions = res.data || [];
+            const total = res.total ?? 0;
+            const limit = res.limit ?? this.pageSize;
+            this.totalPages = total > 0 ? Math.ceil(total / limit) : 1;
+          }
         }),
         catchError(err => {
-          this.toast.show('Failed to load questions.');
+          this.toast.error('Failed to load questions.');
           console.error('Error loading questions:', err);
           return of(null);
         })
@@ -74,12 +77,12 @@ export class ViewQuestionsComponent implements OnInit {
 
   deleteQuestion(id: number): void {
     this.api.admin.deleteQuestionFromBank(id).pipe(
-      tap(() => {
-        this.toast.show('Question deleted successfully!');
+      tap((res) => {
+        this.toast.success(res.message);
         this.loadQuestions();
       }),
-      catchError(() => {
-        this.toast.show('Failed to delete question.');
+      catchError((err) => {
+        this.toast.error(err.error.message);
         return of(null);
       })
     ).subscribe();
