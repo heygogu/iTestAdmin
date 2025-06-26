@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component} from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -29,7 +29,10 @@ export class SharedLayoutComponent {
         this.setPageTitle(url);
       });
   }
-
+  get userName(): string {
+    return this.userService.getUser()?.fullName || 'Admin';
+  }
+    
   logOut(){
       this.userService.removeUser();
       this.router.navigate(["/admin-login"])

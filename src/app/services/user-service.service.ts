@@ -4,7 +4,7 @@ import { LOCAL_STORAGE } from '../local-storage.token';
 
 export interface User {
   id: string;
-  name: string;
+  fullName: string;
   email: string;
   roles: string[];
 }

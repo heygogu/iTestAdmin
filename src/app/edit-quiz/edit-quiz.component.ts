@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/api.service';
-import { ToastServiceService } from 'src/app/toast-service.service';
 import { of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { AppToasterService } from '../services/toaster.service';
 
 @Component({
   selector: 'app-edit-quiz',
@@ -24,7 +24,7 @@ export class EditQuizComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private api: ApiService,
-    private toast: ToastServiceService,
+    private toast: AppToasterService,
     private router: Router
   ) {}
 
@@ -40,12 +40,12 @@ export class EditQuizComponent implements OnInit {
           const { title, description, scoreToPass, questions } = res.data;
           this.quiz = { title, description, scoreToPass, questions };
         } else {
-          this.toast.show('Failed to load quiz.');
+          this.toast.error('Failed to load quiz.');
         }
       }),
       catchError(err => {
         console.error(err);
-        this.toast.show('Error fetching quiz.');
+        this.toast.error('Error fetching quiz.');
         return of(null);
       })
     ).subscribe();
@@ -67,12 +67,12 @@ export class EditQuizComponent implements OnInit {
 
     this.api.admin.updateQuizById(this.quizId, updatedQuestions).pipe(
       tap(() => {
-        this.toast.show('Quiz updated successfully!');
+        this.toast.success('Quiz updated successfully!');
         this.router.navigate(['/quizzes']);
       }),
       catchError(err => {
         console.error('Failed to update quiz', err);
-        this.toast.show('Failed to update quiz.');
+        this.toast.error('Failed to update quiz.');
         this.loading = false;
         return of(null);
       })
@@ -84,15 +84,15 @@ export class EditQuizComponent implements OnInit {
       tap(response => {
         if (response?.success) {
           this.quiz.questions = this.quiz.questions.filter(q => q.id !== id);
-          this.toast.show('Question removed from quiz.');
+          this.toast.success('Question removed from quiz.');
           this.loadQuiz();
         } else {
-          this.toast.show('Failed to remove question.');
+          this.toast.error('Failed to remove question.');
         }
       }),
       catchError(error => {
         console.error('Failed to delete question', error);
-        this.toast.show('Error removing question from quiz.');
+        this.toast.error('Error removing question from quiz.');
         return of(null);
       })
     ).subscribe();

@@ -3,6 +3,7 @@ import { ApiService } from '../api.service';
 import { of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { UserService } from '../services/user-service.service';
+import { AppToasterService } from '../services/toaster.service';
 
 @Component({
   selector: 'app-edit-profile',
@@ -22,7 +23,8 @@ export class EditProfileComponent implements OnInit {
 
   constructor(
     private api: ApiService,
-    private userService: UserService
+    private userService: UserService,
+    private toast: AppToasterService,
   ) {}
 
   ngOnInit(): void {
@@ -58,14 +60,14 @@ export class EditProfileComponent implements OnInit {
       this.api.user.updateProfile(this.userId, this.profileData).pipe(
         tap((res: any) => {
           if (res.success) {
-            alert('Profile updated successfully!');
+            this.toast.success('Profile updated successfully!');
           } else {
-            alert('Failed to update profile.');
+            this.toast.error('Failed to update profile.');
           }
         }),
         catchError(err => {
           console.error('Update error:', err);
-          alert('Error while updating profile.');
+          this.toast.error('Error while updating profile.');
           return of(null);
         })
       ).subscribe();

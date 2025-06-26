@@ -3,6 +3,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { ApiService } from 'src/app/api.service';
 import { ToastServiceService } from 'src/app/toast-service.service';
+import { AppToasterService } from 'src/app/services/toaster.service';
 
 @Component({
   selector: 'app-random-quiz',
@@ -24,7 +25,7 @@ export class RandomQuizComponent implements OnInit {
     questions: [] as any[]
   };
 
-  constructor(private apiService: ApiService,private toast: ToastServiceService) {}
+  constructor(private apiService: ApiService,private toast: AppToasterService) {}
 
   ngOnInit(): void {
     this.apiService.admin.getCategoryStats().pipe(
@@ -35,7 +36,7 @@ export class RandomQuizComponent implements OnInit {
       }),
       catchError(err => {
         console.error('Error loading categories:', err);
-        this.toast.show('Failed to load categories.');
+        this.toast.error('Failed to load categories.');
         return of(null);
       })
     ).subscribe();
@@ -43,7 +44,7 @@ export class RandomQuizComponent implements OnInit {
 
   generateRandomQuiz() {
     if (this.quiz.category == null || !this.quiz.questionCount) {
-      this.toast.show('Please select a category and enter a question count.');
+      this.toast.warning('Please select a category and enter a question count.');
       return;
     }
 
@@ -51,12 +52,12 @@ export class RandomQuizComponent implements OnInit {
     const selectedCategory = this.categories.find(c => c.index === categoryIndex);
 
     if (!selectedCategory) {
-      this.toast.show('Selected category is invalid.');
+      this.toast.error('Selected category is invalid.');
       return;
     }
 
     if (this.quiz.questionCount > selectedCategory.totalQuestions) {
-      this.toast.show(
+      this.toast.warning(
         `Only ${selectedCategory.totalQuestions} questions are available in this category. Please reduce the count.`
       );
       return;
@@ -70,12 +71,12 @@ export class RandomQuizComponent implements OnInit {
           this.quiz.questions = res.data;
           this.generatedQuestionCount = this.quiz.questionCount;
         } else {
-          this.toast.show('Unexpected response from server.');
+          this.toast.error('Unexpected response from server.');
         }
       }),
       catchError(err => {
         console.error('Error fetching questions:', err);
-        this.toast.show('Failed to generate quiz.');
+        this.toast.error('Failed to generate quiz.');
         return of(null);
       })
     ).subscribe();
@@ -85,11 +86,11 @@ export class RandomQuizComponent implements OnInit {
 
   saveQuiz() {
     if (!this.quiz.name || !this.quiz.description || !this.quiz.passScore || this.quiz.questions.length === 0) {
-      this.toast.show('Please complete all fields and generate the quiz before saving.');
+      this.toast.warning('Please complete all fields and generate the quiz before saving.');
       return;
     }
     if (this.quiz.questionCount !== this.generatedQuestionCount) {
-      this.toast.show('Number of questions was changed. Please regenerate the quiz before saving.');
+      this.toast.warning('Number of questions was changed. Please regenerate the quiz before saving.');
       return;
     }    
   
@@ -99,19 +100,19 @@ export class RandomQuizComponent implements OnInit {
       category: Number(this.quiz.category),
       scoreToPass: Number(this.quiz.passScore),
       selectedQuestionIds: this.quiz.questions.map(q => q.id),
-      scheduledAt: null // ✅ explicitly include this
+      scheduledAt: null 
     };
     
     console.log('Payload:', JSON.stringify(payload));
   
     this.apiService.admin.saveRandomQuiz(payload).pipe(
       tap(() => {
-        this.toast.show('Quiz saved as draft.');
+        this.toast.success('Quiz saved as draft.');
         this.resetQuizForm();
       }),
       catchError(err => {
         console.error('Error saving quiz:', err);
-        this.toast.show('Failed to save quiz.');
+        this.toast.error('Failed to save quiz.');
         return of(null);
       })
     ).subscribe();
@@ -119,11 +120,11 @@ export class RandomQuizComponent implements OnInit {
   
   scheduleNow() {
     if (!this.quiz.name || !this.quiz.description || !this.quiz.passScore || this.quiz.questions.length === 0) {
-      this.toast.show('Please complete all fields and generate the quiz before scheduling.');
+      this.toast.warning('Please complete all fields and generate the quiz before scheduling.');
       return;
     }
     if (this.quiz.questionCount !== this.generatedQuestionCount) {
-      this.toast.show('Number of questions was changed. Please regenerate the quiz before saving.');
+      this.toast.warning('Number of questions was changed. Please regenerate the quiz before saving.');
       return;
     }    
  
@@ -138,12 +139,12 @@ export class RandomQuizComponent implements OnInit {
   
     this.apiService.admin.saveRandomQuiz(payload).pipe(
       tap(() => {
-        this.toast.show('Quiz scheduled successfully!');
+        this.toast.success('Quiz scheduled successfully!');
         this.resetQuizForm();
       }),
       catchError(err => {
         console.error('Error scheduling quiz:', err);
-        this.toast.show('Failed to schedule quiz.');
+        this.toast.error('Failed to schedule quiz.');
         return of(null);
       })
     ).subscribe();

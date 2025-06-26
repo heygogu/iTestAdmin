@@ -31,3 +31,10 @@
 mat-divider {
   margin: 12px 0;
 }
+.option-hover:hover {
+    background: #e9ecef !important;
+    transition: background 0.2s;
+  }
+  .card.mt-5.rounded-4 {
+    border-radius: 0.75rem !important;
+  }

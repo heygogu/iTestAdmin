@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from 'src/app/api.service';
-import { ToastServiceService } from 'src/app/toast-service.service';
+import { ApiService } from 'src/app/api.service'
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { AppToasterService } from '../services/toaster.service';
 
 
 @Component({
@@ -26,7 +26,7 @@ export class ListQuizComponent implements OnInit {
     public router: Router,
     private route: ActivatedRoute,
     private api: ApiService,
-    private toast: ToastServiceService
+    private toast: AppToasterService
   ) {}
 
   ngOnInit(): void {
@@ -80,7 +80,7 @@ export class ListQuizComponent implements OnInit {
         }
       }),
       catchError(() => {
-        this.toast.show('Failed to load scheduled quizzes.');
+        this.toast.error('Failed to load scheduled quizzes.');
         return of(null);
       })
     ).subscribe();
@@ -89,7 +89,7 @@ export class ListQuizComponent implements OnInit {
   rescheduleQuiz(quizId: number): void {
     const selectedDate = this.datePickerModels[quizId];
     if (!selectedDate) {
-      this.toast.show('Please select a date to reschedule.');
+      this.toast.warning('Please select a date to reschedule.');
       return;
     }
 
@@ -97,11 +97,11 @@ export class ListQuizComponent implements OnInit {
 
     this.api.admin.rescheduleQuizById(quizId, isoDate).pipe(
       tap(() => {
-        this.toast.show('Quiz rescheduled.');
+        this.toast.success('Quiz rescheduled.');
         this.loadQuizzes(); // reload and reset date pickers
       }),
       catchError(() => {
-        this.toast.show('Failed to reschedule quiz.');
+        this.toast.error('Failed to reschedule quiz.');
         return of(null);
       })
     ).subscribe();
@@ -110,11 +110,11 @@ export class ListQuizComponent implements OnInit {
   deleteQuiz(quizId: number): void {
     this.api.admin.deleteQuizById(quizId).pipe(
       tap(() => {
-        this.toast.show('Quiz deleted.');
+        this.toast.success('Quiz deleted.');
         this.loadQuizzes();
       }),
       catchError(() => {
-        this.toast.show('Failed to delete quiz.');
+        this.toast.error('Failed to delete quiz.');
         return of(null);
       })
     ).subscribe();

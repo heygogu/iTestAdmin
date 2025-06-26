@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/api.service';
-import { ToastServiceService } from 'src/app/toast-service.service';
 import { catchError, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { AppToasterService } from 'src/app/services/toaster.service';
 
 @Component({
   selector: 'app-custom-quiz',
@@ -35,7 +35,7 @@ export class CustomQuizComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    private toast: ToastServiceService
+    private toast: AppToasterService
   ) {}
 
   ngOnInit(): void {
@@ -47,7 +47,7 @@ export class CustomQuizComponent implements OnInit {
       }),
       catchError(err => {
         console.error('Error loading categories:', err);
-        this.toast.show('Failed to load categories.');
+        this.toast.error('Failed to load categories.');
         return of(null);
       })
     ).subscribe();
@@ -57,13 +57,13 @@ export class CustomQuizComponent implements OnInit {
     const { text, options, correctAnswer } = this.newQuestion;
 
     if (!text.trim() || options.some(opt => !opt.trim()) || !correctAnswer) {
-      this.toast.show('Please fill all question fields and select the correct answer.');
+      this.toast.warning('Please fill all question fields and select the correct answer.');
       return;
     }
 
     const uniqueOptions = new Set(options.map(opt => opt.trim()));
     if (uniqueOptions.size < 4) {
-      this.toast.show('Options must be unique.');
+      this.toast.warning('Options must be unique.');
       return;
     }
 
@@ -86,7 +86,7 @@ export class CustomQuizComponent implements OnInit {
   }
   deleteQuestion(index: number) {
     this.quiz.questions.splice(index, 1);
-    this.toast.show('Question deleted.');
+    this.toast.success('Question deleted.');
   }
 
 
@@ -103,7 +103,7 @@ export class CustomQuizComponent implements OnInit {
         isNaN(this.quiz.passScore) || this.quiz.passScore <= 0 ||
         this.quiz.questions.length === 0
       ) {
-        this.toast.show('Please complete all fields and add at least one question.');
+        this.toast.warning('Please complete all fields and add at least one question.');
         return;
       }
 
@@ -119,12 +119,12 @@ export class CustomQuizComponent implements OnInit {
 
     this.apiService.admin.saveCustomQuiz(payload).pipe(
       tap(() => {
-        this.toast.show('Custom quiz saved.');
+        this.toast.success('Custom quiz saved.');
         this.resetQuizForm();
       }),
       catchError(err => {
         console.error('Error saving custom quiz:', err);
-        this.toast.show('Failed to save quiz.');
+        this.toast.error('Failed to save quiz.');
         return of(null);
       })
     ).subscribe();
@@ -138,7 +138,7 @@ export class CustomQuizComponent implements OnInit {
         isNaN(this.quiz.passScore) || this.quiz.passScore <= 0 ||
         this.quiz.questions.length === 0
       ) {
-        this.toast.show('Please complete all fields and add at least one question.');
+        this.toast.warning('Please complete all fields and add at least one question.');
         return;
       }
 
@@ -153,12 +153,12 @@ export class CustomQuizComponent implements OnInit {
 
     this.apiService.admin.saveCustomQuiz(payload).pipe(
       tap(() => {
-        this.toast.show('Custom quiz scheduled successfully!');
+        this.toast.success('Custom quiz scheduled successfully!');
         this.resetQuizForm();
       }),
       catchError(err => {
         console.error('Error scheduling custom quiz:', err);
-        this.toast.show('Failed to schedule quiz.');
+        this.toast.error('Failed to schedule quiz.');
         return of(null);
       })
     ).subscribe();

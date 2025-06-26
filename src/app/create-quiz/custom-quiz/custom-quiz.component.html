@@ -2,7 +2,7 @@
   <div class="row justify-content-center">
     <div class="col-lg-10">
       <!-- Quiz Details Card -->
-      <div class="card shadow-sm border-0 mb-4">
+      <div class="card shadow-sm bg-white rounded-4 border-0 mb-4">
         <div class="card-body">
           <h4 class="text-primary mb-4 fw-bold">
             <i class="bi bi-ui-checks-grid me-2"></i> Quiz Details
@@ -41,7 +41,7 @@
       </div>
 
       <!-- Add Question Card -->
-      <div class="card shadow-sm border-0 mb-4">
+      <div class="card shadow-sm bg-white rounded-4 border-0 mb-4">
         <div class="card-body">
           <h4 class="text-success mb-4 fw-bold"><i class="bi bi-plus-circle me-2"></i> Add Question</h4>
 
@@ -80,7 +80,7 @@
       </div>
 
       <!-- Preview Section -->
-      <div *ngIf="quiz.questions.length > 0" class="card border-0 shadow-sm mb-4">
+      <div *ngIf="quiz.questions.length > 0" class="card border-0 shadow-sm bg-white rounded-4 mb-4">
         <div class="card-body">
           <h4 class="card-title text-dark mb-4"><i class="bi bi-eye me-2"></i> Preview Questions</h4>
           <div *ngFor="let q of quiz.questions; let i = index" class="mb-4">
