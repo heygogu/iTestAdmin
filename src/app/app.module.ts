@@ -51,6 +51,7 @@ import { EditQuizComponent } from './edit-quiz/edit-quiz.component';
 import {ToastrModule} from 'ngx-toastr';
 import { ConfirmDeleteModalComponent } from './confirm-delete-modal/confirm-delete-modal.component';
 import { ScheduleModalComponent } from './schedule-modal/schedule-modal.component';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -115,6 +116,7 @@ import { ScheduleModalComponent } from './schedule-modal/schedule-modal.componen
     MatRadioModule,
     MatSnackBarModule,
     LayoutModule,
+    NgChartsModule
     ],
   providers: [ApiService],
   bootstrap: [AppComponent]

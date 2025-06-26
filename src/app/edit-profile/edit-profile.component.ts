@@ -61,6 +61,15 @@ export class EditProfileComponent implements OnInit {
         tap((res: any) => {
           if (res.success) {
             this.toast.success('Profile updated successfully!');
+
+            // 🔁 Update localStorage
+            const currentUser = this.userService.getUser();
+            if (currentUser) {
+              this.userService.saveUser({
+                ...currentUser,
+                fullName: this.profileData.fullName  // update the display name
+              });
+            }
           } else {
             this.toast.error('Failed to update profile.');
           }
@@ -75,4 +84,5 @@ export class EditProfileComponent implements OnInit {
       console.warn('Form is invalid');
     }
   }
+
 }

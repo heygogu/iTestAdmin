@@ -93,6 +93,10 @@ export class RandomQuizComponent implements OnInit {
       this.toast.warning('Number of questions was changed. Please regenerate the quiz before saving.');
       return;
     }    
+    if (this.quiz.passScore > this.quiz.questions.length) {
+      this.toast.warning(`Pass score cannot be more than ${this.quiz.questions.length} (total questions).`);
+      return;
+    }
   
     const payload = {
       title: this.quiz.name,
@@ -127,7 +131,11 @@ export class RandomQuizComponent implements OnInit {
       this.toast.warning('Number of questions was changed. Please regenerate the quiz before saving.');
       return;
     }    
- 
+    if (this.quiz.passScore > this.quiz.questions.length) {
+      this.toast.warning(`Pass score cannot be more than ${this.quiz.questions.length} (total questions).`);
+      return;
+    }
+  
     const payload = {
       title: this.quiz.name,
       description: this.quiz.description,

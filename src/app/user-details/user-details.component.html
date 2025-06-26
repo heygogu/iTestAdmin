@@ -1,68 +1,143 @@
-<!-- User Info with Bootstrap 5 Advanced Design -->
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-12">
-            <!-- Card for User Details -->
-            <div class="card shadow-sm border-0 mb-4">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-4">
-                        <div class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width:60px; height:60px; font-size:2rem;">
-                            {{ user.name[0] }}
-                        </div>
-                        <div>
-                            <h2 class="card-title mb-0">{{ user.name }}</h2>
-                            <span class="badge bg-info text-dark mt-1">{{ user.country }}</span>
-                        </div>
-                    </div>
-                    <ul class="list-group list-group-flush mb-3">
-                        <li class="list-group-item px-0">
-                            <i class="bi bi-envelope me-2 text-primary"></i>
-                            <strong>Email:</strong> {{ user.email }}
-                        </li>
-                        <li class="list-group-item px-0">
-                            <i class="bi bi-geo-alt me-2 text-primary"></i>
-                            <strong>Country:</strong> {{ user.country }}
-                        </li>
-                    </ul>
-                </div>
-            </div>
+<mat-sidenav-container class="dashboard-container">
+  <mat-sidenav-content class="overflow-hidden">
+    <div class="main-content">
 
-            <!-- Test History Table -->
-            <!-- Test History Table (Simplified like Create Quiz table) -->
-            <div class="card border-0 shadow-sm">
-            <div class="card-body px-0 py-0">
-                <span class="h5 d-block mb-3"><i class="bi bi-clock-history me-2"></i>Test History</span>
-                <div class="table-responsive">
-                <table class="table table-striped table-hover">
-                    <thead class="table-light">
-                    <tr>
-                        <th>Test</th>   
-                        <th>Taken At</th>
-                        <th>Score</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr *ngFor="let test of testHistory; let i = index" [ngClass]="{ 'bg-light': i % 2 === 0 }">
-                        <td>{{ test.testName }}</td>
-                        <td>{{ test.takenAt | date:'medium' }}</td>
-                        <td>{{ test.score }}</td>
-                    </tr>
-                    <tr *ngIf="!testHistory || testHistory.length === 0">
-                        <td colspan="3" class="text-center text-muted py-4">
-                        <i class="bi bi-info-circle me-2"></i>No test history available.
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                </div>
+      <!-- USER PROFILE CARD -->
+      <div class="card shadow-sm border-0 mb-4" *ngIf="user">
+        <div class="card-body">
+          <div class="d-flex align-items-center mb-4">
+            <div class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+                 style="width:60px; height:60px; font-size:2rem;">
+              {{ user.fullName[0] }}
             </div>
+            <div>
+              <h2 class="card-title mb-0">{{ user.fullName }}</h2>
+              <span class="badge bg-info text-dark mt-1">{{ user.country }}</span>
             </div>
+          </div>
+          <ul class="list-group list-group-flush mb-3">
+            <li class="list-group-item px-0">
+              <i class="bi bi-envelope me-2 text-primary"></i>
+              <strong>Email:</strong> {{ user.email }}
+            </li>
+            <li class="list-group-item px-0">
+              <i class="bi bi-telephone me-2 text-primary"></i>
+              <strong>Mobile Number:</strong> {{ user.phoneNumber }}
+            </li>
+            <li class="list-group-item px-0">
+              <i class="bi bi-geo-alt me-2 text-primary"></i>
+              <strong>Country:</strong> {{ user.country }}
+            </li>
+            <li class="list-group-item px-0">
+              <i class="bi bi-person me-2 text-primary"></i>
+              <strong>Gender:</strong> {{ user.gender }}
+            </li>
+          </ul>
         </div>
-    </div>
-</div>
+      </div>
 
-<!-- Bootstrap 5 and Bootstrap Icons required -->
-<!--
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
--->
+      <!-- USER SUMMARY -->
+      <h2 class="section-title">User Summary</h2>
+      <div class="stats-container" *ngIf="stats">
+        <div class="stats-grid">
+          <mat-card class="stat-card">Total Attempted: {{ stats.statsSummary.totalQuizzesAttempted }}</mat-card>
+          <mat-card class="stat-card">Passed: {{ stats.statsSummary.passedQuizzes }}</mat-card>
+          <mat-card class="stat-card">Failed: {{ stats.statsSummary.failedQuizzes }}</mat-card>
+          <mat-card class="stat-card">Correct Answers: {{ stats.statsSummary.totalCorrectAnswers }}</mat-card>
+        </div>
+
+        <!-- CHARTS -->
+        <div class="charts-grid">
+          <mat-card class="chart-card">
+            <h4>Score Over Time</h4>
+            <canvas baseChart
+                    [data]="lineChartData"
+                    [options]="lineChartOptions"
+                    [type]="'line'">
+            </canvas>
+          </mat-card>
+
+          <mat-card class="chart-card">
+            <h4>Pass vs Fail</h4>
+            <canvas baseChart
+                    [data]="{ labels: pieChartLabels, datasets: [{ data: pieChartData, backgroundColor: pieChartColors }] }"
+                    [options]="pieChartOptions"
+                    [type]="'pie'">
+            </canvas>
+          </mat-card>
+        </div>
+      </div>
+
+      <!-- QUIZ HISTORY -->
+       <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body">
+            <h2 class="section-title mb-4">Quiz History</h2>
+
+            <div class="quiz-history" *ngIf="quizHistory.length > 0; else noHistory">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                    <th scope="col">Quiz</th>
+                    <th scope="col">Marks</th>
+                    <th scope="col">%</th>
+                    <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let q of quizHistory">
+                    <td class="text-capitalize">{{ q.name }}</td>
+                    <td>{{ q.marks }} / {{ q.total }}</td>
+                    <td>{{ (q.marks / q.total * 100) | number:'1.0-0' }}%</td>
+                    <td>
+                        <span 
+                        class="badge rounded-pill px-3 py-2"
+                        [ngClass]="q.passed ? 'bg-success' : 'bg-danger'">
+                        {{ q.passed ? 'Pass' : 'Fail' }}
+                        </span>
+                    </td>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+            </div>
+
+            <ng-template #noHistory>
+            <p class="text-muted text-center py-4">
+                <i class="bi bi-info-circle me-2"></i>No quiz history available.
+            </p>
+            </ng-template>
+        </div>
+        </div>
+
+    
+
+        <!-- PAGINATION -->
+        <nav *ngIf="totalPages > 1" class="mt-4">
+          <ul class="pagination justify-content-end mb-0">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <a class="page-link" href="javascript:void(0)" (click)="changePage(-1)">
+                <i class="bi bi-chevron-left"></i>
+              </a>
+            </li>
+
+            <li class="page-item disabled">
+              <span class="page-link bg-white text-dark">
+                Page {{ currentPage }} of {{ totalPages }}
+              </span>
+            </li>
+
+            <li class="page-item" [class.disabled]="currentPage === totalPages">
+              <a class="page-link" href="javascript:void(0)" (click)="changePage(1)">
+                <i class="bi bi-chevron-right"></i>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <ng-template #noHistory>
+        <p class="no-data-text">No quiz history available.</p>
+      </ng-template>
+  </mat-sidenav-content>
+</mat-sidenav-container>

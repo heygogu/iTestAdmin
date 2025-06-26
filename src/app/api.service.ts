@@ -300,7 +300,12 @@ export class ApiService {
       return this.delete(`AdminQuiz/${quizId}`);
     },
 
-      
+    exportQuizResultsById: (quizId: number): Observable<Blob> => {
+      return this.http.get(`${this.API_ROOT}Export/quiz-results/${quizId}`, {
+        responseType: 'blob',
+        withCredentials: true
+      });
+    },
 
   };
 
@@ -317,7 +322,33 @@ export class ApiService {
     getAllUsers: (page: number, limit: number, search: string = '') => {
       return this.get<{ success: boolean; page: number; pageSize: number; total: number; data: any[] }>(`AdminQuiz/users/all/${page}?limit=${limit}&search=${search}`);
     },
-    
+    getUserStats: (userId: number): Observable<{ success: boolean; data: any }> => {
+      return this.get<{ success: boolean; data: any }>(`User/${userId}/stats`);
+    },
+    getUserHistory: ( userId: number, page: number, limit: number = 10): Observable<{
+      success: boolean;
+      totalPages: number;
+      data: {
+        quizTitle: string;
+        score: number;
+        totalMarks: number;
+        passed: boolean;
+        attemptedAt: string;
+      }[];
+    }> => {
+      const params = new HttpParams().set('limit', limit.toString());
+      return this.get<{
+        success: boolean;
+        totalPages: number;
+        data: {
+          quizTitle: string;
+          score: number;
+          totalMarks: number;
+          passed: boolean;
+          attemptedAt: string;
+        }[];
+      }>(`User/user-history/${userId}/page/${page}`, params);
+    },
 
   };
 

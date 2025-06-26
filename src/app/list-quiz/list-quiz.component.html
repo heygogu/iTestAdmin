@@ -1,4 +1,5 @@
-<div class="px-4 py-2">
+<div class="card border-0 shadow-sm rounded-4">
+  <div class="card-body p-4">
   <!-- Header Row -->
   <div class="d-flex justify-content-end align-items-center mb-4">
     <!-- <h2 class="fw-bold text-primary">Quizzes</h2> -->
@@ -119,13 +120,24 @@
   </div>
 
   <!-- Pagination -->
-  <div class="d-flex justify-content-center align-items-center mt-4 gap-3">
-    <button class="btn btn-outline-primary" (click)="prevPage()" [disabled]="currentPage === 1">
-      <i class="bi bi-chevron-left"></i> Prev
-    </button>
-    <span class="fw-semibold">Page {{ currentPage }} of {{ totalPages }}</span>
-    <button class="btn btn-outline-primary" (click)="nextPage()" [disabled]="currentPage === totalPages">
-      Next <i class="bi bi-chevron-right"></i>
-    </button>
+  <nav *ngIf="totalPages > 1" class="mt-4">
+    <ul class="pagination justify-content-end mb-0">
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <a class="page-link" href="javascript:void(0)" (click)="prevPage()">
+          <i class="bi bi-chevron-left"></i>
+        </a>
+      </li>
+      <li class="page-item disabled">
+        <span class="page-link bg-white text-dark">
+          Page {{ currentPage }} of {{ totalPages }}
+        </span>
+      </li>
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <a class="page-link" href="javascript:void(0)" (click)="nextPage()">
+          <i class="bi bi-chevron-right"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>
   </div>
 </div>

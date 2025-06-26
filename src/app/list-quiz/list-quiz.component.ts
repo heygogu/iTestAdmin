@@ -7,7 +7,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmDeleteModalComponent } from '../confirm-delete-modal/confirm-delete-modal.component';
 import { ScheduleModalComponent } from '../schedule-modal/schedule-modal.component';
 import { AppToasterService } from '../services/toaster.service';
-
+import { saveAs } from 'file-saver';
 
 
 @Component({
@@ -102,8 +102,17 @@ getStatusBadge(date: string | null): string {
   return this.isValidDate(date) ? 'success' : 'secondary';
 }
 exportQuiz(quiz: any): void {
-  this.toast.success(`Exporting quiz "${quiz.title}"...`);
-  // Integrate real export logic here
+   this.api.admin.exportQuizResultsById(quiz.id).subscribe({
+    next: (blob: Blob) => {
+      const fileName = `quiz-results-${quiz.title.replace(/\s+/g, '_')}.xlsx`; // Or .csv if applicable
+      saveAs(blob, fileName);
+      this.toast.success(`Quiz "${quiz.title}" exported successfully!`);
+    },
+    error: (err) => {
+      console.error('Export failed:', err);
+      this.toast.error(`Failed to export quiz "${quiz.title}".`);
+    }
+  });
 }
 
  loadQuizzes(): void {

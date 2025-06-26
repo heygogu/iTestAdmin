@@ -93,7 +93,7 @@
         </label>
         <div class="input-group">
           <input
-            type="password"
+            [type]="confirmHidePassword ? 'password' : 'text'"
             class="form-control"
             name="register-confirm-password"
             [(ngModel)]="registerData.confirmPassword"
