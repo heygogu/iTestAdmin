@@ -317,6 +317,7 @@ export class ApiService {
     getAllUsers: (page: number, limit: number, search: string = '') => {
       return this.get<{ success: boolean; page: number; pageSize: number; total: number; data: any[] }>(`AdminQuiz/users/all/${page}?limit=${limit}&search=${search}`);
     },
+    
 
   };
 

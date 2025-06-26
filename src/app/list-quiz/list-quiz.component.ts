@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from 'src/app/api.service';
-import { ToastServiceService } from 'src/app/toast-service.service';
+import { ApiService } from 'src/app/api.service'
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmDeleteModalComponent } from '../confirm-delete-modal/confirm-delete-modal.component';
 import { ScheduleModalComponent } from '../schedule-modal/schedule-modal.component';
+import { AppToasterService } from '../services/toaster.service';
+
 
 
 @Component({
@@ -29,9 +30,8 @@ export class ListQuizComponent implements OnInit {
     public router: Router,
     private route: ActivatedRoute,
     private api: ApiService,
-    private toast: ToastServiceService,
-    private modalService: NgbModal
-    
+    private modalService:NgbModal,
+    private toast: AppToasterService
   ) {}
 
   selectedStatus: string = '';
@@ -65,11 +65,11 @@ openScheduleModal(quiz: any, isReschedule: boolean): void {
     const isoDate = new Date(date).toISOString();
     this.api.admin.rescheduleQuizById(quiz.id, isoDate).subscribe({
       next: () => {
-        this.toast.show(`${isReschedule ? 'Rescheduled' : 'Scheduled'} successfully.`);
+        this.toast.success(`${isReschedule ? 'Rescheduled' : 'Scheduled'} successfully.`);
         this.loadQuizzes();
       },
       error: () => {
-        this.toast.show('Error scheduling quiz.');
+        this.toast.error('Error scheduling quiz.');
       }
     });
   }).catch(() => {});
@@ -102,7 +102,7 @@ getStatusBadge(date: string | null): string {
   return this.isValidDate(date) ? 'success' : 'secondary';
 }
 exportQuiz(quiz: any): void {
-  this.toast.show(`Exporting quiz "${quiz.title}"...`);
+  this.toast.success(`Exporting quiz "${quiz.title}"...`);
   // Integrate real export logic here
 }
 
@@ -126,22 +126,18 @@ exportQuiz(quiz: any): void {
               ? quiz.rescheduledAt
               : quiz.scheduledAt || '';
         }
-      } else {
-        this.scheduledQuizzes = [];
-      }
-    }),
-    catchError(() => {
-      this.toast.show('Failed to load quizzes.');
-      return of(null);
-    })
-  ).subscribe();
-}
-
+      }}),
+      catchError(() => {
+        this.toast.error('Failed to load scheduled quizzes.');
+        return of(null);
+      })
+    ).subscribe();
+  }
 
   rescheduleQuiz(quizId: number): void {
     const selectedDate = this.datePickerModels[quizId];
     if (!selectedDate) {
-      this.toast.show('Please select a date to reschedule.');
+      this.toast.warning('Please select a date to reschedule.');
       return;
     }
 
@@ -149,11 +145,11 @@ exportQuiz(quiz: any): void {
 
     this.api.admin.rescheduleQuizById(quizId, isoDate).pipe(
       tap(() => {
-        this.toast.show('Quiz rescheduled.');
+        this.toast.success('Quiz rescheduled.');
         this.loadQuizzes(); // reload and reset date pickers
       }),
       catchError(() => {
-        this.toast.show('Failed to reschedule quiz.');
+        this.toast.error('Failed to reschedule quiz.');
         return of(null);
       })
     ).subscribe();
@@ -162,11 +158,11 @@ exportQuiz(quiz: any): void {
   deleteQuiz(quizId: number): void {
     this.api.admin.deleteQuizById(quizId).pipe(
       tap(() => {
-        this.toast.show('Quiz deleted.');
+        this.toast.success('Quiz deleted.');
         this.loadQuizzes();
       }),
       catchError(() => {
-        this.toast.show('Failed to delete quiz.');
+        this.toast.error('Failed to delete quiz.');
         return of(null);
       })
     ).subscribe();

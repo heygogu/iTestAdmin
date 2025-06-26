@@ -40,10 +40,10 @@
               <tbody>
                 <tr *ngFor="let user of users; let i = index">
                   <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-                  <td>{{ user.fullName }}</td>
+                  <td class="text-capitalize">{{ user.fullName }}</td>
                   <td>{{ user.email }}</td>
-                  <td>{{ user.country || 'N/A' }}</td>
-                  <td>{{ user.gender || 'N/A' }}</td>
+                  <td class="text-capitalize">{{ user.country || 'N/A' }}</td>
+                  <td class="text-capitalize">{{ user.gender || 'N/A' }}</td>
                   <td>{{ user.totalAttempts }}</td>
                   <td>{{ user.totalPassed }}</td>
                   <td>

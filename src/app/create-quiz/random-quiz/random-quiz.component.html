@@ -1,4 +1,4 @@
-<div class="card border-0 shadow-sm mb-4">
+<div class="card border-0 shadow-sm bg-white rounded-4 mb-4">
   <div class="card-body">
     <h4 class="card-title text-primary mb-4"><i class="bi bi-shuffle me-2"></i> Generate Random Quiz</h4>
 
@@ -62,55 +62,62 @@
 
 <!-- Preview Questions -->
 <div *ngIf="quiz.questions.length" class="card mt-5 border-0 shadow-sm bg-white rounded-4 overflow-hidden">
-  <div class="bg-primary bg-gradient text-white py-4 px-4 d-flex align-items-center justify-content-between">
-    <div class="d-flex align-items-center">
-      <i class="bi bi-eye-fill me-3 fs-2"></i>
-      <h4 class="mb-0 fw-bold">Preview Questions</h4>
+  <div class="bg-primary bg-gradient text-white py-3 px-4 d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center gap-2">
+      <i class="bi bi-eye-fill fs-4"></i>
+      <h5 class="mb-0 fw-semibold">Preview Questions</h5>
     </div>
-    <span class="badge bg-light text-primary fs-6 px-4 py-2 shadow-sm rounded-pill">
+    <span class="badge bg-light text-primary fs-6 px-3 py-2 shadow-sm rounded-pill">
       {{ quiz.questions.length }} Questions
     </span>
   </div>
   <div class="card-body p-0">
-    <ul class="list-group list-group-flush">
-      <li *ngFor="let q of quiz.questions; let i = index" class="list-group-item px-4 py-4 border-0 border-bottom bg-transparent">
-        <div class="d-flex align-items-start mb-3">
-          <span class="badge bg-gradient bg-info text-white fs-5 me-3 shadow"
-                style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
-            Q{{ i + 1 }}
-          </span>
-          <span class="fs-5 fw-semibold text-dark flex-grow-1">{{ q.text }}</span>
-        </div>
-        <div class="row g-3">
-          <div class="col-12 col-md-6 col-lg-3" *ngIf="q.optionA">
-            <div class="option-card border-0 rounded-3 p-3 h-100 bg-light d-flex align-items-center shadow-sm">
-              <span class="badge bg-secondary bg-gradient me-2 fs-6">A</span>
-              <span class="fs-6">{{ q.optionA }}</span>
-            </div>
-          </div>
-          <div class="col-12 col-md-6 col-lg-3" *ngIf="q.optionB">
-            <div class="option-card border-0 rounded-3 p-3 h-100 bg-light d-flex align-items-center shadow-sm">
-              <span class="badge bg-secondary bg-gradient me-2 fs-6">B</span>
-              <span class="fs-6">{{ q.optionB }}</span>
-            </div>
-          </div>
-          <div class="col-12 col-md-6 col-lg-3" *ngIf="q.optionC">
-            <div class="option-card border-0 rounded-3 p-3 h-100 bg-light d-flex align-items-center shadow-sm">
-              <span class="badge bg-secondary bg-gradient me-2 fs-6">C</span>
-              <span class="fs-6">{{ q.optionC }}</span>
-            </div>
-          </div>
-          <div class="col-12 col-md-6 col-lg-3" *ngIf="q.optionD">
-            <div class="option-card border-0 rounded-3 p-3 h-100 bg-light d-flex align-items-center shadow-sm">
-              <span class="badge bg-secondary bg-gradient me-2 fs-6">D</span>
-              <span class="fs-6">{{ q.optionD }}</span>
-            </div>
+    <div *ngFor="let q of quiz.questions; let i = index" class="border-bottom px-4 py-4">
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <span class="badge bg-light text-dark border fw-normal" style="font-size: 1.05rem; min-width: 2rem;">Q{{ i + 1 }}</span>
+        <span class="fw-semibold text-dark" style="font-size: 0.98rem;">
+          {{ q.text }}
+        </span>
+      </div>
+      <div class="row g-2">
+        <div class="col-12 col-md-6 col-lg-3" *ngIf="q.optionA">
+          <div class="d-flex align-items-center border rounded-3 px-3 py-3 bg-light option-hover mb-2" style="font-size: 1.08rem;">
+            <span class="badge bg-secondary me-2">A</span>
+            <span class="text-dark small">{{ q.optionA }}</span>
           </div>
         </div>
-      </li>
-    </ul>
+        <div class="col-12 col-md-6 col-lg-3" *ngIf="q.optionB">
+          <div class="d-flex align-items-center border rounded-3 px-3 py-3 bg-light option-hover mb-2" style="font-size: 1.08rem;">
+            <span class="badge bg-secondary me-2">B</span>
+            <span class="text-dark small">{{ q.optionB }}</span>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3" *ngIf="q.optionC">
+          <div class="d-flex align-items-center border rounded-3 px-3 py-3 bg-light option-hover mb-2" style="font-size: 1.08rem;">
+            <span class="badge bg-secondary me-2">C</span>
+            <span class="text-dark small">{{ q.optionC }}</span>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3" *ngIf="q.optionD">
+          <div class="d-flex align-items-center border rounded-3 px-3 py-3 bg-light option-hover mb-2" style="font-size: 1.08rem;">
+            <span class="badge bg-secondary me-2">D</span>
+            <span class="text-dark small">{{ q.optionD }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
+<style>
+  .option-hover:hover {
+    background: #e9ecef !important;
+    transition: background 0.2s;
+  }
+  .card.mt-5.rounded-4 {
+    border-radius: 0.75rem !important;
+  }
+</style>
 
 <!-- No questions fallback -->
 <div *ngIf="!quiz.questions.length" class="card mt-5 border-0 bg-white rounded-4 text-center py-5">

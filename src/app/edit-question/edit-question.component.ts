@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/api.service';
-import { ToastServiceService } from 'src/app/toast-service.service';
 import { catchError, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { AppToasterService } from '../services/toaster.service';
 
 @Component({
   selector: 'app-edit-question',
@@ -29,17 +29,16 @@ export class EditQuestionComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private apiService: ApiService,
-    private toast: ToastServiceService
+    private toast: AppToasterService
   ) {}
 
   ngOnInit(): void {
-    // ✅ Properly subscribe to route params
     this.route.params.subscribe(params => {
       this.categoryParam = params['category'] || '';
       this.questionId = +params['id'] || 0;
 
       if (!this.questionId || !this.categoryParam) {
-        this.toast.show('Invalid question or category.');
+        this.toast.warning('Invalid question or category.');
         this.router.navigate(['/dashboard']);
         return;
       }
@@ -62,12 +61,12 @@ export class EditQuestionComponent implements OnInit {
             category: res.data.category
           };
         } else {
-          this.toast.show('Failed to load question.');
+          this.toast.error('Failed to load question.');
         }
       }),
       catchError(err => {
         console.error('Error fetching question:', err);
-        this.toast.show('Error loading question.');
+        this.toast.error('Error loading question.');
         return of(null);
       })
     ).subscribe();
@@ -90,12 +89,12 @@ export class EditQuestionComponent implements OnInit {
 
     this.apiService.admin.updateQuestionById(this.questionId, updatedQuestion).pipe(
       tap(() => {
-        this.toast.show('Question updated successfully!');
+        this.toast.success('Question updated successfully!');
         this.router.navigate(['/questionbank/view', this.categoryParam]);
       }),
       catchError(err => {
         console.error('Update failed:', err);
-        this.toast.show('Failed to update question.');
+        this.toast.error('Failed to update question.');
         this.loading = false;
         return of(null);
       })

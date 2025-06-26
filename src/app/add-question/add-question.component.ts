@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../api.service';
-import { ToastServiceService } from '../toast-service.service';
 import { of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { AppToasterService } from '../services/toaster.service';
 
 @Component({
   selector: 'app-add-question',
@@ -50,7 +50,7 @@ export class AddQuestionComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private apiService: ApiService,
-    private toast: ToastServiceService,
+    private toast: AppToasterService,
     private router: Router
   ) {}
 
@@ -63,7 +63,7 @@ export class AddQuestionComponent implements OnInit {
 
     const categoryEnum = this.categoryMap[this.categoryParam];
     if (categoryEnum === undefined) {
-      this.toast.show('Invalid category.');
+      this.toast.warning('Invalid category.');
       return;
     }
 
@@ -81,11 +81,11 @@ export class AddQuestionComponent implements OnInit {
 
     this.apiService.admin.addQuestionToBank(payload).pipe(
       tap(() => {
-        this.toast.show('Question added successfully!');
+        this.toast.success('Question added successfully!');
       }),
       catchError(err => {
         console.error(err);
-        this.toast.show('Failed to add question.');
+        this.toast.error('Failed to add question.');
         return of(null);
       })
     ).subscribe(() => {

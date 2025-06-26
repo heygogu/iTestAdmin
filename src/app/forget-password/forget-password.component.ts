@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import { catchError, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { ToastServiceService } from '../toast-service.service';
+import { AppToasterService } from '../services/toaster.service';
 
 @Component({
   selector: 'app-forget-password',
@@ -11,7 +11,7 @@ import { ToastServiceService } from '../toast-service.service';
   styleUrls: ['./forget-password.component.css']
 })
 export class ForgetPasswordComponent {
-  constructor(private apiService: ApiService, private router: Router,private toast: ToastServiceService) {}
+  constructor(private apiService: ApiService, private router: Router,private toast: AppToasterService) {}
 
   email: string = '';
   loading: boolean = false;
@@ -23,12 +23,12 @@ export class ForgetPasswordComponent {
       this.apiService.auth.forgotPassword({ email: this.email }).pipe(
         tap(response => {
           console.log('Forgot Password API Response:', response);
-          this.toast.show(response.message);
+          this.toast.success(response.message);
           this.router.navigate(['/reset-password']); 
         }),
         catchError(error => {
           console.error('Forgot Password API Error:', error);
-          this.toast.show(error?.error?.message);
+          this.toast.error(error?.error?.message);
           return of(null); 
         })
       ).subscribe(() => {
