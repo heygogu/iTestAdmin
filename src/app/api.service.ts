@@ -251,11 +251,12 @@ export class ApiService {
       return this.get(`AdminQuiz/admin/unscheduled-quizzes/${page}`, params);
     },
 
-    getScheduledQuizzes: (
+    getAllQuizzes: (
       page: number,
       limit: number = 10,
       category: number | null = null,
-      search: string = ''
+      search: string = '',
+      status:string=''
     ): Observable<{
         success: boolean;
         data: {
@@ -274,8 +275,11 @@ export class ApiService {
       if (search) {
         params = params.set('search', search);
       }
+      if(status){
+        params=params.set('status',status)
+      }
 
-      return this.get(`AdminQuiz/admin/scheduled-quizzes/${page}`, params);
+      return this.get(`AdminQuiz/admin/quizzes/${page}`, params);
     },
 
     scheduleQuizById: (

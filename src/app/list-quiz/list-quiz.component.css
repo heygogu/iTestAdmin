@@ -30,9 +30,7 @@
   flex: 1 1 auto;
 }
 
-.content-wrapper {
-  padding: 30px 40px;
-}
+
 
 .button-group {
   display: flex;
@@ -108,4 +106,29 @@ input[type="date"] {
   background-color: rgba(103, 58, 183, 0.1);
   font-weight: bold;
   color: #673ab7;
+}
+.dropdown-menu {
+  border-radius: 0.75rem;
+  padding: 0.5rem;
+}
+
+.dropdown-item {
+  transition: background 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #e9f5ff;
+  font-weight: 500;
+}
+
+.btn-outline-dark .bi {
+  font-size: 1.1rem;
+}
+
+.table thead th {
+  vertical-align: middle;
+}
+
+.btn {
+  cursor: pointer;
 }

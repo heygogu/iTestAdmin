@@ -4,6 +4,9 @@ import { ToastServiceService } from 'src/app/toast-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmDeleteModalComponent } from '../confirm-delete-modal/confirm-delete-modal.component';
+import { ScheduleModalComponent } from '../schedule-modal/schedule-modal.component';
 
 
 @Component({
@@ -18,7 +21,7 @@ export class ListQuizComponent implements OnInit {
   searchText = '';
   currentPage = 1;
   totalPages = 1;
-  pageSize = 6;
+  pageSize = 10;
 
   datePickerModels: { [quizId: number]: string } = {};
 
@@ -26,9 +29,12 @@ export class ListQuizComponent implements OnInit {
     public router: Router,
     private route: ActivatedRoute,
     private api: ApiService,
-    private toast: ToastServiceService
+    private toast: ToastServiceService,
+    private modalService: NgbModal
+    
   ) {}
 
+  selectedStatus: string = '';
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.currentPage = parseInt(params.get('page') || '1', 10);
@@ -36,6 +42,38 @@ export class ListQuizComponent implements OnInit {
       this.loadQuizzes();
     });
   }
+
+  openDeleteModal(quiz: any): void {
+  const modalRef = this.modalService.open(ConfirmDeleteModalComponent);
+  modalRef.componentInstance.quiz = quiz;
+
+  modalRef.result.then(result => {
+    if (result === true) {
+      this.deleteQuiz(quiz.id);
+    }
+  }).catch(() => {});
+}
+
+
+
+openScheduleModal(quiz: any, isReschedule: boolean): void {
+  const modalRef = this.modalService.open(ScheduleModalComponent);
+  modalRef.componentInstance.quiz = quiz;
+  modalRef.componentInstance.isReschedule = isReschedule;
+
+  modalRef.result.then(date => {
+    const isoDate = new Date(date).toISOString();
+    this.api.admin.rescheduleQuizById(quiz.id, isoDate).subscribe({
+      next: () => {
+        this.toast.show(`${isReschedule ? 'Rescheduled' : 'Scheduled'} successfully.`);
+        this.loadQuizzes();
+      },
+      error: () => {
+        this.toast.show('Error scheduling quiz.');
+      }
+    });
+  }).catch(() => {});
+}
 
   getCategoryName(index: number): string {
     return this.categories.find(c => c.index === index)?.name || 'Custom';
@@ -56,35 +94,49 @@ export class ListQuizComponent implements OnInit {
     ).subscribe();
   }
 
-  loadQuizzes(): void {
-    this.api.admin.getScheduledQuizzes(
-      this.currentPage,
-      this.pageSize,
-      this.selectedCategory,
-      this.searchText
-    ).pipe(
-      tap(res => {
-        if (res.success) {
-          this.scheduledQuizzes = res.data.quizzes;
-          const total = res.data.totalCount || 0;
-          this.totalPages = total > 0 ? Math.ceil(total / res.data.limit) : 1;
-          this.datePickerModels = {};
-          for (const quiz of this.scheduledQuizzes) {
-            this.datePickerModels[quiz.id] =
-              this.isValidDate(quiz.rescheduledAt)
-                ? quiz.rescheduledAt
-                : quiz.scheduledAt || '';
-          }
-        } else {
-          this.scheduledQuizzes = [];
+  getStatusLabel(date: string | null): string {
+  return this.isValidDate(date) ? 'Scheduled' : 'Draft';
+}
+
+getStatusBadge(date: string | null): string {
+  return this.isValidDate(date) ? 'success' : 'secondary';
+}
+exportQuiz(quiz: any): void {
+  this.toast.show(`Exporting quiz "${quiz.title}"...`);
+  // Integrate real export logic here
+}
+
+ loadQuizzes(): void {
+  this.api.admin.getAllQuizzes(
+    this.currentPage,
+    this.pageSize,
+    this.selectedCategory,
+    this.searchText,
+    this.selectedStatus 
+  ).pipe(
+    tap((res:any) => {
+      if (res.success) {
+        this.scheduledQuizzes = res.data.quizzes;
+        const total = res.data.totalCount || 0;
+        this.totalPages = total > 0 ? Math.ceil(total / res.data.limit) : 1;
+        this.datePickerModels = {};
+        for (const quiz of this.scheduledQuizzes) {
+          this.datePickerModels[quiz.id] =
+            this.isValidDate(quiz.rescheduledAt)
+              ? quiz.rescheduledAt
+              : quiz.scheduledAt || '';
         }
-      }),
-      catchError(() => {
-        this.toast.show('Failed to load scheduled quizzes.');
-        return of(null);
-      })
-    ).subscribe();
-  }
+      } else {
+        this.scheduledQuizzes = [];
+      }
+    }),
+    catchError(() => {
+      this.toast.show('Failed to load quizzes.');
+      return of(null);
+    })
+  ).subscribe();
+}
+
 
   rescheduleQuiz(quizId: number): void {
     const selectedDate = this.datePickerModels[quizId];

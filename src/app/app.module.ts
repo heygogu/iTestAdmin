@@ -49,10 +49,14 @@ import { AddQuestionComponent } from './add-question/add-question.component';
 import { ViewQuestionsComponent } from './view-questions/view-questions.component';
 import { EditQuizComponent } from './edit-quiz/edit-quiz.component';
 import {ToastrModule} from 'ngx-toastr';
+import { ConfirmDeleteModalComponent } from './confirm-delete-modal/confirm-delete-modal.component';
+import { ScheduleModalComponent } from './schedule-modal/schedule-modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    ConfirmDeleteModalComponent,
+    ScheduleModalComponent,
     DashboardComponent,
     UsersComponent,
     ListQuizComponent,
@@ -75,7 +79,9 @@ import {ToastrModule} from 'ngx-toastr';
     ScheduleQuizComponent,
     EditQuestionComponent,
     EditQuestionComponent,
-    EditQuizComponent
+    EditQuizComponent,
+    ConfirmDeleteModalComponent,
+    ScheduleModalComponent
   ],
   imports: [
     BrowserModule,

@@ -1,82 +1,115 @@
-<div class="container py-5 d-flex flex-column">
-  <!-- Action Buttons -->
-  <div class="d-flex justify-content-center gap-4 mb-5">
-    <button class="btn btn-primary btn-lg px-5 rounded-pill shadow-lg d-flex align-items-center gap-2"
-      (click)="router.navigate(['/create-quiz'])">
-      <i class="bi bi-plus-circle-fill fs-3"></i> <span>Create Quiz</span>
-    </button>
-    <button class="btn btn-outline-primary btn-lg px-5 rounded-pill shadow-lg d-flex align-items-center gap-2"
-      (click)="router.navigate(['/schedule-quiz'])">
-      <i class="bi bi-calendar-event-fill fs-3"></i> <span>Schedule Quiz</span>
+<div class="px-4 py-2">
+  <!-- Header Row -->
+  <div class="d-flex justify-content-end align-items-center mb-4">
+    <!-- <h2 class="fw-bold text-primary">Quizzes</h2> -->
+    <button class="btn btn-primary  px-4 py-2 d-flex align-items-center gap-2"
+            (click)="router.navigate(['/create-quiz'])">
+      <i class="bi bi-plus-circle-fill fs-5"></i> Create Quiz
     </button>
   </div>
 
   <!-- Filters -->
-  <div class="row mb-4">
-    <div class="col-md-4 mb-2">
-      <label class="form-label fw-semibold text-primary"><i class="bi bi-filter"></i> Filter by Category</label>
-      <select class="form-select shadow-sm" [(ngModel)]="selectedCategory" (change)="loadQuizzes()">
-        <option [ngValue]="null">All Categories</option>
-        <option *ngFor="let cat of categories" [ngValue]="cat.index">
-          {{ cat.name }} ({{ cat.totalScheduledQuizzes }})
-        </option>
-      </select>
+  <div class="row align-items-end mb-4 g-3">
+    <div class="col-md-5">
+      <label class="form-label fw-semibold text-primary">Search</label>
+      <input type="text" class="form-control shadow-sm" [(ngModel)]="searchText"
+             (ngModelChange)="loadQuizzes()" placeholder="Search by title">
     </div>
-    <div class="col-md-8 mb-2">
-      <label class="form-label fw-semibold text-primary"><i class="bi bi-search"></i> Search</label>
-      <input type="text" class="form-control shadow-sm" placeholder="Search by title"
-        [(ngModel)]="searchText" (ngModelChange)="loadQuizzes()" />
+
+    <div class="col-md-3">
+      <label class="form-label fw-semibold text-primary">Filter by Category</label>
+     <select class="form-select shadow-sm" [(ngModel)]="selectedCategory" (change)="loadQuizzes()"
+        style="border: 2px solid #0d6efd; border-radius: 0.375rem;">
+  <option [ngValue]="null">All Categories</option>
+  <option *ngFor="let cat of categories" [ngValue]="cat.index">
+    {{ cat.name }} ({{ cat.totalScheduledQuizzes }})
+  </option>
+</select>
+
+    </div>
+
+    <div class="col-md-4">
+      <label class="form-label fw-semibold text-primary">Filter by Status</label>
+      <!-- Status Filter -->
+<select class="form-select shadow-sm" [(ngModel)]="selectedStatus" (change)="loadQuizzes()"
+        style="border: 2px solid #0d6efd; border-radius: 0.375rem;">
+  <option value="">All</option>
+  <option value="scheduled">Scheduled</option>
+  <option value="unscheduled">Unscheduled</option>
+
+  
+</select>
+
     </div>
   </div>
 
-  <!-- Quiz Cards -->
-  <div class="row justify-content-center g-4 flex-grow-1">
-    <div class="col-md-6 col-lg-5" *ngFor="let quiz of scheduledQuizzes">
-      <div class="card border-0 shadow-sm quiz-card h-100">
-        <div class="card-body d-flex flex-column">
-          <h4 class="card-title fw-bold text-primary">{{ quiz.title }}</h4>
-          <h6 class="text-muted">ID: {{ quiz.id }}</h6>
-          <p><strong>Description:</strong> {{ quiz.description || 'No description provided.' }}</p>
-          <p><strong>Category:</strong> {{ getCategoryName(quiz.category) }}</p>
-          <p>
-            <strong>{{ isValidDate(quiz.rescheduledAt) ? 'Rescheduled At' : 'Scheduled At' }}:</strong>
-            {{
-              isValidDate(quiz.rescheduledAt)
-                ? (quiz.rescheduledAt | date: 'medium')
-                : (quiz.scheduledAt | date: 'medium')
-            }}
-          </p>
+  <!-- Table -->
+  <div class="table-responsive">
+    <table class="table table-striped table-hover shadow-sm">
+      <thead class="">
+        <tr>
+          <th scope="col">Sr. No.</th>
+          <th scope="col">Title</th>
+          <th scope="col">Category</th>
+          <th scope="col">Scheduled At</th>
+          <th scope="col">Status</th>
+          <th scope="col" class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+       <tr *ngFor="let quiz of scheduledQuizzes; let i = index">
+  <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+  <td>{{ quiz.title }}</td>
+  <td>{{ getCategoryName(quiz.category) }}</td>
+  <td>
+    {{
+      isValidDate(quiz.rescheduledAt)
+        ? (quiz.rescheduledAt | date: 'medium')
+        : (quiz.scheduledAt | date: 'medium')
+    }}
+  </td>
+  <td>
+    <span class="badge bg-{{ getStatusBadge(quiz.scheduledAt) }}">
+      {{ getStatusLabel(quiz.scheduledAt) }}
+    </span>
+  </td>
+  <td class="text-end">
+    <button class="btn btn-sm btn-outline-secondary me-2" [routerLink]="['/edit-quiz', quiz.id]" style="cursor: pointer;">
+      <i class="bi bi-pencil"></i>
+    </button>
+    <button class="btn btn-sm btn-outline-danger me-2" (click)="openDeleteModal(quiz)" style="cursor: pointer;">
+      <i class="bi bi-trash"></i>
+    </button>
 
-          <!-- Reschedule Picker (uses temp model to avoid mutating original) -->
-          <div class="input-group mt-2">
-            <input
-              type="datetime-local"
-              class="form-control"
-              [(ngModel)]="datePickerModels[quiz.id]"
-            />
-            <button class="btn btn-success" (click)="rescheduleQuiz(quiz.id)">
-              <i class="bi bi-calendar-check me-1"></i> Reschedule
-            </button>
-          </div>
-
-          <!-- Actions -->
-          <div class="mt-auto d-flex justify-content-between pt-3">
-            <a class="btn btn-outline-secondary btn-sm" [routerLink]="['/edit-quiz', quiz.id]">
-              <i class="bi bi-pencil me-1"></i> Edit
-            </a>
-            <button class="btn btn-outline-danger btn-sm" (click)="deleteQuiz(quiz.id)">
-              <i class="bi bi-trash me-1"></i> Delete
-            </button>
-          </div>
-        </div>
-      </div>
+    <!-- More Dropdown -->
+    <div class="btn-group dropstart">
+      <button type="button" class="btn btn-sm btn-outline-dark dropdown-toggle"
+              data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
+        <i class="bi bi-list-ul"></i> <!-- changed from three-dots-vertical -->
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end shadow">
+        <li *ngIf="!isValidDate(quiz.scheduledAt)">
+          <a class="dropdown-item" (click)="openScheduleModal(quiz, false)">
+            <i class="bi bi-calendar-plus me-2"></i> Schedule Quiz
+          </a>
+        </li>
+        <li *ngIf="isValidDate(quiz.scheduledAt)">
+          <a class="dropdown-item" (click)="openScheduleModal(quiz, true)">
+            <i class="bi bi-calendar-event me-2"></i> Reschedule Quiz
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item text-primary" (click)="exportQuiz(quiz)" style="cursor: pointer;">
+            <i class="bi bi-box-arrow-up-right me-2"></i> Export
+          </a>
+        </li>
+      </ul>
     </div>
+  </td>
+</tr>
 
-    <!-- No Quizzes Message -->
-    <div *ngIf="scheduledQuizzes.length === 0" class="col-12 text-center text-muted mt-5">
-      <i class="bi bi-clipboard-x fs-1"></i>
-      <p class="fs-4 mt-3">No scheduled quizzes found.</p>
-    </div>
+      </tbody>
+    </table>
   </div>
 
   <!-- Pagination -->
