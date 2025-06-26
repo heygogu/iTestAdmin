@@ -53,18 +53,21 @@
       <div class="d-flex align-items-center">
         <button mat-button [matMenuTriggerFor]="profileMenu" class="d-flex shadow-sm border align-items-center px-3 py-2">
           <mat-icon class="me-2" style="font-size: 1.2rem;">account_circle</mat-icon>
-          <span class="d-none d-md-inline text-capitalize">{{ userName }}</span>
+          <span>
+            {{ userName.length>15?userName.slice(0,15)+"...":userName }}
+          </span>
         </button>
-        <mat-menu #profileMenu="matMenu">
-          <button mat-menu-item routerLink="/edit-profile">
-            <mat-icon color="primary">edit</mat-icon>
+        <mat-menu #profileMenu="matMenu" class="custom-profile-menu" [overlapTrigger]="false">
+          <button mat-menu-item routerLink="/edit-profile" class="custom-menu-item">
+            <mat-icon color="primary" class="me-2">edit</mat-icon>
             <span>Edit Profile</span>
           </button>
-          <button mat-menu-item (click)="logOut()">
-            <mat-icon color="warn">logout</mat-icon>
+          <button mat-menu-item (click)="logOut()" class="custom-menu-item">
+            <mat-icon color="warn" class="me-2">logout</mat-icon>
             <span>Logout</span>
           </button>
         </mat-menu>
+        
       </div>
     </mat-toolbar>
 

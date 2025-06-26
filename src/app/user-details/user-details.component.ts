@@ -40,11 +40,13 @@ export class UserDetailsComponent implements OnInit{
     plugins: {
       legend: { display: true, position: 'bottom' },
       tooltip: {
-        callbacks: {
+         callbacks: {
+          title: () => '',
           label: (tooltipItem: TooltipItem<'line'>) => {
-            const score = tooltipItem.raw;
-            const quizTitle = this.stats?.lineGraph[tooltipItem.dataIndex]?.quizTitle || '';
-            return `${quizTitle}: ${score}`;
+          const score = tooltipItem.parsed.y;
+          const quizTitle = this.stats?.lineGraph[tooltipItem.dataIndex]?.quizTitle || '';
+          return `${quizTitle}: ${score}`;
+        
           }
         }
       }

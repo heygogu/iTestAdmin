@@ -23,9 +23,9 @@
           </div>
 
           <!-- Table -->
-          <div class="table-responsive rounded-4 overflow-hidden">
-            <table class="table table-striped table-hover">
-              <thead class="table-light">
+          <div class="table-responsive overflow-hidden">
+            <table class="table table-striped table-hover table-bordered">
+              <thead class="table-dark">
                 <tr>
                   <th>#</th>
                   <th>Name</th>
@@ -40,7 +40,13 @@
               <tbody>
                 <tr *ngFor="let user of users; let i = index">
                   <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-                  <td class="text-capitalize">{{ user.fullName }}</td>
+                 <td class="text-capitalize d-flex align-items-center gap-2">
+                  <span class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+                        style="width:32px; height:32px; font-size:1rem;">
+                    {{ user.fullName[0] }}
+                  </span>
+                  <span>{{ user.fullName }}</span>
+                 </td>
                   <td>{{ user.email }}</td>
                   <td class="text-capitalize">{{ user.country || 'N/A' }}</td>
                   <td class="text-capitalize">{{ user.gender || 'N/A' }}</td>

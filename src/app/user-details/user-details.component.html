@@ -11,7 +11,7 @@
               {{ user.fullName[0] }}
             </div>
             <div>
-              <h2 class="card-title mb-0">{{ user.fullName }}</h2>
+              <h2 class="card-title mb-0 text-capitalize">{{ user.fullName }}</h2>
               <span class="badge bg-info text-dark mt-1">{{ user.country }}</span>
             </div>
           </div>
@@ -39,33 +39,65 @@
       <!-- USER SUMMARY -->
       <h2 class="section-title">User Summary</h2>
       <div class="stats-container" *ngIf="stats">
-        <div class="stats-grid">
-          <mat-card class="stat-card">Total Attempted: {{ stats.statsSummary.totalQuizzesAttempted }}</mat-card>
-          <mat-card class="stat-card">Passed: {{ stats.statsSummary.passedQuizzes }}</mat-card>
-          <mat-card class="stat-card">Failed: {{ stats.statsSummary.failedQuizzes }}</mat-card>
-          <mat-card class="stat-card">Correct Answers: {{ stats.statsSummary.totalCorrectAnswers }}</mat-card>
+      <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+        <div class="card text-center shadow-sm border-0 bg-light">
+          <div class="card-body">
+          <i class="bi bi-clipboard-data fs-2 text-primary mb-2"></i>
+          <div class="fw-bold">Total Attempted</div>
+          <div>{{ stats.statsSummary.totalQuizzesAttempted }}</div>
+          </div>
         </div>
-
-        <!-- CHARTS -->
-        <div class="charts-grid">
-          <mat-card class="chart-card">
-            <h4>Score Over Time</h4>
-            <canvas baseChart
-                    [data]="lineChartData"
-                    [options]="lineChartOptions"
-                    [type]="'line'">
-            </canvas>
-          </mat-card>
-
-          <mat-card class="chart-card">
-            <h4>Pass vs Fail</h4>
-            <canvas baseChart
-                    [data]="{ labels: pieChartLabels, datasets: [{ data: pieChartData, backgroundColor: pieChartColors }] }"
-                    [options]="pieChartOptions"
-                    [type]="'pie'">
-            </canvas>
-          </mat-card>
         </div>
+        <div class="col-6 col-md-3">
+        <div class="card text-center shadow-sm border-0 bg-success bg-opacity-10">
+          <div class="card-body">
+          <i class="bi bi-check-circle fs-2 text-success mb-2"></i>
+          <div class="fw-bold">Passed</div>
+          <div>{{ stats.statsSummary.passedQuizzes }}</div>
+          </div>
+        </div>
+        </div>
+        <div class="col-6 col-md-3">
+        <div class="card text-center shadow-sm border-0 bg-danger bg-opacity-10">
+          <div class="card-body">
+          <i class="bi bi-x-circle fs-2 text-danger mb-2"></i>
+          <div class="fw-bold">Failed</div>
+          <div>{{ stats.statsSummary.failedQuizzes }}</div>
+          </div>
+        </div>
+        </div>
+        <div class="col-6 col-md-3">
+        <div class="card text-center shadow-sm border-0 bg-info bg-opacity-10">
+          <div class="card-body">
+          <i class="bi bi-patch-check fs-2 text-info mb-2"></i>
+          <div class="fw-bold">Correct Answers</div>
+          <div>{{ stats.statsSummary.totalCorrectAnswers }}</div>
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <!-- CHARTS (DO NOT CHANGE) -->
+      <div class="charts-grid">
+        <mat-card class="chart-card">
+        <h4>Line Chart - Score Over Time</h4>
+        <canvas baseChart
+            [data]="lineChartData"
+            [options]="lineChartOptions"
+            [type]="'line'">
+        </canvas>
+        </mat-card>
+
+        <mat-card class="chart-card">
+        <h4>Pie Chart - Pass vs Fail</h4>
+        <canvas baseChart
+            [data]="{ labels: pieChartLabels, datasets: [{ data: pieChartData, backgroundColor: pieChartColors }] }"
+            [options]="pieChartOptions"
+            [type]="'pie'">
+        </canvas>
+        </mat-card>
+      </div>
       </div>
 
       <!-- QUIZ HISTORY -->
@@ -75,17 +107,18 @@
 
             <div class="quiz-history" *ngIf="quizHistory.length > 0; else noHistory">
             <div class="table-responsive">
-                <table class="table table-striped table-hover align-middle">
+                <table class="table table-striped table-hover table-bordered align-middle">
                 <thead class="table-dark">
                     <tr>
                     <th scope="col">Quiz</th>
                     <th scope="col">Marks</th>
-                    <th scope="col">%</th>
+                    <th scope="col">Percentage</th>
                     <th scope="col">Status</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let q of quizHistory">
+                      
                     <td class="text-capitalize">{{ q.name }}</td>
                     <td>{{ q.marks }} / {{ q.total }}</td>
                     <td>{{ (q.marks / q.total * 100) | number:'1.0-0' }}%</td>
