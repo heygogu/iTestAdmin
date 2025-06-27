@@ -85,7 +85,7 @@ export class AddQuestionComponent implements OnInit {
       }),
       catchError(err => {
         console.error(err);
-        this.toast.error('Failed to add question.');
+        this.toast.error(err.error?.message || 'Failed to add question.');
         return of(null);
       })
     ).subscribe(() => {

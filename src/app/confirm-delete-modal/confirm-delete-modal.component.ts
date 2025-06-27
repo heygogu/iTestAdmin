@@ -6,7 +6,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   selector: 'app-confirm-delete-modal',
   template: `
     <div class="modal-header bg-danger text-white">
-      <h5 class="modal-title">Confirm Delete</h5>
+      <h5 class="modal-title fs-5 mt-2">Confirm Delete</h5>
       <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss()"></button>
     </div>
     <div class="modal-body text-center">

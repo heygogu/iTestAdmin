@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { catchError, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { ApiService } from 'src/app/api.service';
-import { ToastServiceService } from 'src/app/toast-service.service';
 import { AppToasterService } from 'src/app/services/toaster.service';
 
 @Component({
