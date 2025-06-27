@@ -41,6 +41,12 @@ export class RegisterComponent {
   }
 
   onSubmit(form: any) {
+    if (!this.captchaToken) {
+      this.captchaError = true;
+      console.warn('CAPTCHA not completed');
+      return;
+    }
+
     if (form.valid && this.passwordsMatch) {
       const payload = {
         email: this.registerData.email,
