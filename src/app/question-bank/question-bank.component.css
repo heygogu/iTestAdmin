@@ -1,6 +1,4 @@
-/* Custom styles to complement Bootstrap */
 
-/* Category Card Enhancements */
 .category-card {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }

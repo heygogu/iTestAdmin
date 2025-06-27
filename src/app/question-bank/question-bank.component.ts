@@ -14,20 +14,27 @@ interface CategoryStats {
   styleUrls: ['./question-bank.component.css']
 })
 export class QuestionBankComponent implements OnInit {
+
   constructor(private router: Router, private api: ApiService) {}
 
   categories: CategoryStats[] = [];
+ isLoading = false;
 
   ngOnInit(): void {
+    this.isLoading = true;
+
     this.api.admin.getCategoryStats().subscribe({
       next: (res) => {
         this.categories = res.data;
+        this.isLoading = false;
       },
       error: () => {
         console.error('Failed to load category stats');
+        this.isLoading = false;
       }
     });
   }
+
 
   showAddForm(category: string) {
     this.router.navigate(['/questionbank/add', category]);

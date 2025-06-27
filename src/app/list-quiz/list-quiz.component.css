@@ -1,6 +1,4 @@
-/* .sidenav-container {
-  height: 100vh;
-} */
+
 .quiz-card {
   border-left: 5px dotted #0d6efd;
   transition: transform 0.2s ease, box-shadow 0.2s ease;

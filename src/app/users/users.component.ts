@@ -12,11 +12,12 @@ import { catchError, tap } from 'rxjs/operators';
 })
 export class UsersComponent implements OnInit {
 
-   users: any[] = [];
+  users: any[] = [];
   currentPage = 1;
   totalPages = 1;
   pageSize = 10;
   searchText = '';
+  isLoading = false;
 
   constructor(
     private api: ApiService,
@@ -28,6 +29,7 @@ export class UsersComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.currentPage = parseInt(params.get('page') || '1', 10);
+      this.isLoading = true;
       this.loadUsers(); 
     });
   }
@@ -44,9 +46,11 @@ export class UsersComponent implements OnInit {
             this.users = res.data;
             this.totalPages = Math.ceil(res.total / res.pageSize);
           }
+          this.isLoading = false;
         }),
         catchError(err => {
           this.toast.error('Failed to load users');
+          this.isLoading = false;
           return of(null);
         })
       ).subscribe();

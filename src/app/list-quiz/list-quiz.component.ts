@@ -25,6 +25,7 @@ export class ListQuizComponent implements OnInit {
   pageSize = 10;
 
   datePickerModels: { [quizId: number]: string } = {};
+  isLoading = false;
 
   constructor(
     public router: Router,
@@ -39,6 +40,7 @@ export class ListQuizComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       this.currentPage = parseInt(params.get('page') || '1', 10);
       this.loadCategories();
+      this.isLoading = true;
       this.loadQuizzes();
     });
   }
@@ -56,24 +58,38 @@ export class ListQuizComponent implements OnInit {
 
 
 
-openScheduleModal(quiz: any, isReschedule: boolean): void {
-  const modalRef = this.modalService.open(ScheduleModalComponent);
-  modalRef.componentInstance.quiz = quiz;
-  modalRef.componentInstance.isReschedule = isReschedule;
+  openScheduleModal(quiz: any, isReschedule: boolean): void {
+    const modalRef = this.modalService.open(ScheduleModalComponent);
+    modalRef.componentInstance.quiz = quiz;
+    modalRef.componentInstance.isReschedule = isReschedule;
 
-  modalRef.result.then(date => {
-    const isoDate = new Date(date).toISOString();
-    this.api.admin.rescheduleQuizById(quiz.id, isoDate).subscribe({
-      next: () => {
-        this.toast.success(`${isReschedule ? 'Rescheduled' : 'Scheduled'} successfully.`);
-        this.loadQuizzes();
-      },
-      error: () => {
-        this.toast.error('Error scheduling quiz.');
+    modalRef.result.then(date => {
+      const isoDate = new Date(date).toISOString();
+   
+      if (isReschedule) {
+        this.api.admin.rescheduleQuizById(quiz.id, isoDate).subscribe({
+          next: () => {
+            this.toast.success('Quiz rescheduled successfully.');
+            this.loadQuizzes();
+          },
+          error: () => {
+            this.toast.error('Failed to reschedule quiz.');
+          }
+        });
+      } else {
+        this.api.admin.scheduleQuizById(quiz.id, isoDate).subscribe({
+          next: () => {
+            this.toast.success('Quiz scheduled successfully.');
+            this.loadQuizzes();
+          },
+          error: () => {
+            this.toast.error('Failed to schedule quiz.');
+          }
+        });
       }
-    });
-  }).catch(() => {});
-}
+    }).catch(() => {});
+  }
+
 
   getCategoryName(index: number): string {
     return this.categories.find(c => c.index === index)?.name || 'Custom';
@@ -104,7 +120,7 @@ getStatusBadge(date: string | null): string {
 exportQuiz(quiz: any): void {
    this.api.admin.exportQuizResultsById(quiz.id).subscribe({
     next: (blob: Blob) => {
-      const fileName = `quiz-results-${quiz.title.replace(/\s+/g, '_')}.xlsx`; // Or .csv if applicable
+      const fileName = `quiz-results-${quiz.title.replace(/\s+/g, '_')}.csv`; 
       saveAs(blob, fileName);
       this.toast.success(`Quiz "${quiz.title}" exported successfully!`);
     },
@@ -135,9 +151,12 @@ exportQuiz(quiz: any): void {
               ? quiz.rescheduledAt
               : quiz.scheduledAt || '';
         }
-      }}),
+      }
+      this.isLoading = false;
+    }),
       catchError(() => {
         this.toast.error('Failed to load scheduled quizzes.');
+        this.isLoading = false;
         return of(null);
       })
     ).subscribe();
@@ -155,7 +174,7 @@ exportQuiz(quiz: any): void {
     this.api.admin.rescheduleQuizById(quizId, isoDate).pipe(
       tap(() => {
         this.toast.success('Quiz rescheduled.');
-        this.loadQuizzes(); // reload and reset date pickers
+        this.loadQuizzes(); 
       }),
       catchError(() => {
         this.toast.error('Failed to reschedule quiz.');

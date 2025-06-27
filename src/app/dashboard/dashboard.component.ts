@@ -22,8 +22,10 @@ constructor(
   currentPage = 1;
   totalPages = 1;
   pageSize = 10;
+  isLoading = false;
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.loadRecentUsers();
   }
 
@@ -40,9 +42,11 @@ constructor(
           }));
           this.totalPages = Math.ceil(res.total / res.limit);
         }
+        this.isLoading = false;
       }),
       catchError((err) => {
         this.toast.error('Failed to load recent users');
+        this.isLoading = false;
         return of(null);
       })
     ).subscribe();

@@ -18,6 +18,7 @@ export class ViewQuestionsComponent implements OnInit {
   totalPages = 1;
   searchText = '';
   pageSize = 10;
+  isLoading = false;
 
   categoryMap: { [key: string]: number } = {
     GeneralKnowledge: 0, Science: 1, Technology: 2, History: 3, Mathematics: 4,
@@ -34,6 +35,7 @@ export class ViewQuestionsComponent implements OnInit {
       this.categoryParam = params.get('category') || '';
       this.currentPage = parseInt(params.get('page') || '1', 10);
       this.categoryIndex = this.categoryMap[this.categoryParam];
+      this.isLoading = true;
       this.loadQuestions();
     });
   }
@@ -49,10 +51,12 @@ export class ViewQuestionsComponent implements OnInit {
             const limit = res.limit ?? this.pageSize;
             this.totalPages = total > 0 ? Math.ceil(total / limit) : 1;
           }
+          this.isLoading = false;
         }),
         catchError(err => {
           this.toast.error('Failed to load questions.');
           console.error('Error loading questions:', err);
+          this.isLoading = false;
           return of(null);
         })
       )
