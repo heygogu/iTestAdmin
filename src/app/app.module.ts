@@ -115,7 +115,7 @@ import { NgChartsModule } from 'ng2-charts';
     MatRadioModule,
     MatSnackBarModule,
     LayoutModule,
-    NgChartsModule
+    NgChartsModule,
     ],
   providers: [ApiService],
   bootstrap: [AppComponent]
