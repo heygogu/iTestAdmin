@@ -13,17 +13,16 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
-  // Simple HTTP methods without token management
   private get<T>(url: string, params?: HttpParams): Observable<T> {
     return this.http.get<T>(`${this.API_ROOT}${url}`, {
       params,
-      withCredentials: true // Important for session-based auth
+      withCredentials: true 
     });
   }
 
   private post<T>(url: string, body: any): Observable<T> {
     return this.http.post<T>(`${this.API_ROOT}${url}`, body, {
-      withCredentials: true // Important for session-based auth
+      withCredentials: true 
     });
   }
 
@@ -50,7 +49,7 @@ export class ApiService {
       email: string;
       password: string;
       fullName: string;
-      role: number; // 0 = user, 1 = admin
+      role: number; 
     }): Observable<any> => {
       return this.post('Auth/register', userData);
     },
