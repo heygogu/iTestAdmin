@@ -48,7 +48,7 @@ export class ListQuizComponent implements OnInit {
   toISTDate(dateString: string): Date | null {
     if (!dateString) return null;
     const utcDate = new Date(dateString);
-    const istOffset = 5.5 * 60 * 60 * 1000; // ms
+    const istOffset = 5.5 * 60 * 60 * 1000; 
     return new Date(utcDate.getTime() + istOffset);
   }
   openDeleteModal(quiz: any): void {
