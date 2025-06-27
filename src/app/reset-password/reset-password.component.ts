@@ -29,8 +29,8 @@ export class ResetPasswordComponent {
   
   passwordsMatch: boolean = true;
   loading: boolean = false;
-  showNewPassword=false;
-  showConfirmPassword=false;
+  showNewPassword=true;
+  showConfirmPassword=true;
   
   checkPasswordsMatch() {
     this.passwordsMatch =

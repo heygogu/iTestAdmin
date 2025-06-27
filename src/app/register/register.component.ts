@@ -1,4 +1,5 @@
-import { Component, Inject } from '@angular/core';
+import {  Inject } from '@angular/core';
+import { Component,ViewChild} from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import { of } from 'rxjs';
@@ -6,6 +7,7 @@ import { tap, catchError } from 'rxjs/operators';
 import { AppToasterService } from '../services/toaster.service';
 import { LOCAL_STORAGE } from '../local-storage.token';
 import { UserService } from '../services/user-service.service';
+import { RecaptchaComponent } from 'ng-recaptcha';
 
 @Component({
   selector: 'app-register',
@@ -21,8 +23,6 @@ export class RegisterComponent {
     }
   }
 
-  hidePassword=true;
-  confirmHidePassword=true;
   registerData = {
     fullName: '',
     email: '',
@@ -31,24 +31,26 @@ export class RegisterComponent {
   };
 
   captchaToken: string | null = null;
-  captchaError: boolean = false;
-
   passwordsMatch: boolean = true;
   loading = false;
+  hidePassword=true;
+  confirmHidePassword=true;
+
+  @ViewChild('captchaRef') captchaComponent!: RecaptchaComponent;
+
 
   checkPasswordsMatch() {
     this.passwordsMatch =
       this.registerData.password === this.registerData.confirmPassword;
   }
 
-  // Triggered when CAPTCHA is solved
   onCaptchaResolved(token: string) {
     this.captchaToken = token;
-    this.captchaError = false;
     console.log('CAPTCHA Token:', token);
   }
 
   onSubmit(form: any) {
+
     if (form.valid && this.passwordsMatch) {
       const payload = {
         email: this.registerData.email,
@@ -61,9 +63,14 @@ export class RegisterComponent {
   
       this.apiService.auth.register(payload).pipe(
         tap((response: any) => {
-          console.log('Register response:', response);
-          this.toast.success(response.message || 'Registration successful!');
-          this.router.navigate(['/admin-login']);
+          if (response.success) {
+            console.log('Register response:', response);
+            this.toast.success(response.message || 'Registration successful!');
+            this.router.navigate(['/admin-login']);
+          } else {
+            this.toast.error(response.message || 'Registration failed.');
+          }
+
           this.resetFormData(form);
         }),
         catchError((error) => {
@@ -82,14 +89,18 @@ export class RegisterComponent {
   }
   
   resetFormData(form: any) {
-  this.registerData = {
-    fullName: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
-  };
-  this.captchaToken = null;
-  this.passwordsMatch = true;
-  form.resetForm();
+    this.registerData = {
+      fullName: '',
+      email: '',
+      password: '',
+      confirmPassword: ''
+    };
+    this.captchaToken = null;
+    this.passwordsMatch = true;
+    form.resetForm();
+
+    if (this.captchaComponent) {
+      this.captchaComponent.reset();
+    }
   }
 }

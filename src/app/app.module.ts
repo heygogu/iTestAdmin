@@ -21,7 +21,6 @@ import { SharedLayoutComponent } from './shared-layout/shared-layout.component';
 import {LayoutModule} from '@angular/cdk/layout';
 import { EditQuestionComponent } from './edit-question/edit-question.component';
 
-// Angular Material modules
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
@@ -116,7 +115,7 @@ import { NgChartsModule } from 'ng2-charts';
     MatRadioModule,
     MatSnackBarModule,
     LayoutModule,
-    NgChartsModule
+    NgChartsModule,
     ],
   providers: [ApiService],
   bootstrap: [AppComponent]

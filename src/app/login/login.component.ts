@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ViewChild} from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import { of } from 'rxjs';
@@ -6,6 +6,7 @@ import { tap, catchError } from 'rxjs/operators';
 import { UserService } from '../services/user-service.service';
 import { AppToasterService } from '../services/toaster.service';
 import { LOCAL_STORAGE } from '../local-storage.token';
+import { RecaptchaComponent } from 'ng-recaptcha';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,6 @@ export class LoginComponent {
   };
 
   captchaToken: string | null = null;
-  captchaError: boolean = false;
   hidePassword=true;
 
   constructor(private apiService: ApiService,private router: Router,private toast: AppToasterService,private userService:UserService,@Inject(LOCAL_STORAGE) private localStorage:Storage) {
@@ -30,19 +30,14 @@ export class LoginComponent {
     }
   }
 
-  // Captures the CAPTCHA token
   onCaptchaResolved(token: string) {
     this.captchaToken = token;
-    this.captchaError = false;
     console.log('CAPTCHA Token:', token);
   }
 
+  @ViewChild('captchaRef') captchaComponent!: RecaptchaComponent;
+
   onSubmit(form: any) {
-    if (!this.captchaToken) {
-      this.captchaError = true;
-      console.warn('CAPTCHA not completed');
-      return;
-    }
   
     if (form.valid) {
       this.apiService.auth.login(this.loginData).pipe(
@@ -61,6 +56,10 @@ export class LoginComponent {
           this.loginData = { email: '', password: '' };
           this.captchaToken = null;
           form.resetForm();
+
+          if (this.captchaComponent) {
+            this.captchaComponent.reset();
+          }
         }),
         catchError((err) => {
           console.log('Login error:', err.error.message);
@@ -69,6 +68,10 @@ export class LoginComponent {
           this.loginData = { email: '', password: '' };
           this.captchaToken = null;
           form.resetForm();
+
+          if (this.captchaComponent) {
+            this.captchaComponent.reset();
+          }
   
           return of(null); 
         })

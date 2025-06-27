@@ -200,7 +200,6 @@ export class ApiService {
       return this.post('AdminQuiz/custom', quizData);
     },
 
-    //For edit quiz
     getQuizById: (quizId: number) => {
         return this.get<{ success: boolean; data: any }>(`AdminQuiz/${quizId}/details`);
     },
