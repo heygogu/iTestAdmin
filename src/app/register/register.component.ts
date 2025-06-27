@@ -23,7 +23,6 @@ export class RegisterComponent {
   };
 
   captchaToken: string | null = null;
-  captchaError: boolean = false;
 
   passwordsMatch: boolean = true;
   loading = false;
@@ -35,16 +34,10 @@ export class RegisterComponent {
 
   onCaptchaResolved(token: string) {
     this.captchaToken = token;
-    this.captchaError = false;
     console.log('CAPTCHA Token:', token);
   }
 
   onSubmit(form: any) {
-    if (!this.captchaToken) {
-      this.captchaError = true;
-      console.warn('CAPTCHA not completed');
-      return;
-    }
 
     if (form.valid && this.passwordsMatch) {
       const payload = {

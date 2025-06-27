@@ -18,23 +18,16 @@ export class LoginComponent {
   };
 
   captchaToken: string | null = null;
-  captchaError: boolean = false;
   hidePassword=true;
 
   constructor(private apiService: ApiService,private router: Router,private toast: AppToasterService,private userService:UserService) {}
 
   onCaptchaResolved(token: string) {
     this.captchaToken = token;
-    this.captchaError = false;
     console.log('CAPTCHA Token:', token);
   }
 
   onSubmit(form: any) {
-    if (!this.captchaToken) {
-      this.captchaError = true;
-      console.warn('CAPTCHA not completed');
-      return;
-    }
   
     if (form.valid) {
       this.apiService.auth.login(this.loginData).pipe(

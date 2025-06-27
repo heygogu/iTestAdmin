@@ -114,9 +114,6 @@
             siteKey="6LePdGkrAAAAAF55GXnYiJpCDfQabX6aK9rMbIFB"
             (resolved)="onCaptchaResolved($event)">
           </re-captcha>
-          <div *ngIf="captchaError" class="invalid-feedback d-block mt-2 text-center">
-            Please verify that you are not a robot
-          </div>
         </div>
       </div>
 
@@ -124,7 +121,7 @@
         <button
           type="submit"
           class="btn btn-primary btn-lg rounded-pill shadow-sm"
-          [disabled]="!registerForm.valid"
+          [disabled]="!registerForm.valid || !captchaToken"
         >
           <i class="bi bi-person-check-fill me-2"></i>Register
         </button>
