@@ -12,6 +12,7 @@ import { AppToasterService } from '../services/toaster.service';
 })
 export class EditQuestionComponent implements OnInit {
   loading = false;
+  isLoading = false;
   questionId: number = 0;
   categoryParam: string = '';
 
@@ -42,7 +43,7 @@ export class EditQuestionComponent implements OnInit {
         this.router.navigate(['/dashboard']);
         return;
       }
-
+      this.isLoading = true;
       this.loadQuestion();
     });
   }
@@ -63,10 +64,12 @@ export class EditQuestionComponent implements OnInit {
         } else {
           this.toast.error('Failed to load question.');
         }
+        this.isLoading = false;
       }),
       catchError(err => {
         console.error('Error fetching question:', err);
         this.toast.error('Error loading question.');
+        this.isLoading = false;
         return of(null);
       })
     ).subscribe();
@@ -90,7 +93,7 @@ export class EditQuestionComponent implements OnInit {
     this.apiService.admin.updateQuestionById(this.questionId, updatedQuestion).pipe(
       tap(() => {
         this.toast.success('Question updated successfully!');
-        this.router.navigate(['/questionbank/view', this.categoryParam]);
+        this.router.navigate(['/questionbank/view', this.categoryParam, 'page', 1]);
       }),
       catchError(err => {
         console.error('Update failed:', err);
@@ -102,6 +105,6 @@ export class EditQuestionComponent implements OnInit {
   }
 
   onCancel(): void {
-    this.router.navigate(['/questionbank/view', this.categoryParam]);
+    this.router.navigate(['/questionbank/view', this.categoryParam, 'page', 1]);
   }
 }

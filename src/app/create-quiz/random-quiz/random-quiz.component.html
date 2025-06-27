@@ -3,21 +3,18 @@
     <h4 class="card-title text-primary mb-4"><i class="bi bi-shuffle me-2"></i> Generate Random Quiz</h4>
 
     <form #quizForm="ngForm">
-      <!-- Test Name -->
       <div class="mb-3">
         <label class="form-label fw-semibold">Test Name</label>
         <input type="text" class="form-control" [(ngModel)]="quiz.name" name="name" required #name="ngModel">
         <div class="text-danger small" *ngIf="name.invalid && name.touched">Test Name is required</div>
       </div>
 
-      <!-- Description -->
       <div class="mb-3">
         <label class="form-label fw-semibold">Description</label>
         <textarea class="form-control" rows="2" [(ngModel)]="quiz.description" name="description" required #description="ngModel"></textarea>
         <div class="text-danger small" *ngIf="description.invalid && description.touched">Description is required</div>
       </div>
 
-      <!-- Category -->
       <div class="mb-3">
         <label class="form-label fw-semibold">Select Category</label>
         <select class="form-select" [(ngModel)]="quiz.category" name="category" required #category="ngModel">
@@ -28,7 +25,6 @@
         <div class="text-danger small" *ngIf="category.invalid && category.touched">Category is required</div>
       </div>
 
-      <!-- Number of Questions and Score -->
       <div class="row g-3">
         <div class="col-md-6">
           <label class="form-label fw-semibold">Number of Questions</label>
@@ -44,7 +40,6 @@
         </div>
       </div>
 
-      <!-- Buttons -->
       <div class="mt-4 d-flex justify-content-end gap-3">
         <button class="btn btn-outline-primary btn-lg" type="button" (click)="generateRandomQuiz()">
           <i class="bi bi-shuffle me-1"></i> Generate Quiz
@@ -60,7 +55,6 @@
   </div>
 </div>
 
-<!-- Preview Questions -->
 <div *ngIf="quiz.questions.length" class="card mt-5 border-0 shadow-sm bg-white rounded-4 overflow-hidden">
   <div class="bg-primary bg-gradient text-white py-3 px-4 d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center gap-2">
@@ -109,17 +103,6 @@
   </div>
 </div>
 
-<style>
-  .option-hover:hover {
-    background: #e9ecef !important;
-    transition: background 0.2s;
-  }
-  .card.mt-5.rounded-4 {
-    border-radius: 0.75rem !important;
-  }
-</style>
-
-<!-- No questions fallback -->
 <div *ngIf="!quiz.questions.length" class="card mt-5 border-0 bg-white rounded-4 text-center py-5">
   <div class="d-flex flex-column align-items-center justify-content-center h-100">
     <i class="bi bi-emoji-frown fs-1 text-primary mb-3"></i>

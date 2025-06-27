@@ -1,5 +1,4 @@
 <mat-sidenav-container class="sidenav-container bg-light" style="min-height: 100vh;">
-  <!-- Sidebar -->
   <mat-sidenav
     #sidenav
     [mode]="isScreenSmall ? 'over' : 'side'"
@@ -37,9 +36,7 @@
     </div>
   </mat-sidenav>
 
-  <!-- Main Content Area -->
   <mat-sidenav-content class="bg-light" style="height: 100vh; overflow-y: auto;">
-    <!-- Sticky Header -->
     <mat-toolbar
       color="primary"
       class="top-toolbar sticky-top px-3 d-flex align-items-center justify-content-between"
@@ -71,7 +68,6 @@
       </div>
     </mat-toolbar>
 
-    <!-- Main Scrollable Content -->
     <div class="main-content p-4">
       <router-outlet></router-outlet>
     </div>

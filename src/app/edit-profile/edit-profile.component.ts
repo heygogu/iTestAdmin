@@ -31,7 +31,7 @@ export class EditProfileComponent implements OnInit {
     const user = this.userService.getUser();
     if (user) {
       this.userId = Number(user.id);
-      this.email = user.email; // 💡 Load email separately
+      this.email = user.email; 
       this.loadProfile();
     } else {
       console.error('User not found in localStorage');
@@ -62,12 +62,11 @@ export class EditProfileComponent implements OnInit {
           if (res.success) {
             this.toast.success('Profile updated successfully!');
 
-            // 🔁 Update localStorage
             const currentUser = this.userService.getUser();
             if (currentUser) {
               this.userService.saveUser({
                 ...currentUser,
-                fullName: this.profileData.fullName  // update the display name
+                fullName: this.profileData.fullName  
               });
             }
           } else {

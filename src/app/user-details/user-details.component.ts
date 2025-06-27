@@ -11,8 +11,7 @@ import { AppToasterService } from '../services/toaster.service';
   templateUrl: './user-details.component.html',
   styleUrls: ['./user-details.component.css']
 })
-export class UserDetailsComponent implements OnInit{
-
+export class UserDetailsComponent implements OnInit {
   quizHistory: any[] = [];
   stats: any;
   currentPage: number = 1;
@@ -20,6 +19,10 @@ export class UserDetailsComponent implements OnInit{
   limit: number = 10;
   userId!: number;
   user: any;
+
+  userLoading = true;
+  statsLoading = true;
+  historyLoading = true;
 
   lineChartData = {
     labels: [] as string[],
@@ -40,13 +43,12 @@ export class UserDetailsComponent implements OnInit{
     plugins: {
       legend: { display: true, position: 'bottom' },
       tooltip: {
-         callbacks: {
+        callbacks: {
           title: () => '',
           label: (tooltipItem: TooltipItem<'line'>) => {
-          const score = tooltipItem.parsed.y;
-          const quizTitle = this.stats?.lineGraph[tooltipItem.dataIndex]?.quizTitle || '';
-          return `${quizTitle}: ${score}`;
-        
+            const score = tooltipItem.parsed.y;
+            const quizTitle = this.stats?.lineGraph[tooltipItem.dataIndex]?.quizTitle || '';
+            return `${quizTitle}: ${score}`;
           }
         }
       }
@@ -84,7 +86,7 @@ export class UserDetailsComponent implements OnInit{
     private router: Router,
     private route: ActivatedRoute,
     private api: ApiService,
-    private toast: AppToasterService,
+    private toast: AppToasterService
   ) {}
 
   ngOnInit(): void {
@@ -92,8 +94,10 @@ export class UserDetailsComponent implements OnInit{
     if (!idParam) return;
 
     this.userId = +idParam;
+
     this.loadUserProfile();
     this.loadStats();
+
     this.route.paramMap.subscribe(paramMap => {
       const pageParam = paramMap.get('page');
       this.currentPage = pageParam ? parseInt(pageParam, 10) : 1;
@@ -101,43 +105,56 @@ export class UserDetailsComponent implements OnInit{
     });
   }
 
-
-
   loadUserProfile(): void {
+    this.userLoading = true;
     this.api.user.getProfile(this.userId).pipe(
       tap(res => {
         if (res.success) {
           this.user = res.data;
+        } else {
+          this.toast.error('User profile not found');
         }
+        this.userLoading = false;
       }),
       catchError(() => {
         this.toast.error('Failed to load user profile', 'Close');
+        this.userLoading = false;
         return of(null);
       })
     ).subscribe();
   }
 
-
-
   loadStats(): void {
+    this.statsLoading = true;
     this.api.user.getUserStats(this.userId).pipe(
       tap(res => {
         if (res.success) {
           this.stats = res.data;
+
           const line = res.data.lineGraph;
           this.lineChartData.labels = line.map((d: any) => d.attemptedAt);
           this.lineChartData.datasets[0].data = line.map((d: any) => d.score);
-          this.pieChartData = [res.data.pieChart.passed, res.data.pieChart.failed];
+
+          this.pieChartData = [
+            res.data.pieChart.passed,
+            res.data.pieChart.failed
+          ];
+        } else {
+          this.toast.error('No stats found');
         }
+        this.statsLoading = false;
       }),
       catchError(() => {
         this.toast.error('Failed to load user stats', 'Close');
+        this.statsLoading = false;
         return of(null);
       })
     ).subscribe();
   }
 
   loadQuizHistory(page: number): void {
+    this.historyLoading = true;
+
     const params = new HttpParams().set('limit', this.limit.toString());
 
     this.api.user.getUserHistory(this.userId, page, this.limit).pipe(
@@ -150,10 +167,14 @@ export class UserDetailsComponent implements OnInit{
             passed: item.passed
           }));
           this.totalPages = res.totalPages;
+        } else {
+          this.toast.error('No quiz history found');
         }
+        this.historyLoading = false;
       }),
       catchError(() => {
         this.toast.error('Failed to load quiz history', 'Close');
+        this.historyLoading = false;
         return of(null);
       })
     ).subscribe();
@@ -170,7 +191,4 @@ export class UserDetailsComponent implements OnInit{
       window.scrollTo(0, 0);
     }
   }
-
-
-
 }

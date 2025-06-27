@@ -39,27 +39,41 @@ export class SharedLayoutComponent {
   }
 
 
-  setPageTitle(url: string) {
-    if (url.includes('/dashboard')) {
-      this.pageTitle = 'Dashboard';
-    } else if (url.includes('/users')) {
-      this.pageTitle = 'Users';
-    } else if (url.includes('/quizzes')) {
-      this.pageTitle = 'Quizzes';
-    } else if (url.includes('/question-bank')) {
-      this.pageTitle = 'Question Bank';
-    } else if (url.includes('/edit-profile')) {
-      this.pageTitle = 'Edit Profile';
-    } else if (url.includes('/schedule-quiz')) {
-      this.pageTitle = 'Schedule Quiz';
-    } else if (url.includes('/create-quiz')) {
-      this.pageTitle = 'Create Quiz';
-    } else if(url.includes('/questionbank/add/')){
-      this.pageTitle = 'Question Bank';
-    } else if(url.includes('questionbank/view')){
-      this.pageTitle = 'Question Bank'
-    } else {
-      this.pageTitle = 'Admin Panel';
+  setPageTitle(url: string): void {
+    switch (true) {
+      case url.includes('/dashboard'):
+        this.pageTitle = 'Dashboard';
+        break;
+      case url.includes('/users'):
+        this.pageTitle = 'Users';
+        break;
+      case url.includes('/quizzes'):
+        this.pageTitle = 'Quizzes';
+        break;
+      case url.includes('/question-bank'):
+      case url.includes('/questionbank/add/'):
+      case url.includes('questionbank/view'):
+        this.pageTitle = 'Question Bank';
+        break;
+      case url.includes('/edit-profile'):
+        this.pageTitle = 'Edit Profile';
+        break;
+      case url.includes('/schedule-quiz'):
+        this.pageTitle = 'Schedule Quiz';
+        break;
+      case url.includes('/create-quiz'):
+        this.pageTitle = 'Create Quiz';
+        break;
+      case url.includes('/user-details'):
+        this.pageTitle = 'User Details';
+        break;
+      case url.includes('/edit-quiz'):
+        this.pageTitle = 'Edit Quiz';
+        break;
+      default:
+        this.pageTitle = 'Admin Panel';
+        break;
     }
   }
+
 }
