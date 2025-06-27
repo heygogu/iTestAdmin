@@ -46,15 +46,15 @@
 
   <!-- Table -->
   <div class="table-responsive">
-    <table class="table table-striped table-hover shadow-sm">
-      <thead class="">
+    <table class="table table-striped table-hover shadow-sm table-bordered align-middle">
+      <thead class="table-dark align-middle">
         <tr>
-          <th scope="col">Sr. No.</th>
-          <th scope="col">Title</th>
-          <th scope="col">Category</th>
-          <th scope="col">Scheduled At</th>
-          <th scope="col">Status</th>
-          <th scope="col" class="text-end">Actions</th>
+          <th scope="col" class="fw-semibold text-center">#</th>
+          <th scope="col" class="fw-semibold">Title</th>
+          <th scope="col" class="fw-semibold">Category</th>
+          <th scope="col" class="fw-semibold">Scheduled At</th>
+          <th scope="col" class="fw-semibold">Status</th>
+          <th class="text-end fw-semibold" scope="col">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -92,16 +92,16 @@
     <div class="btn-group dropstart">
       <button type="button" class="btn btn-sm btn-outline-dark dropdown-toggle"
               data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
-        <i class="bi bi-list-ul"></i> <!-- changed from three-dots-vertical -->
+        <!-- <i class="bi bi-three-dots-vertical"></i> -->
       </button>
       <ul class="dropdown-menu dropdown-menu-end shadow">
-        <li *ngIf="!isValidDate(quiz.scheduledAt)">
-          <a class="dropdown-item" (click)="openScheduleModal(quiz, false)">
+        <li  *ngIf="!isValidDate(quiz.scheduledAt)">
+          <a style="cursor: pointer;" class="dropdown-item" (click)="openScheduleModal(quiz, false)">
             <i class="bi bi-calendar-plus me-2"></i> Schedule Quiz
           </a>
         </li>
         <li *ngIf="isValidDate(quiz.scheduledAt)">
-          <a class="dropdown-item" (click)="openScheduleModal(quiz, true)">
+          <a class="dropdown-item" style="cursor: pointer;" (click)="openScheduleModal(quiz, true)">
             <i class="bi bi-calendar-event me-2"></i> Reschedule Quiz
           </a>
         </li>
