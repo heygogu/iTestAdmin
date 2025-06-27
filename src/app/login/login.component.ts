@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild} from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import { of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { UserService } from '../services/user-service.service';
 import { AppToasterService } from '../services/toaster.service';
+import { RecaptchaComponent } from 'ng-recaptcha';
 
 @Component({
   selector: 'app-login',
@@ -27,6 +28,8 @@ export class LoginComponent {
     console.log('CAPTCHA Token:', token);
   }
 
+  @ViewChild('captchaRef') captchaComponent!: RecaptchaComponent;
+
   onSubmit(form: any) {
   
     if (form.valid) {
@@ -46,6 +49,10 @@ export class LoginComponent {
           this.loginData = { email: '', password: '' };
           this.captchaToken = null;
           form.resetForm();
+
+          if (this.captchaComponent) {
+            this.captchaComponent.reset();
+          }
         }),
         catchError((err) => {
           console.log('Login error:', err.error.message);
@@ -54,6 +61,10 @@ export class LoginComponent {
           this.loginData = { email: '', password: '' };
           this.captchaToken = null;
           form.resetForm();
+
+          if (this.captchaComponent) {
+            this.captchaComponent.reset();
+          }
   
           return of(null); 
         })
