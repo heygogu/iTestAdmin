@@ -14,14 +14,12 @@ export class SharedLayoutComponent {
   isScreenSmall: boolean = false;
 
   constructor(private router: Router, private breakpointObserver: BreakpointObserver,private userService:UserService) {
-    // Watch for screen size
     this.breakpointObserver.observe([Breakpoints.Handset])
       .subscribe(result => {
         this.isScreenSmall = result.matches;
       });
 
       
-    // Watch for route changes
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {

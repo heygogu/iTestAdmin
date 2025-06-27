@@ -8,7 +8,6 @@
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
 }
 
-/* Category Icon Wrapper */
 .category-icon-wrapper {
   width: 60px;
   height: 60px;
@@ -19,13 +18,11 @@
   font-size: 1.5rem;
 }
 
-/* Question text in table */
 .question-text {
   max-width: 300px;
   line-height: 1.4;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .category-icon-wrapper {
     width: 50px;
@@ -42,7 +39,6 @@
   }
 }
 
-/* Custom hover effects for buttons */
 .btn-outline-primary:hover,
 .btn-outline-success:hover,
 .btn-outline-warning:hover,
@@ -51,7 +47,6 @@
   transition: transform 0.1s ease;
 }
 
-/* Table row hover enhancement */
 .table-hover tbody tr:hover {
   background-color: rgba(0, 123, 255, 0.05);
 }

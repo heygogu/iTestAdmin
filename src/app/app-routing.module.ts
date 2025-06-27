@@ -28,7 +28,6 @@ const routes: Routes = [
   { path: 'forgot-password', component: ForgetPasswordComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
 
-  // Routes using shared layout
   {
     path: '',
     component: SharedLayoutComponent,
