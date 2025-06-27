@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import { of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { AppToasterService } from '../services/toaster.service';
+import { LOCAL_STORAGE } from '../local-storage.token';
+import { UserService } from '../services/user-service.service';
 
 @Component({
   selector: 'app-register',
@@ -11,7 +13,13 @@ import { AppToasterService } from '../services/toaster.service';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
-  constructor(private apiService: ApiService, private router: Router, private toast: AppToasterService) {}
+  constructor(private apiService: ApiService, private router: Router, private toast: AppToasterService,@Inject(LOCAL_STORAGE)private localStorage:Storage,private userService:UserService) {
+     if(this.localStorage.getItem('user')!==null){
+      const user = JSON.parse(this.localStorage.getItem('user') || '{}');
+      this.userService.saveUser(user)
+      router.navigate(["/dashboard"])
+    }
+  }
 
   hidePassword=true;
   confirmHidePassword=true;
