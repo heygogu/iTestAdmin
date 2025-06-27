@@ -13,7 +13,7 @@ export class RandomQuizComponent implements OnInit {
 
   categories: { index: number, name: string, totalQuestions: number }[] = [];
   private generatedQuestionCount: number | null = null;
-
+  showValidation = false;
 
   quiz = {
     name: '',
@@ -35,13 +35,14 @@ export class RandomQuizComponent implements OnInit {
       }),
       catchError(err => {
         console.error('Error loading categories:', err);
-        this.toast.error('Failed to load categories.');
+        this.toast.error(err.error?.message ||'Failed to load categories.');
         return of(null);
       })
     ).subscribe();
   }
 
   generateRandomQuiz() {
+    this.showValidation = true;
     if (this.quiz.category == null || !this.quiz.questionCount) {
       this.toast.warning('Please select a category and enter a question count.');
       return;
@@ -75,7 +76,7 @@ export class RandomQuizComponent implements OnInit {
       }),
       catchError(err => {
         console.error('Error fetching questions:', err);
-        this.toast.error('Failed to generate quiz.');
+        this.toast.error(err.error?.message ||'Failed to generate quiz.');
         return of(null);
       })
     ).subscribe();
@@ -115,7 +116,7 @@ export class RandomQuizComponent implements OnInit {
       }),
       catchError(err => {
         console.error('Error saving quiz:', err);
-        this.toast.error('Failed to save quiz.');
+        this.toast.error(err.error?.message ||'Failed to save quiz.');
         return of(null);
       })
     ).subscribe();
@@ -151,7 +152,7 @@ export class RandomQuizComponent implements OnInit {
       }),
       catchError(err => {
         console.error('Error scheduling quiz:', err);
-        this.toast.error('Failed to schedule quiz.');
+        this.toast.error(err.error?.message ||'Failed to schedule quiz.');
         return of(null);
       })
     ).subscribe();

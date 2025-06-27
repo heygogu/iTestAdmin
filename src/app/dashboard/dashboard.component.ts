@@ -45,7 +45,7 @@ constructor(
         this.isLoading = false;
       }),
       catchError((err) => {
-        this.toast.error('Failed to load recent users');
+        this.toast.error(err.error?.message ||'Failed to load recent users');
         this.isLoading = false;
         return of(null);
       })

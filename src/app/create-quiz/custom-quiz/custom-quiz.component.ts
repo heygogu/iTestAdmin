@@ -32,6 +32,7 @@ export class CustomQuizComponent implements OnInit {
     options: ['', '', '', ''],
     correctAnswer: ''
   };
+  showValidation = false;
 
   constructor(
     private apiService: ApiService,
@@ -47,7 +48,7 @@ export class CustomQuizComponent implements OnInit {
       }),
       catchError(err => {
         console.error('Error loading categories:', err);
-        this.toast.error('Failed to load categories.');
+        this.toast.error(err.error?.message || 'Failed to load categories.');
         return of(null);
       })
     ).subscribe();
@@ -81,7 +82,7 @@ export class CustomQuizComponent implements OnInit {
       options: ['', '', '', ''],
       correctAnswer: ''
     };
-
+    this.showValidation = true;
     form.resetForm();
   }
   deleteQuestion(index: number) {
@@ -96,14 +97,19 @@ export class CustomQuizComponent implements OnInit {
   }
 
   saveQuiz() {
+    this.showValidation = true;
     if (
         !this.quiz.title.trim() ||
         !this.quiz.description.trim() ||
         this.quiz.category === '' ||
-        isNaN(this.quiz.passScore) || this.quiz.passScore <= 0 ||
+        this.quiz.passScore <= 0 ||
         this.quiz.questions.length === 0
       ) {
         this.toast.warning('Please complete all fields and add at least one question.');
+        return;
+      }
+      if (isNaN(this.quiz.passScore)) {
+        this.toast.warning('Please enter a valid score to pass.');
         return;
       }
       if (this.quiz.passScore > this.quiz.questions.length) {

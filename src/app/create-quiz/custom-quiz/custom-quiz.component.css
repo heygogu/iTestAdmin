@@ -8,11 +8,11 @@ mat-form-field {
 }
 
 mat-form-field .mat-form-field-wrapper {
-  padding-bottom: 6px; /* reduces space below input */
+  padding-bottom: 6px; 
 }
 
 mat-form-field .mat-form-field-infix {
-  padding: 6px 10px; /* reduces input height */
+  padding: 6px 10px; 
 }
 
 mat-card {

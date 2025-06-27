@@ -68,7 +68,7 @@ export class EditQuestionComponent implements OnInit {
       }),
       catchError(err => {
         console.error('Error fetching question:', err);
-        this.toast.error('Error loading question.');
+        this.toast.error(err.error?.message ||'Error loading question.');
         this.isLoading = false;
         return of(null);
       })
@@ -97,7 +97,7 @@ export class EditQuestionComponent implements OnInit {
       }),
       catchError(err => {
         console.error('Update failed:', err);
-        this.toast.error('Failed to update question.');
+        this.toast.error(err.error?.message ||'Failed to update question.');
         this.loading = false;
         return of(null);
       })

@@ -26,7 +26,7 @@ export class ResetPasswordComponent {
   
   checkPasswordsMatch() {
     this.passwordsMatch =
-      this.resetData.newPassword === this.resetData.confirmPassword;
+    this.resetData.newPassword === this.resetData.confirmPassword;
   }
 
   onSubmit(form: any) {

@@ -37,7 +37,6 @@ mat-card {
   margin-top: 15px;
 }
 
-/* If you use mat-flat-button or mat-raised-button, use this */
 button[mat-flat-button],
 button[mat-raised-button] {
   font-weight: 500;
@@ -47,7 +46,6 @@ button[mat-raised-button] {
   gap: 8px;
 }
 
-/* Optional: For custom-styled buttons (not mat-button) */
 .mode-button {
   padding: 10px 25px;
   border: none;
@@ -88,10 +86,3 @@ button[mat-raised-button] {
   align-items: center;
   gap: 6px;
 }
-/* .nav-pills .nav-link {
-  transition: all 0.3s ease;
-}
-.nav-pills .nav-link:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
-} */
