@@ -1,13 +1,13 @@
 <div class="d-flex justify-content-center align-items-center min-vh-100 bg-gradient" style="background: linear-gradient(135deg, #e0e7ff 0%, #f8fafc 100%);">
   <div class="card border-0 shadow-lg p-0 overflow-hidden" style="max-width: 420px; width: 100%; border-radius: 2rem;">
-    <!-- Decorative Top Section -->
+
     <div class="bg-primary text-white text-center py-4" >
       <i class="bi bi-shield-lock-fill fs-1"></i>
       <h2 class="fw-bold mt-2 mb-0">Welcome Back, Admin</h2>
       <p class="mb-0 small opacity-75">Sign in to continue to your dashboard</p>
     </div>
     <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)" autocomplete="off" novalidate class="p-4">
-      <!-- Email Field -->
+
       <div class="mb-3">
         <label for="email" class="form-label fw-semibold">
          Email
@@ -32,7 +32,6 @@
         </div>
       </div>
 
-      <!-- Password Field -->
       <div class="mb-2">
         <label for="password" class="form-label fw-semibold">
           Password
@@ -65,14 +64,12 @@
         </div>
       </div>
 
-      <!-- Forget password-->
       <div class="mb-3 text-end">
         <a routerLink="/forgot-password" class="link-secondary small">
           Forgot Password?
         </a>
       </div>
 
-      <!-- Recaptcha Centered -->
       <div class="mb-4 d-flex justify-content-center">
         <div>
           <re-captcha
@@ -80,12 +77,11 @@
             (resolved)="onCaptchaResolved($event)">
           </re-captcha>
           <div *ngIf="captchaError" class="invalid-feedback d-block mt-2 text-center">
-            <i class="bi bi-robot me-1"></i>Please verify that you are not a robot
+            Please verify that you are not a robot
           </div>
         </div>
       </div>
 
-      <!-- Login Button -->
       <div class="d-grid mb-3">
         <button
           type="submit"
@@ -96,12 +92,10 @@
         </button>
       </div>
 
-      <!-- Divider -->
       <div class="text-center text-muted mb-3">
         <span style="letter-spacing: 0.1em;">or</span>
       </div>
 
-      <!-- Sign Up Link -->
       <div class="text-center">
         <span>Don't have an account?</span>
         <a class="ms-1 link-primary fw-semibold" routerLink="/admin-register">Register</a>

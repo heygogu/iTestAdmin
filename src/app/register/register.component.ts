@@ -33,7 +33,6 @@ export class RegisterComponent {
       this.registerData.password === this.registerData.confirmPassword;
   }
 
-  // Triggered when CAPTCHA is solved
   onCaptchaResolved(token: string) {
     this.captchaToken = token;
     this.captchaError = false;

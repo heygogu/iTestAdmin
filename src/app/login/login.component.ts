@@ -23,7 +23,6 @@ export class LoginComponent {
 
   constructor(private apiService: ApiService,private router: Router,private toast: AppToasterService,private userService:UserService) {}
 
-  // Captures the CAPTCHA token
   onCaptchaResolved(token: string) {
     this.captchaToken = token;
     this.captchaError = false;

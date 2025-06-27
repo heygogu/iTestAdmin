@@ -1,6 +1,5 @@
 <div class="d-flex justify-content-center align-items-center min-vh-100 bg-gradient" style="background: linear-gradient(135deg, #e0e7ff 0%, #f8fafc 100%);">
   <div class="card border-0 shadow-lg p-0 overflow-hidden" style="max-width: 420px; width: 100%; border-radius: 2rem;">
-    <!-- Decorative Top Section -->
     <div class="bg-primary text-white text-center py-4">
       <i class="bi bi-person-plus-fill fs-1"></i>
       <h2 class="fw-bold text-white mt-2 mb-0">Admin Registration</h2>
@@ -8,7 +7,6 @@
     </div>
 
     <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)" autocomplete="off" novalidate class="p-4">
-      <!-- Name Field -->
       <div class="mb-3">
         <label class="form-label fw-semibold">
           Name
@@ -30,8 +28,6 @@
           <span *ngIf="fullName.errors?.['minlength']">Minimum 3 characters</span>
         </div>
       </div>
-
-      <!-- Email Field -->
       <div class="mb-3">
         <label class="form-label fw-semibold">
          Email
@@ -54,7 +50,6 @@
         </div>
       </div>
 
-      <!-- Password Field -->
       <div class="mb-3">
         <label class="form-label fw-semibold">
           Password
@@ -86,7 +81,6 @@
         </div>
       </div>
 
-      <!-- Confirm Password Field -->
       <div class="mb-3">
         <label class="form-label fw-semibold">
           Confirm Password
@@ -114,7 +108,6 @@
         </div>
       </div>
 
-      <!-- Recaptcha Centered -->
       <div class="mb-4 d-flex justify-content-center">
         <div>
           <re-captcha
@@ -127,7 +120,6 @@
         </div>
       </div>
 
-      <!-- Register Button -->
       <div class="d-grid mb-3">
         <button
           type="submit"
@@ -138,12 +130,10 @@
         </button>
       </div>
 
-      <!-- Divider -->
       <div class="text-center text-muted mb-3">
         <span style="letter-spacing: 0.1em;">or</span>
       </div>
 
-      <!-- Sign In Link -->
       <div class="text-center">
         <span>Already have an account?</span>
         <a class="ms-1 link-primary fw-semibold" routerLink="/admin-login">Login</a>
