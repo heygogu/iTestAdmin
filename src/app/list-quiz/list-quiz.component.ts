@@ -25,6 +25,13 @@ export class ListQuizComponent implements OnInit {
   pageSize = 10;
 
   datePickerModels: { [quizId: number]: string } = {};
+toISTDate(dateString: string): Date | null {
+  if (!dateString) return null;
+  const utcDate = new Date(dateString);
+  // Convert to IST (UTC + 5:30)
+  const istOffset = 5.5 * 60 * 60 * 1000; // ms
+  return new Date(utcDate.getTime() + istOffset);
+}
 
   constructor(
     public router: Router,

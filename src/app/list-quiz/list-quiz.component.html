@@ -63,17 +63,19 @@
   <td>{{ quiz.title }}</td>
   <td>{{ getCategoryName(quiz.category) }}</td>
   <td>
-    <ng-container *ngIf="isValidDate(quiz.rescheduledAt); else scheduledDate">
-      {{ quiz.rescheduledAt | date: 'medium' }}
-    </ng-container>
-    <ng-template #scheduledDate>
-      <ng-container *ngIf="isValidDate(quiz.scheduledAt); else noDate">
-        {{ quiz.scheduledAt | date: 'medium' }}
-      </ng-container>
-      <ng-template #noDate>
-        <span class="text-muted">--</span>
-      </ng-template>
-    </ng-template>
+  <ng-container *ngIf="isValidDate(quiz.rescheduledAt); else scheduledDate">
+  {{ toISTDate(quiz.rescheduledAt) | date: 'medium' }}
+</ng-container>
+<ng-template #scheduledDate>
+  <ng-container *ngIf="isValidDate(quiz.scheduledAt); else noDate">
+    {{ toISTDate(quiz.scheduledAt) | date: 'medium' }}
+  </ng-container>
+  <ng-template #noDate>
+    <span class="text-muted">--</span>
+  </ng-template>
+</ng-template>
+
+
   </td>
   <td>
     <span class="badge p-2 fw-medium rounded-2 bg-{{ getStatusBadge(quiz.scheduledAt) }}">
