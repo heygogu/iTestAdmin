@@ -54,7 +54,7 @@ export class ViewQuestionsComponent implements OnInit {
           this.isLoading = false;
         }),
         catchError(err => {
-          this.toast.error('Failed to load questions.');
+          this.toast.error(err.error?.message ||'Failed to load questions.');
           console.error('Error loading questions:', err);
           this.isLoading = false;
           return of(null);

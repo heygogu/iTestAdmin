@@ -32,9 +32,15 @@
 
             <div class="mb-3">
               <label class="form-label fw-semibold">Score to Pass</label>
-              <input type="number" class="form-control" [(ngModel)]="quiz.passScore" name="passScore" required #passScore="ngModel">
-              <div class="text-danger small" *ngIf="passScore.invalid && passScore.touched">Score to pass is required</div>
+              <input type="number" class="form-control" [(ngModel)]="quiz.passScore" name="passScore" required min="1" #passScore="ngModel"
+                [ngClass]="{ 'is-invalid': passScore.invalid && (passScore.touched || passScore.dirty || showValidation) }"
+                placeholder="Enter score to pass">
+              <div class="text-danger small" *ngIf="passScore.invalid && (passScore.touched || passScore.dirty || showValidation)">
+                <span *ngIf="passScore.errors?.['required']">Score to pass is required</span>
+                <span *ngIf="passScore.errors?.['min']">Score to pass must be at least 1</span>
+              </div>
             </div>
+
           </form>
         </div>
       </div>

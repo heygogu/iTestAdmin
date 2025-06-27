@@ -56,8 +56,8 @@
         </button>
         <mat-menu #profileMenu="matMenu" class="custom-profile-menu" [overlapTrigger]="false">
           <button mat-menu-item routerLink="/edit-profile" class="custom-menu-item">
-            <mat-icon color="primary" class="me-2">edit</mat-icon>
-            <span>Edit Profile</span>
+            <i class="bi bi-pencil text-primary"></i>
+            <span class="ms-2">Edit Profile</span>
           </button>
           <button mat-menu-item (click)="logOut()" class="custom-menu-item">
             <mat-icon color="warn" class="me-2">logout</mat-icon>

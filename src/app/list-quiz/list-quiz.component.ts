@@ -64,38 +64,32 @@ export class ListQuizComponent implements OnInit {
 
 
 
-  openScheduleModal(quiz: any, isReschedule: boolean): void {
-    const modalRef = this.modalService.open(ScheduleModalComponent);
-    modalRef.componentInstance.quiz = quiz;
-    modalRef.componentInstance.isReschedule = isReschedule;
+openScheduleModal(quiz: any, isReschedule: boolean): void {
+  const modalRef = this.modalService.open(ScheduleModalComponent);
+  modalRef.componentInstance.quiz = quiz;
+  modalRef.componentInstance.isReschedule = isReschedule;
 
-    modalRef.result.then(date => {
-      const isoDate = new Date(date).toISOString();
-   
-      if (isReschedule) {
-        this.api.admin.rescheduleQuizById(quiz.id, isoDate).subscribe({
-          next: () => {
-            this.toast.success('Quiz rescheduled successfully.');
-            this.loadQuizzes();
-          },
-          error: () => {
-            this.toast.error('Failed to reschedule quiz.');
-          }
-        });
-      } else {
-        this.api.admin.scheduleQuizById(quiz.id, isoDate).subscribe({
-          next: () => {
-            this.toast.success('Quiz scheduled successfully.');
-            this.loadQuizzes();
-          },
-          error: () => {
-            this.toast.error('Failed to schedule quiz.');
-          }
-        });
-      }
-    }).catch(() => {});
-  }
+  modalRef.result.then(date => {
+    const isoDate = new Date(date).toISOString();
+    const apiCall = isReschedule
+      ? this.api.admin.rescheduleQuizById(quiz.id, isoDate)
+      : this.api.admin.scheduleQuizById(quiz.id, isoDate);
 
+    apiCall.pipe(
+      tap(() => {
+        const msg = isReschedule ? 'Quiz rescheduled successfully.' : 'Quiz scheduled successfully.';
+        this.toast.success(msg);
+        this.loadQuizzes();
+      }),
+      catchError((err) => {
+        const fallbackMsg = isReschedule ? 'Failed to reschedule quiz.' : 'Failed to schedule quiz.';
+        this.toast.error(err.error?.message || fallbackMsg);
+        return of(null);
+      })
+    ).subscribe();
+    
+  }).catch(() => {});
+}
 
   getCategoryName(index: number): string {
     return this.categories.find(c => c.index === index)?.name || 'Custom';
@@ -124,17 +118,18 @@ getStatusBadge(date: string | null): string {
   return this.isValidDate(date) ? 'success' : 'secondary';
 }
 exportQuiz(quiz: any): void {
-   this.api.admin.exportQuizResultsById(quiz.id).subscribe({
-    next: (blob: Blob) => {
-      const fileName = `quiz-results-${quiz.title.replace(/\s+/g, '_')}.csv`; 
+  this.api.admin.exportQuizResultsById(quiz.id).pipe(
+    tap((blob: Blob) => {
+      const fileName = `quiz-results-${quiz.title.replace(/\s+/g, '_')}.csv`;
       saveAs(blob, fileName);
       this.toast.success(`Quiz "${quiz.title}" exported successfully!`);
-    },
-    error: (err) => {
+    }),
+    catchError((err) => {
       console.error('Export failed:', err);
       this.toast.error(`Failed to export quiz "${quiz.title}".`);
-    }
-  });
+      return of(null); // Return a fallback observable
+    })
+  ).subscribe();
 }
 
  loadQuizzes(): void {
@@ -160,8 +155,8 @@ exportQuiz(quiz: any): void {
       }
       this.isLoading = false;
     }),
-      catchError(() => {
-        this.toast.error('Failed to load scheduled quizzes.');
+      catchError(err => {
+        this.toast.error(err.error?.message ||'Failed to load quizzes.');
         this.isLoading = false;
         return of(null);
       })
@@ -182,8 +177,8 @@ exportQuiz(quiz: any): void {
         this.toast.success('Quiz rescheduled.');
         this.loadQuizzes(); 
       }),
-      catchError(() => {
-        this.toast.error('Failed to reschedule quiz.');
+      catchError((err) => {
+        this.toast.error(err.error?.message ||'Failed to reschedule quiz.');
         return of(null);
       })
     ).subscribe();
@@ -195,8 +190,8 @@ exportQuiz(quiz: any): void {
         this.toast.success('Quiz deleted.');
         this.loadQuizzes();
       }),
-      catchError(() => {
-        this.toast.error('Failed to delete quiz.');
+      catchError((err) => {
+        this.toast.error(err.error?.message ||'Failed to delete quiz.');
         return of(null);
       })
     ).subscribe();

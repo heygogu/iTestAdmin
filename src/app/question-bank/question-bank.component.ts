@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
+import { tap, catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { AppToasterService } from '../services/toaster.service';
 
 interface CategoryStats {
   index: number;
@@ -15,7 +18,7 @@ interface CategoryStats {
 })
 export class QuestionBankComponent implements OnInit {
 
-  constructor(private router: Router, private api: ApiService) {}
+  constructor(private router: Router, private api: ApiService,private toast:AppToasterService) {}
 
   categories: CategoryStats[] = [];
  isLoading = false;
@@ -23,17 +26,20 @@ export class QuestionBankComponent implements OnInit {
   ngOnInit(): void {
     this.isLoading = true;
 
-    this.api.admin.getCategoryStats().subscribe({
-      next: (res) => {
+    this.api.admin.getCategoryStats().pipe(
+      tap(res => {
         this.categories = res.data;
         this.isLoading = false;
-      },
-      error: () => {
+      }),
+      catchError(err => {
         console.error('Failed to load category stats');
+        this.toast.error(err.error?.message || 'Failed to load category stats');
         this.isLoading = false;
-      }
-    });
+        return of(null); 
+      })
+    ).subscribe();
   }
+
 
 
   showAddForm(category: string) {

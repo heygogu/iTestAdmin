@@ -45,7 +45,7 @@ export class EditQuizComponent implements OnInit {
       }),
       catchError(err => {
         console.error(err);
-        this.toast.error('Error fetching quiz.');
+        this.toast.error(err.error?.message ||'Error fetching quiz.');
         return of(null);
       })
     ).subscribe();
@@ -72,7 +72,7 @@ export class EditQuizComponent implements OnInit {
       }),
       catchError(err => {
         console.error('Failed to update quiz', err);
-        this.toast.error('Failed to update quiz.');
+        this.toast.error(err.error?.message ||'Failed to update quiz.');
         this.loading = false;
         return of(null);
       })
@@ -92,7 +92,7 @@ export class EditQuizComponent implements OnInit {
       }),
       catchError(error => {
         console.error('Failed to delete question', error);
-        this.toast.error('Error removing question from quiz.');
+        this.toast.error(error.error?.message ||'Error removing question from quiz.');
         return of(null);
       })
     ).subscribe();

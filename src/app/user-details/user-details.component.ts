@@ -116,8 +116,8 @@ export class UserDetailsComponent implements OnInit {
         }
         this.userLoading = false;
       }),
-      catchError(() => {
-        this.toast.error('Failed to load user profile', 'Close');
+      catchError((err) => {
+        this.toast.error(err.error?.message ||'Failed to load user profile', 'Close');
         this.userLoading = false;
         return of(null);
       })
@@ -144,8 +144,8 @@ export class UserDetailsComponent implements OnInit {
         }
         this.statsLoading = false;
       }),
-      catchError(() => {
-        this.toast.error('Failed to load user stats', 'Close');
+      catchError((err) => {
+        this.toast.error(err.error?.message ||'Failed to load user stats', 'Close');
         this.statsLoading = false;
         return of(null);
       })

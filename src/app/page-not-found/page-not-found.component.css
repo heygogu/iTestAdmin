@@ -73,8 +73,8 @@ body{
   display: inline-block;
   margin: 0 10px;
   text-decoration: none;
-  border: 2px solid #69a6ce;
-  color: #69a6ce;
+  border: 2px solid #0d6efd;
+  color: #0d6efd;
   font-weight: 500;
   padding: 10px 25px;
   border-radius: 25px;
@@ -82,6 +82,6 @@ body{
   transition: all 0.3s ease;
 }
 .content .btns a:hover{
-  background: #69a6ce;
+  background: #0d6efd;
   color: #fff;
 }

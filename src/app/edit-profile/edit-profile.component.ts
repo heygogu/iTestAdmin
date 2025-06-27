@@ -20,7 +20,7 @@ export class EditProfileComponent implements OnInit {
     country: '',
     gender: ''
   };
-
+  
   constructor(
     private api: ApiService,
     private userService: UserService,
@@ -75,7 +75,7 @@ export class EditProfileComponent implements OnInit {
         }),
         catchError(err => {
           console.error('Update error:', err);
-          this.toast.error('Error while updating profile.');
+          this.toast.error(err.error?.message || 'Error while updating profile.');
           return of(null);
         })
       ).subscribe();

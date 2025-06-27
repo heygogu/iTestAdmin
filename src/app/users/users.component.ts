@@ -49,7 +49,7 @@ export class UsersComponent implements OnInit {
           this.isLoading = false;
         }),
         catchError(err => {
-          this.toast.error('Failed to load users');
+          this.toast.error(err.error?.message ||'Failed to load users');
           this.isLoading = false;
           return of(null);
         })

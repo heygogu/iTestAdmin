@@ -6,12 +6,12 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   selector: 'app-schedule-modal',
   template: `
     <div class="modal-header bg-primary text-white">
-      <h5 class="modal-title">{{ isReschedule ? 'Reschedule Quiz' : 'Schedule Quiz' }}</h5>
+      <h5 class="modal-title fs-5 mt-2">{{ isReschedule ? 'Reschedule Quiz' : 'Schedule Quiz' }}</h5>
       <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss()"></button>
     </div>
     <div class="modal-body">
-      <h5 class="text-primary">{{ quiz.title }}</h5>
-      <p class="text-muted mb-4">{{ quiz.description || 'No description.' }}</p>
+      <h5 class="text-primary fs-5">{{ quiz.title }}</h5>
+      <p class="text-muted mb-4 fs-6">{{ quiz.description || 'No description.' }}</p>
 
       <label class="form-label">Select Date & Time</label>
       <input type="datetime-local" class="form-control" [(ngModel)]="selectedDate" />
