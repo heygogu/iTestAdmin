@@ -51,14 +51,14 @@ export class ApiService {
       fullName: string;
       role: number; 
     }): Observable<any> => {
-      return this.post('Auth/register', userData);
+      return this.post('Auth/admin/register', userData);
     },
   
     login: (credentials: {
       email: string;
       password: string;
     }): Observable<any> => {
-      return this.post('Auth/login', credentials);
+      return this.post('Auth/admin/login', credentials);
     },
     forgotPassword: (emailPayload: { 
       email: string;

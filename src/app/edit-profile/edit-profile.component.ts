@@ -20,7 +20,7 @@ export class EditProfileComponent implements OnInit {
     country: '',
     gender: ''
   };
-
+  
   constructor(
     private api: ApiService,
     private userService: UserService,

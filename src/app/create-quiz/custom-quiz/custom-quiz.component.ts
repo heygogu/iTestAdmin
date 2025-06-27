@@ -106,6 +106,10 @@ export class CustomQuizComponent implements OnInit {
         this.toast.warning('Please complete all fields and add at least one question.');
         return;
       }
+      if (this.quiz.passScore > this.quiz.questions.length) {
+      this.toast.warning(`Pass score cannot be more than ${this.quiz.questions.length} (total questions).`);
+      return;
+    }
 
 
     const payload = {
@@ -141,6 +145,10 @@ export class CustomQuizComponent implements OnInit {
         this.toast.warning('Please complete all fields and add at least one question.');
         return;
       }
+      if (this.quiz.passScore > this.quiz.questions.length) {
+      this.toast.warning(`Pass score cannot be more than ${this.quiz.questions.length} (total questions).`);
+      return;
+    }
 
     const payload = {
       title: this.quiz.title.trim(),
