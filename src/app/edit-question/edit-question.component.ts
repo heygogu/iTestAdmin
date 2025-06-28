@@ -103,6 +103,18 @@ export class EditQuestionComponent implements OnInit {
       })
     ).subscribe();
   }
+  areOptionsUnique(): boolean {
+    const { optionA, optionB, optionC, optionD } = this.question;
+    const trimmedOptions = [
+      optionA.trim(),
+      optionB.trim(),
+      optionC.trim(),
+      optionD.trim()
+    ];
+    const uniqueOptions = new Set(trimmedOptions);
+    return uniqueOptions.size === 4;
+  }
+
 
   onCancel(): void {
     this.router.navigate(['/questionbank/view', this.categoryParam, 'page', 1]);

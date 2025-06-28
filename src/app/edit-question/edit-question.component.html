@@ -15,7 +15,7 @@
           <h4 class="mb-0 flex-grow-1">Edit Question</h4>
         </div>
         <div class="card-body bg-light rounded-bottom-2">
-          <form #editForm="ngForm" (ngSubmit)="onSubmit(editForm)" autocomplete="off" novalidate>
+          <form #editForm="ngForm" (ngSubmit)="onSubmit(editForm)" autocomplete="off">
             <div class="mb-4">
               <label for="questionText" class="form-label fw-semibold">
                 <i class="bi bi-question-circle me-2 text-primary"></i>Question
@@ -97,6 +97,9 @@
                 <option value="C">C</option>
                 <option value="D">D</option>
               </select>
+            </div>
+            <div *ngIf="!areOptionsUnique()" class="text-danger small mb-2">
+              All options must be unique.
             </div>
             <div class="d-flex justify-content-between align-items-center mt-4 gap-3">
               <button

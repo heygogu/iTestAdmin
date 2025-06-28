@@ -13,6 +13,7 @@ import { AppToasterService } from '../services/toaster.service';
 export class EditQuizComponent implements OnInit {
   quizId!: number;
   loading = false;
+  isLoading = false;
 
   quiz = {
     title: '',
@@ -30,6 +31,7 @@ export class EditQuizComponent implements OnInit {
 
   ngOnInit(): void {
     this.quizId = +this.route.snapshot.paramMap.get('id')!;
+    this.isLoading = true;
     this.loadQuiz();
   }
 
@@ -42,10 +44,12 @@ export class EditQuizComponent implements OnInit {
         } else {
           this.toast.error('Failed to load quiz.');
         }
+        this.isLoading = false;
       }),
       catchError(err => {
         console.error(err);
         this.toast.error(err.error?.message ||'Error fetching quiz.');
+        this.isLoading = false;
         return of(null);
       })
     ).subscribe();

@@ -1,55 +1,146 @@
 <div class="container py-5">
   <div class="row justify-content-center">
-    <div class="col-lg-8">
-      <div class="card p-4 shadow-sm border-0 bg-white">
-        <div class="card-body p-4">
-          <h3 class="text-center text-primary mb-4 fw-bold">
-            <i class="bi bi-journal-plus me-2 fs-5 "></i><span class="fs-5">Add New Question</span> 
-          </h3>
-
-          <form #questionForm="ngForm" (ngSubmit)="onSubmit(questionForm)">
-            <div class="mb-3">
-              <label class="form-label fw-semibold">Question</label>
-              <textarea class="form-control fs-6" rows="3" name="text" [(ngModel)]="newQuestion.text" required></textarea>
-            </div>
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Option A</label>
-                <input type="text" class="form-control fs-6" name="optionA" [(ngModel)]="newQuestion.optionA" required>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Option B</label>
-                <input type="text" class="form-control fs-6" name="optionB" [(ngModel)]="newQuestion.optionB" required>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Option C</label>
-                <input type="text" class="form-control fs-6" name="optionC" [(ngModel)]="newQuestion.optionC" required>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Option D</label>
-                <input type="text" class="form-control fs-6" name="optionD" [(ngModel)]="newQuestion.optionD" required>
-              </div>
-            </div>
-            <div class="mb-3">
-              <label class="form-label fw-semibold">Correct Option</label>
-              <select class="form-select fs-6" name="correctOption" [(ngModel)]="newQuestion.correctOption" required>
-                <option value="" disabled selected>Select correct option</option>
-                <option value="A">A</option>
-                <option value="B">B</option>
-                <option value="C">C</option>
-                <option value="D">D</option>
-              </select>
-            </div>
-            
-            <div class="d-flex justify-content-between align-items-center mt-4">
-              <button type="button" class="btn btn-outline-secondary" (click)="goBack()">
-                <i class="bi bi-arrow-left"></i> Back to Categories
-              </button>
-              <button type="submit" class="btn btn-primary px-4" [disabled]="loading">
-                <i class="bi bi-save me-1"></i>
-                {{ loading ? 'Saving...' : 'Save Question' }}
-              </button>
-            </div>
-
-          </form>
+    <div class="col-xl-10 col-lg-10">
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-header bg-primary text-white rounded-top-4 d-flex align-items-center">
+          <h4 class="mb-0 fw-semibold flex-grow-1">Add New Question</h4>
+          <button type="button" class="btn btn-outline-light btn-sm ms-2" (click)="goBack()" title="Back">
+            <i class="bi bi-arrow-left"></i>
+          </button>
         </div>
+        <div class="card-body p-4">
+          <form #questionForm="ngForm" (ngSubmit)="addToPreview(questionForm)" autocomplete="off" novalidate>
+            <div class="mb-3">
+              <label class="form-label fw-semibold fs-6">Question</label>
+              <textarea class="form-control rounded-3"
+                rows="3"
+                name="text"
+                [(ngModel)]="newQuestion.text"
+                required
+                placeholder="Type your question here..."></textarea>
+              <div *ngIf="questionForm.submitted && !newQuestion.text" class="text-danger small mt-1">
+                Question is required.
+              </div>
+            </div>
+            <div class="row g-3 mb-4">
+              <div class="col-6 col-md-3">
+                <label class="form-label fw-semibold">Option A</label>
+                <input type="text"
+                  class="form-control rounded-3"
+                  name="optionA"
+                  [(ngModel)]="newQuestion.optionA"
+                  required
+                  placeholder="Option A">
+              </div>
+              <div class="col-6 col-md-3">
+                <label class="form-label fw-semibold">Option B</label>
+                <input type="text"
+                  class="form-control rounded-3"
+                  name="optionB"
+                  [(ngModel)]="newQuestion.optionB"
+                  required
+                  placeholder="Option B">
+              </div>
+              <div class="col-6 col-md-3">
+                <label class="form-label fw-semibold">Option C</label>
+                <input type="text"
+                  class="form-control rounded-3"
+                  name="optionC"
+                  [(ngModel)]="newQuestion.optionC"
+                  required
+                  placeholder="Option C">
+              </div>
+              <div class="col-6 col-md-3">
+                <label class="form-label fw-semibold">Option D</label>
+                <input type="text"
+                  class="form-control rounded-3"
+                  name="optionD"
+                  [(ngModel)]="newQuestion.optionD"
+                  required
+                  placeholder="Option D">
+              </div>
+            </div>
+            <div *ngIf="questionForm.submitted && !areOptionsUnique()" class="text-danger small mb-2">
+              All options must be unique.
+            </div>
+            <div *ngIf="questionForm.submitted && !areAllOptionsFilled()" class="text-danger small mb-2">
+              All options are required.
+            </div>
+            <div class="mb-4">
+              <label class="form-label fw-semibold fs-6">Correct Option</label>
+              <div class="input-group">
+                <span class="input-group-text bg-primary bg-opacity-10 border-0">
+                  <i class="bi bi-check2-circle text-primary"></i>
+                </span>
+                <select class="form-select rounded-end"
+                  name="correctOption"
+                  [(ngModel)]="newQuestion.correctOption"
+                  required>
+                  <option value="" disabled selected>Select correct option</option>
+                  <option value="A">A</option>
+                  <option value="B">B</option>
+                  <option value="C">C</option>
+                  <option value="D">D</option>
+                </select>
+              </div>
+              <div *ngIf="questionForm.submitted && !newQuestion.correctOption" class="text-danger small mt-1">
+                Please select the correct option.
+              </div>
+            </div>
+            <div class="d-flex justify-content-end">
+              <button type="submit"
+                class="btn btn-primary px-4 shadow-sm"
+                [disabled]="loading">
+                <i class="bi bi-plus-circle me-1"></i>
+                {{ loading ? 'Adding...' : 'Add' }}
+              </button>
+            </div>
+          </form>
+
+          <div *ngIf="questionsToAdd.length > 0" class="mt-5">
+            <div *ngFor="let q of questionsToAdd; index as i" class="card mb-3 shadow-sm border-0">
+              <div class="card-header d-flex align-items-center">
+                <span class="fw-bold text-primary fs-6">Q{{ i + 1 }}:</span>
+                <span class="ms-2">{{ q.text | slice:0:60 }}{{ q.text.length > 60 ? '...' : '' }}</span>
+                <button class="btn btn-sm ms-auto text-danger" (click)="removeQuestion(i)">
+                  <i class="bi bi-x-lg"></i> 
+                </button>
+              </div>
+              <div class="card-body">
+                <ul class="list-group mb-0">
+                  <li class="list-group-item d-flex align-items-center" [ngClass]="{'list-group-item-success': q.correctOption === 'A'}">
+                    <span class="badge bg-primary me-2">A</span>
+                    <span class="flex-grow-1">{{ q.optionA }}</span>
+                    <i *ngIf="q.correctOption === 'A'" class="bi bi-check-circle-fill text-success ms-2"></i>
+                  </li>
+                  <li class="list-group-item d-flex align-items-center" [ngClass]="{'list-group-item-success': q.correctOption === 'B'}">
+                    <span class="badge bg-primary me-2">B</span>
+                    <span class="flex-grow-1">{{ q.optionB }}</span>
+                    <i *ngIf="q.correctOption === 'B'" class="bi bi-check-circle-fill text-success ms-2"></i>
+                  </li>
+                  <li class="list-group-item d-flex align-items-center" [ngClass]="{'list-group-item-success': q.correctOption === 'C'}">
+                    <span class="badge bg-primary me-2">C</span>
+                    <span class="flex-grow-1">{{ q.optionC }}</span>
+                    <i *ngIf="q.correctOption === 'C'" class="bi bi-check-circle-fill text-success ms-2"></i>
+                  </li>
+                  <li class="list-group-item d-flex align-items-center" [ngClass]="{'list-group-item-success': q.correctOption === 'D'}">
+                    <span class="badge bg-primary me-2">D</span>
+                    <span class="flex-grow-1">{{ q.optionD }}</span>
+                    <i *ngIf="q.correctOption === 'D'" class="bi bi-check-circle-fill text-success ms-2"></i>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="questionsToAdd.length > 0" class="text-end mt-4">
+            <button class="btn btn-success px-4 shadow-sm" (click)="saveAllQuestions()" [disabled]="loading">
+              <i class="bi bi-save me-1"></i>
+              {{ loading ? 'Saving...' : 'Save' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

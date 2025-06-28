@@ -74,17 +74,21 @@ export class ApiService {
   };
 
   admin = {
-    addQuestionToBank: (questionData: {
-      text: string;
-      optionA: string;
-      optionB: string;
-      optionC: string;
-      optionD: string;
-      correctOption: string;
-      category: number;
-    }): Observable<any> => {
-      return this.post('AdminQuiz/question-bank', questionData);
+    addQuestionsToBank: (
+      questionList: {
+        text: string;
+        optionA: string;
+        optionB: string;
+        optionC: string;
+        optionD: string;
+        correctOption: string;
+        category: number;
+      }[]
+    ): Observable<any> => {
+      return this.post('AdminQuiz/question-bank', questionList); 
     },
+
+
 
     getCategoryStats: (): Observable<{
       success: boolean;

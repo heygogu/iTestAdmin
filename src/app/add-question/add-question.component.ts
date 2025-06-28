@@ -46,6 +46,7 @@ export class AddQuestionComponent implements OnInit {
     optionD: '',
     correctOption: ''
   };
+  questionsToAdd: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -57,41 +58,99 @@ export class AddQuestionComponent implements OnInit {
   ngOnInit(): void {
     this.categoryParam = this.route.snapshot.paramMap.get('category') || '';
   }
-
-  onSubmit(form: any): void {
-    if (!form.valid) return;
-
-    const categoryEnum = this.categoryMap[this.categoryParam];
-    if (categoryEnum === undefined) {
-      this.toast.warning('Invalid category.');
-      return;
+  
+    areAllOptionsFilled(): boolean {
+      const { optionA, optionB, optionC, optionD } = this.newQuestion;
+      return !!optionA.trim() && !!optionB.trim() && !!optionC.trim() && !!optionD.trim();
+    }
+    areOptionsUnique(): boolean {
+      const { optionA, optionB, optionC, optionD } = this.newQuestion;
+      const options = [optionA.trim(), optionB.trim(), optionC.trim(), optionD.trim()];
+      const uniqueOptions = new Set(options);
+      return uniqueOptions.size === 4;
     }
 
-    const payload = {
-      text: this.newQuestion.text.trim(),
-      optionA: this.newQuestion.optionA.trim(),
-      optionB: this.newQuestion.optionB.trim(),
-      optionC: this.newQuestion.optionC.trim(),
-      optionD: this.newQuestion.optionD.trim(),
-      correctOption: this.newQuestion.correctOption,
-      category: categoryEnum   
-    };
+    addToPreview(form: any): void {
+      form.form.markAllAsTouched();
 
-    this.loading = true;
+      if (!form.valid) return;
+      if (!this.areAllOptionsFilled()) {
+        this.toast.warning('Please fill in all options.');
+        return;
+      }
+      if (!this.areOptionsUnique()) {
+        this.toast.warning('Options must be unique.');
+        return;
+      }
+      if (!this.newQuestion.correctOption) {
+        this.toast.warning('Please select the correct option.');
+        return;
+      }
+      const trimmed = {
+        text: this.newQuestion.text.trim(),
+        optionA: this.newQuestion.optionA.trim(),
+        optionB: this.newQuestion.optionB.trim(),
+        optionC: this.newQuestion.optionC.trim(),
+        optionD: this.newQuestion.optionD.trim(),
+        correctOption: this.newQuestion.correctOption
+      };
 
-    this.apiService.admin.addQuestionToBank(payload).pipe(
-      tap(() => {
-        this.toast.success('Question added successfully!');
-      }),
-      catchError(err => {
-        console.error(err);
-        this.toast.error(err.error?.message || 'Failed to add question.');
-        return of(null);
-      })
-    ).subscribe(() => {
-      this.loading = false;
-    });
-  }
+      const exists = this.questionsToAdd.some(q => q.text === trimmed.text);
+      if (exists) {
+        this.toast.warning('Duplicate question not allowed.');
+        return;
+      }
+
+      this.questionsToAdd.push(trimmed);
+
+      this.newQuestion = {
+        text: '',
+        optionA: '',
+        optionB: '',
+        optionC: '',
+        optionD: '',
+        correctOption: ''
+      };
+
+      form.resetForm();
+    }
+
+    saveAllQuestions(): void {
+      if (this.questionsToAdd.length === 0) {
+        this.toast.warning('No questions to save.');
+        return;
+      }
+
+      const categoryEnum = this.categoryMap[this.categoryParam];
+      if (categoryEnum === undefined) {
+        this.toast.warning('Invalid category.');
+        return;
+      }
+      this.loading = true;
+      const questionList = this.questionsToAdd.map(q => ({
+        ...q,
+        category: categoryEnum
+      }));
+
+      this.apiService.admin.addQuestionsToBank(questionList).pipe(
+        tap(() => {
+          this.toast.success('Questions saved successfully!');
+          this.questionsToAdd = [];
+        }),
+        catchError(err => {
+          console.error(err);
+          this.toast.error(err.error?.message || 'Failed to save questions.');
+          return of(null);
+        })
+      ).subscribe(() => {
+        this.loading = false;
+      });
+    }
+
+    removeQuestion(index: number): void {
+      this.questionsToAdd.splice(index, 1);
+    }
+
   goBack() {
     this.router.navigate(['/question-bank']);
   }

@@ -3,6 +3,8 @@ import { catchError, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { ApiService } from 'src/app/api.service';
 import { AppToasterService } from 'src/app/services/toaster.service';
+import { ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-random-quiz',
@@ -159,15 +161,20 @@ export class RandomQuizComponent implements OnInit {
   }
   
 
-  resetQuizForm() {
-    this.quiz = {
-      name: '',
-      description: '',
-      category: '',
-      questionCount: 0,
-      passScore: 0,
-      questions: []
-    };
-    this.generatedQuestionCount = null;
-  }
+   @ViewChild('quizForm') quizForm!: NgForm;
+    resetQuizForm() {
+      this.quiz = {
+        name: '',
+        description: '',
+        category: '',
+        questionCount: 0,
+        passScore: 0,
+        questions: []
+      };
+      this.generatedQuestionCount = null;
+      this.showValidation = false;
+      setTimeout(() => {
+        this.quizForm?.resetForm();
+      });
+    }
 }

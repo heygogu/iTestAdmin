@@ -3,6 +3,9 @@ import { ApiService } from 'src/app/api.service';
 import { catchError, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { AppToasterService } from 'src/app/services/toaster.service';
+import { ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
+
 
 @Component({
   selector: 'app-custom-quiz',
@@ -178,6 +181,7 @@ export class CustomQuizComponent implements OnInit {
     ).subscribe();
   }
 
+  @ViewChild('quizForm') quizForm!: NgForm;
   resetQuizForm() {
     this.quiz = {
       title: '',
@@ -186,10 +190,17 @@ export class CustomQuizComponent implements OnInit {
       passScore: 0,
       questions: []
     };
+
     this.newQuestion = {
       text: '',
       options: ['', '', '', ''],
       correctAnswer: ''
     };
+
+    this.showValidation = false;
+    setTimeout(() => {
+      this.quizForm?.resetForm(); 
+    }, 0);
   }
+
 }
