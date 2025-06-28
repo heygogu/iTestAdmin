@@ -10,6 +10,9 @@
               {{ profileData.fullName ? profileData.fullName.charAt(0).toUpperCase() : '' }}
             </div>
           </div>
+          <div class="text-center mb-4">
+            <h2 class="fw-bold text-primary text-capitalize">{{profileData.fullName}}</h2>
+          </div>
 
           <form #profileForm="ngForm" (ngSubmit)="onSubmit(profileForm)">
             <div class="mb-3">

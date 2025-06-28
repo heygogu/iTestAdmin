@@ -14,12 +14,21 @@ export class EditQuizComponent implements OnInit {
   quizId!: number;
   loading = false;
   isLoading = false;
-
+  showAddQuestionForm = false;
+  
   quiz = {
     title: '',
     description: '',
     scoreToPass: 0,
     questions: [] as any[]
+  };
+  newQuestion = {
+    text: '',
+    optionA: '',
+    optionB: '',
+    optionC: '',
+    optionD: '',
+    correctOption: '',
   };
 
   constructor(
@@ -54,34 +63,92 @@ export class EditQuizComponent implements OnInit {
       })
     ).subscribe();
   }
+// Show the inline question form
+    addQuestion(): void {
+      this.showAddQuestionForm = true;
+      this.newQuestion = {
+        text: '',
+        optionA: '',
+        optionB: '',
+        optionC: '',
+        optionD: '',
+        correctOption: ''
+      };
+    }
+    cancelAddQuestion(): void {
+      this.showAddQuestionForm = false;
+    }
+
+
+  confirmAddQuestion(): void {
+    const { text, optionA, optionB, optionC, optionD, correctOption } = this.newQuestion;
+
+    if (
+      !text.trim() ||
+      !optionA.trim() ||
+      !optionB.trim() ||
+      !optionC.trim() ||
+      !optionD.trim() ||
+      !correctOption
+    ) {
+      this.toast.warning('Please fill all fields before adding the question.');
+      return;
+    }
+
+    const options = [optionA, optionB, optionC, optionD].map(opt => opt.trim());
+    const uniqueOptions = new Set(options);
+    if (uniqueOptions.size < 4) {
+      this.toast.warning('Options must be unique.');
+      return;
+    }
+
+    this.quiz.questions.push({
+      id: Date.now(), // temporary ID for frontend
+      text: text.trim(),
+      optionA: optionA.trim(),
+      optionB: optionB.trim(),
+      optionC: optionC.trim(),
+      optionD: optionD.trim(),
+      correctOption
+    });
+
+    this.toast.success('Question added!');
+    this.showAddQuestionForm = false;
+  }
+
 
   
   updateQuiz(): void {
     this.loading = true;
 
-    const updatedQuestions = this.quiz.questions.map(q => ({
-      id: q.id,
-      text: q.text,
-      optionA: q.optionA,
-      optionB: q.optionB,
-      optionC: q.optionC,
-      optionD: q.optionD,
-      correctOption: q.correctOption
-    }));
+    const payload = {
+      title: this.quiz.title.trim(),
+      description: this.quiz.description.trim(),
+      scoreToPass: this.quiz.scoreToPass,
+      questions: this.quiz.questions.map(q => ({
+        text: q.text.trim(),
+        optionA: q.optionA.trim(),
+        optionB: q.optionB.trim(),
+        optionC: q.optionC.trim(),
+        optionD: q.optionD.trim(),
+        correctOption: q.correctOption
+      }))
+    };
 
-    this.api.admin.updateQuizById(this.quizId, updatedQuestions).pipe(
+    this.api.admin.updateQuizById(this.quizId, payload).pipe(
       tap(() => {
         this.toast.success('Quiz updated successfully!');
         this.router.navigate(['/quizzes']);
       }),
       catchError(err => {
         console.error('Failed to update quiz', err);
-        this.toast.error(err.error?.message ||'Failed to update quiz.');
+        this.toast.error(err.error?.message || 'Failed to update quiz.');
         this.loading = false;
         return of(null);
       })
     ).subscribe();
   }
+
 
   deleteQuestion(id: number): void {
     this.api.admin.deleteQuestionFromQuiz(this.quizId, id).pipe(

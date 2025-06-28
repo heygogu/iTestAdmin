@@ -102,7 +102,7 @@
               <div class="card-header d-flex align-items-center">
                 <span class="fw-bold text-primary fs-6">Q{{ i + 1 }}:</span>
                 <span class="ms-2">{{ q.text | slice:0:60 }}{{ q.text.length > 60 ? '...' : '' }}</span>
-                <button class="btn btn-sm ms-auto text-danger" (click)="removeQuestion(i)">
+                <button class="btn btn-sm btn-outline-danger rounded-circle ms-auto" (click)="removeQuestion(i)">
                   <i class="bi bi-x-lg"></i> 
                 </button>
               </div>

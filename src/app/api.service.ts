@@ -209,19 +209,25 @@ export class ApiService {
     },
 
     updateQuizById: (
-        quizId: number,
+      quizId: number,
+      data: {
+        title: string;
+        description: string;
+        scoreToPass: number;
         questions: {
-          id: number;
           text: string;
           optionA: string;
           optionB: string;
           optionC: string;
           optionD: string;
-          correctOption: 'A' | 'B' | 'C' | 'D';
-        }[]
-      ): Observable<any> => {
-        return this.patch(`AdminQuiz/${quizId}/edit-questions`, questions);
+          correctOption: string;
+        }[];
+      }
+    ): Observable<any> => {
+      return this.patch(`AdminQuiz/${quizId}/edit-quiz`, data);
     },
+
+
     deleteQuestionFromQuiz: (quizId: number, questionId: number): Observable<any> => {
       return this.delete(`AdminQuiz/${quizId}/remove-question/${questionId}`);
     },
