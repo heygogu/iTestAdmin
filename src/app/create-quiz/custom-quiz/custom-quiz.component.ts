@@ -137,7 +137,7 @@ export class CustomQuizComponent implements OnInit {
       }),
       catchError(err => {
         console.error('Error saving custom quiz:', err);
-        this.toast.error('Failed to save quiz.');
+        this.toast.error(err.error?.message || 'Failed to save quiz.');
         return of(null);
       })
     ).subscribe();
@@ -175,7 +175,7 @@ export class CustomQuizComponent implements OnInit {
       }),
       catchError(err => {
         console.error('Error scheduling custom quiz:', err);
-        this.toast.error('Failed to schedule quiz.');
+        this.toast.error(err.error?.message ||'Failed to schedule quiz.');
         return of(null);
       })
     ).subscribe();

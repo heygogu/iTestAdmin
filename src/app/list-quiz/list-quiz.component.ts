@@ -126,7 +126,7 @@ exportQuiz(quiz: any): void {
     }),
     catchError((err) => {
       console.error('Export failed:', err);
-      this.toast.error(`Failed to export quiz "${quiz.title}".`);
+      this.toast.error(err.error?.message || `Failed to export quiz "${quiz.title}".`);
       return of(null); 
     })
   ).subscribe();

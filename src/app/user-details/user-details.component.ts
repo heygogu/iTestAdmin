@@ -172,8 +172,8 @@ export class UserDetailsComponent implements OnInit {
         }
         this.historyLoading = false;
       }),
-      catchError(() => {
-        this.toast.error('Failed to load quiz history', 'Close');
+      catchError((err) => {
+        this.toast.error(err.error?.message ||'Failed to load quiz history', 'Close');
         this.historyLoading = false;
         return of(null);
       })

@@ -133,8 +133,8 @@ export class AddQuestionComponent implements OnInit {
       }));
 
       this.apiService.admin.addQuestionsToBank(questionList).pipe(
-        tap(() => {
-          this.toast.success('Questions saved successfully!');
+        tap((res) => {
+          this.toast.success(res?.message || 'Questions saved successfully!');
           this.questionsToAdd = [];
         }),
         catchError(err => {
