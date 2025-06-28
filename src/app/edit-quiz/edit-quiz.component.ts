@@ -63,7 +63,7 @@ export class EditQuizComponent implements OnInit {
       })
     ).subscribe();
   }
-// Show the inline question form
+
     addQuestion(): void {
       this.showAddQuestionForm = true;
       this.newQuestion = {
@@ -103,7 +103,7 @@ export class EditQuizComponent implements OnInit {
     }
 
     this.quiz.questions.push({
-      id: Date.now(), // temporary ID for frontend
+      id: Date.now(),
       text: text.trim(),
       optionA: optionA.trim(),
       optionB: optionB.trim(),

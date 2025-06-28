@@ -14,7 +14,7 @@
 
         <ng-template #quizFormBlock>
           <form #quizForm="ngForm" (ngSubmit)="updateQuiz()" class="p-4">
-            <!-- Quiz Meta -->
+         
             <div class="row g-4">
               <div class="col-md-12">
                 <label class="form-label fw-semibold">Title</label>
@@ -46,7 +46,7 @@
               </div>
             </div>
 
-            <!-- Add Question Form -->
+          
             <div *ngIf="showAddQuestionForm" class="border border-success rounded-3 bg-light-subtle p-4 mt-5 shadow-sm">
               <div class="d-flex justify-content-end align-items-center mb-3">
                 <button type="button" class="btn btn-sm btn-outline-danger rounded-circle" (click)="cancelAddQuestion()">
@@ -88,7 +88,6 @@
               </div>
             </div>
 
-            <!-- Existing Questions -->
             <div class="mt-5">
               <div class="d-flex align-items-center mb-3">
                 <span class="badge bg-primary rounded-pill me-2" style="font-size: 1rem;">
@@ -140,7 +139,6 @@
               </div>
             </div>
 
-            <!-- Actions -->
             <div class="d-flex justify-content-end gap-3 mt-5">
               <a class="btn btn-outline-secondary px-4 rounded-2 d-flex align-items-center gap-2" routerLink="/quizzes">
                 <i class="bi bi-arrow-left"></i> Cancel

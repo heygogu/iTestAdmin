@@ -1,4 +1,3 @@
-// schedule-modal.component.ts
 import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
