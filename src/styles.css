@@ -51,3 +51,12 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+tbody,
+td,
+tfoot,
+th,
+thead,
+tr {
+  white-space: nowrap !important;
+}
