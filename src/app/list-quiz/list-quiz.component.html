@@ -37,6 +37,7 @@
         <option value="">All</option>
         <option value="scheduled">Scheduled</option>
         <option value="unscheduled">Unscheduled</option> 
+        <option value="deleted">Deleted</option>
       </select>
     </div>
   </div>
@@ -79,20 +80,20 @@
             </ng-template>
             </td>
           <td>
-            <span class="badge p-2 fw-medium rounded-2 bg-{{ getStatusBadge(quiz.scheduledAt) }}">
-              {{ getStatusLabel(quiz.scheduledAt) }}
+            <span class="badge p-2 fw-medium rounded-2 bg-{{ getStatusBadge(quiz.scheduledAt,quiz) }}">
+              {{ getStatusLabel(quiz.scheduledAt,quiz) }}
             </span>
           </td>
         <td class="text-end">
           <div class="d-flex flex-column flex-sm-row justify-content-end align-items-end gap-2">
-            <button class="btn btn-sm btn-outline-secondary me-2" [routerLink]="['/edit-quiz', quiz.id]" style="cursor: pointer;" ngbTooltip="Edit Quiz">
+            <button  [disabled]="quiz.isDeleted" class="btn btn-sm btn-outline-secondary me-2" [routerLink]="['/edit-quiz', quiz.id]" style="cursor: pointer;" ngbTooltip="Edit Quiz">
               <i class="bi bi-pencil"></i>
               </button>
-              <button class="btn btn-sm btn-outline-danger me-2" (click)="openDeleteModal(quiz)" style="cursor: pointer;"  ngbTooltip="Delete Quiz">
+              <button  [disabled]="quiz.isDeleted" class="btn btn-sm btn-outline-danger me-2" (click)="openDeleteModal(quiz)" style="cursor: pointer;"  ngbTooltip="Delete Quiz">
               <i class="bi bi-trash"></i>
               </button>
-            <div class="btn-group dropstart">
-              <button type="button" class="btn btn-sm btn-outline-dark dropdown-toggle"
+            <div  class="btn-group dropstart">
+              <button  [disabled]="quiz.isDeleted" type="button" class="btn btn-sm btn-outline-dark dropdown-toggle"
                       data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;" ngbTooltip="More">
               </button>
               <ul class="dropdown-menu dropdown-menu-end shadow">

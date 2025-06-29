@@ -110,11 +110,17 @@ openScheduleModal(quiz: any, isReschedule: boolean): void {
     ).subscribe();
   }
 
-  getStatusLabel(date: string | null): string {
+  getStatusLabel(date: string | null,quiz:any): string {
+    if(quiz.isDeleted){
+      return 'Deleted'
+    }
   return this.isValidDate(date) ? 'Scheduled' : 'Draft';
 }
 
-getStatusBadge(date: string | null): string {
+getStatusBadge(date: string | null,quiz:any): string {
+  if(quiz.isDeleted){
+    return 'danger'
+  }
   return this.isValidDate(date) ? 'success' : 'secondary';
 }
 exportQuiz(quiz: any): void {
